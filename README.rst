@@ -21,14 +21,14 @@ will be used.
 Usage
 -----
 
-Load the 
+Load the local timezone:
 
     >>> from tzlocal import get_localzone
     >>> tz = get_localzone()
     >>> tz
     <DstTzInfo 'Europe/Warsaw' WMT+1:24:00 STD>
     
-Create a local datetime
+Create a local datetime:
 
     >>> from datetime import datetime
     >>> dt = tz.localize(datetime.now())
