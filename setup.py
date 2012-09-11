@@ -6,9 +6,16 @@ version = '0.1'
 setup(name='tzlocal',
       version=version,
       description="tzinfo object for the local timezone",
-      long_description=open('README.rst', 'rt').read(),
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-      keywords='timezone pytz dateutil',
+      long_description=open('README.rst', 'rt').read() + '\n\n' + open('CHANGES.txt', 'rt').read(),
+      classifiers=[
+          'Development Status :: 4 - Beta',
+          'License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
+          'Operating System :: Microsoft :: Windows',
+          'Operating System :: Unix',
+          'Operating System :: MacOS :: MacOS X',
+          'Programming Language :: Python :: 2.6',
+          ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      keywords='timezone pytz',
       author='Lennart Regebro',
       author_email='regebro@gmail.com',
       url='https://github.com/regebro/tzlocal',
