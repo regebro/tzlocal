@@ -14,6 +14,7 @@ setup(name='tzlocal',
           'Operating System :: Unix',
           'Operating System :: MacOS :: MacOS X',
           'Programming Language :: Python :: 2.6',
+          'Programming Language :: Python :: 2.7',
           ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='timezone pytz',
       author='Lennart Regebro',
