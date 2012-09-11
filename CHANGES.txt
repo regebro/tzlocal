@@ -1,7 +1,7 @@
 Changes
 =======
 
-Version 0.1 (Unreleased)
-------------------------
+0.1 (2012-09-11)
+----------------
 
 - Initial release
