@@ -1,5 +1,9 @@
-import _winreg
-import windows_tz
+try: 
+    import _winreg as winreg
+except ImportError:
+    import winreg
+    
+from .windows_tz import tz_names
 import pytz
 
 _cache_tz = None
@@ -7,9 +11,9 @@ _cache_tz = None
 def valuestodict(key):
     """Convert a registry key's values to a dictionary."""
     dict = {}
-    size = _winreg.QueryInfoKey(key)[1]
+    size = winreg.QueryInfoKey(key)[1]
     for i in range(size):
-        data = _winreg.EnumValue(key, i)
+        data = winreg.EnumValue(key, i)
         dict[data[0]] = data[1]
     return dict
 
@@ -19,22 +23,22 @@ def get_localzone_name():
     # translated to the language of the operating system, so we need to
     # do a backwards lookup, by going through all time zones and see which
     # one matches.
-    handle = _winreg.ConnectRegistry(None, _winreg.HKEY_LOCAL_MACHINE)
+    handle = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
 
     TZKEYNAME = r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones"
-    tzkey = _winreg.OpenKey(handle, TZKEYNAME)
+    tzkey = winreg.OpenKey(handle, TZKEYNAME)
 
     TZLOCALKEYNAME = r"SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
-    localtz = _winreg.OpenKey(handle, TZLOCALKEYNAME)
+    localtz = winreg.OpenKey(handle, TZLOCALKEYNAME)
 
     tzwin = valuestodict(localtz)['StandardName']
     localtz.Close()
     
     # Now, match this value to Time Zone information        
     tzkeyname = None
-    for i in range(_winreg.QueryInfoKey(tzkey)[0]):
-        subkey = _winreg.EnumKey(tzkey, i)
-        sub = _winreg.OpenKey(tzkey, subkey)
+    for i in range(winreg.QueryInfoKey(tzkey)[0]):
+        subkey = winreg.EnumKey(tzkey, i)
+        sub = winreg.OpenKey(tzkey, subkey)
         data = valuestodict(sub)
         sub.Close()
         if data['Std'] == tzwin:
@@ -44,11 +48,11 @@ def get_localzone_name():
     tzkey.Close()
     handle.Close()
     
-    timezone = windows_tz.tz_names.get(tzkeyname)
+    timezone = tz_names.get(tzkeyname)
     if timezone is None:
         # Nope, that didn't work. Try adding "Standard Time",
         # it seems to work a lot of times:
-        timezone = windows_tz.tz_names.get(tzkeyname + " Standard Time")            
+        timezone = tz_names.get(tzkeyname + " Standard Time")            
         
     # Return what we have.
     return timezone    
