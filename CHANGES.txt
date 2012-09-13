@@ -6,6 +6,11 @@ Changes
 
 - Windows 7 support.
 
+- Python 2.5 support (also tested with Python 3.3).
+
+- Got rid of relative imports, because I don't actually like them, 
+  so I don't know why I used them in the first place.
+  
 
 0.2 (2012-09-12)
 ----------------
