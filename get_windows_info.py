@@ -18,7 +18,8 @@ for element in dom.getElementsByTagName('mapTimezones'):
 
 mappings = {}
 for mapping in element.getElementsByTagName('mapZone'):
-    mappings[mapping.getAttribute('other')] = mapping.getAttribute('type').split(' ')[0]
+    if mapping.getAttribute('territory') == '001':
+        mappings[mapping.getAttribute('other')] = mapping.getAttribute('type').split(' ')[0]
     
 
 with open('tzlocal/windows_tz.py', "wt") as out:
