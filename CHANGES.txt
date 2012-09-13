@@ -4,7 +4,7 @@ Changes
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Windows 7 support.
 
 
 0.2 (2012-09-12)
