@@ -18,6 +18,19 @@ have the tzinfo file. However, if the timezone name is readily available it
 will be used.
 
 
+Supported systems
+-----------------
+
+These are the systems that are in theory supported:
+
+ * Windows 2000 and later
+
+ * Any unix-like system with a /etc/localtime or /usr/local/etc/localtime
+
+If you have one of the above systems and it does not work, it's a bug.
+Please report it.
+
+
 Usage
 -----
 
