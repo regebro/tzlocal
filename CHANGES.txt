@@ -6,7 +6,9 @@ Changes
 
 - Windows 7 support.
 
-- Python 2.5 support (also tested with Python 3.3).
+- Python 2.5 supported; because it only needed a __future__ import.
+
+- Python 3.3 tested, it worked.
 
 - Got rid of relative imports, because I don't actually like them, 
   so I don't know why I used them in the first place.
