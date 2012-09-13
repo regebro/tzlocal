@@ -30,10 +30,12 @@ def get_localzone_name():
     keyvalues = valuestodict(localtz)
     localtz.Close()
     if 'TimeZoneKeyName' in keyvalues:
-        # Windows 7 (and Vista?)
-        tzkeyname = keyvalues['TimeZoneKeyName']
-        if '\x00' in tzkeyname: # Windows is *weird*.
-            tzkeyname = tzkeyname.split('\x00', 1)[0]
+        # Windows 7 (and Vista?) 
+        
+        # For some reason this returns a string with loads of NUL bytes at
+        # least on some systems. I don't know if this is a bug somewhere, I
+        # just work around it.
+        tzkeyname = keyvalues['TimeZoneKeyName'].split('\x00', 1)[0]
     else:
         # Windows 2000 or XP
         
