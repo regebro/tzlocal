@@ -4,7 +4,7 @@ Changes
 0.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fixed some more cases where spaces needs replacing with underscores.
 
 
 0.3 (2012-09-13)
