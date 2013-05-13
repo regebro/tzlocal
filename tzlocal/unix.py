@@ -51,7 +51,7 @@ def _get_localzone(_root='/'):
             etctz, dummy = etctz.split(' ', 1)
         if '#' in etctz:
             etctz, dummy = etctz.split('#', 1)
-        return pytz.timezone(etctz)
+        return pytz.timezone(etctz.replace(' ', '_'))
                 
 
     # CentOS has a ZONE setting in /etc/sysconfig/clock,
@@ -82,7 +82,7 @@ def _get_localzone(_root='/'):
                 etctz = line[:end_re.search(line).start()]
 
                 # We found a timezone
-                return pytz.timezone(etctz)
+                return pytz.timezone(etctz.replace(' ', '_'))
 
     # No explicit setting existed. Use localtime
     for filename in ('etc/localtime', 'usr/local/etc/localtime'):
