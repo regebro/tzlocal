@@ -6,6 +6,8 @@ Changes
 
 - Fixed some more cases where spaces needs replacing with underscores.
 
+- Better handling of misconfigured /etc/timezone.
+
 
 0.3 (2012-09-13)
 ----------------
