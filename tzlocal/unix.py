@@ -43,16 +43,19 @@ def _get_localzone(_root='/'):
     # that contain the timezone name.
     tzpath = os.path.join(_root, 'etc/timezone')
     if os.path.exists(tzpath):
-        with open(tzpath, 'rt') as tzfile:
-            etctz = tzfile.read().strip()
+        with open(tzpath, 'rb') as tzfile:
+            data = tzfile.read()
             
-        # Get rid of host definitions and comments:
-        if ' ' in etctz:
-            etctz, dummy = etctz.split(' ', 1)
-        if '#' in etctz:
-            etctz, dummy = etctz.split('#', 1)
-        return pytz.timezone(etctz.replace(' ', '_'))
-                
+            # Issue #3 was that /etc/timezone was a zoneinfo file. 
+            # That's a misconfiguration, but we need to handle it gracefully:
+            if data[:5] != 'TZif2':
+                etctz = data.strip().decode()
+                # Get rid of host definitions and comments:
+                if ' ' in etctz:
+                    etctz, dummy = etctz.split(' ', 1)
+                if '#' in etctz:
+                    etctz, dummy = etctz.split('#', 1)
+                return pytz.timezone(etctz.replace(' ', '_'))                
 
     # CentOS has a ZONE setting in /etc/sysconfig/clock,
     # OpenSUSE has a TIMEZONE setting in /etc/sysconfig/clock and
