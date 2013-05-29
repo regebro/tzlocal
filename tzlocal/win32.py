@@ -60,8 +60,8 @@ def get_localzone_name():
         tzkey.Close()
         handle.Close()
     
-        if tzkeyname is None:
-            raise LookupError('Can not find Windows timezone configuration')
+    if tzkeyname is None:
+        raise LookupError('Can not find Windows timezone configuration')
     
     timezone = tz_names.get(tzkeyname)
     if timezone is None:
