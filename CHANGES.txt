@@ -1,7 +1,7 @@
 Changes
 =======
 
-0.4 (unreleased)
+1.0 (2013-05-29)
 ----------------
 
 - Fixed some more cases where spaces needs replacing with underscores.
