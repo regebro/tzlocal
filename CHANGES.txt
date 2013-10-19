@@ -4,7 +4,7 @@ Changes
 1.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Adding better support for OS X.
 
 
 1.0 (2013-05-29)
