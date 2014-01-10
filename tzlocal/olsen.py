@@ -1,4 +1,4 @@
-from tzlocal.olsen_tz import tz_names_olsen
+from tzlocal.windows_tz import tz_names_olsen
 
 def get_windowszone_name(tz):
     """Get the TimeZone Name as the Windows TimeZone Name"""
