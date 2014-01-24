@@ -24,6 +24,9 @@ for mapping in element.getElementsByTagName('mapZone'):
     # We want all the names in the Olsen listing as there are many Olsen names to a single Windows name
     for olsen_name in mapping.getAttribute('type').split(' '):
         olsen_mappings[olsen_name] = mapping.getAttribute('other')
+
+# B/c some systems will report Etc/UTC which isn't in the XML file
+olsen_mappings['Etc/UTC'] = 'UTC'
     
 
 with open('tzlocal/windows_tz.py', "wt") as out:
