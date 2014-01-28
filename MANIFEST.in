@@ -1,5 +1,4 @@
 include *.py
 include *.rst
 include *.txt
-include tox.ini
 recursive-include tzlocal/test_data *
