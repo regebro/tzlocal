@@ -6,6 +6,8 @@ Changes
 
 - Adding better support for OS X.
 
+- Added support to map from tzdata/Olsen names to Windows names. 
+
 
 1.0 (2013-05-29)
 ----------------
