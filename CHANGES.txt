@@ -4,7 +4,7 @@ Changes
 1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- I forgot to add Etc/UTC as an alias for Etc/GMT.
 
 
 1.1 (2014-01-28)
@@ -12,7 +12,8 @@ Changes
 
 - Adding better support for OS X.
 
-- Added support to map from tzdata/Olsen names to Windows names. 
+- Added support to map from tzdata/Olsen names to Windows names.
+  (Thanks to Benjamen Meyer).
 
 
 1.0 (2013-05-29)
