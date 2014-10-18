@@ -9,6 +9,9 @@ Changes
 
 - Now doesn't fail if the TZ environment variable isn't an Olsen time zone.
 
+- Some timezones on Windows can apparently be empty (perhaps the are deleted).
+  Now these are ignored.
+
 
 1.1.1 (2014-01-29)
 ------------------

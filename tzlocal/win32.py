@@ -53,9 +53,14 @@ def get_localzone_name():
             sub = winreg.OpenKey(tzkey, subkey)
             data = valuestodict(sub)
             sub.Close()
-            if data['Std'] == tzwin:
-                tzkeyname = subkey
-                break
+            try:
+                if data['Std'] == tzwin:
+                    tzkeyname = subkey
+                    break
+            except KeyError:
+                # This timezone didn't have proper configuration.
+                # Ignore it.
+                pass
 
         tzkey.Close()
         handle.Close()

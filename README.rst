@@ -40,29 +40,38 @@ Load the local timezone:
     >>> tz = get_localzone()
     >>> tz
     <DstTzInfo 'Europe/Warsaw' WMT+1:24:00 STD>
-    
+
 Create a local datetime:
 
     >>> from datetime import datetime
     >>> dt = tz.localize(datetime.now())
     >>> dt
     datetime.datetime(2012, 9, 11, 14, 43, 42, 518871, tzinfo=<DstTzInfo 'Europe/Warsaw' CEST+2:00:00 DST>)
-    
+
 Lookup another timezone with `pytz`:
 
     >>> import pytz
     >>> eastern = pytz.timezone('US/Eastern')
-    
+
 Convert the datetime:
 
     >>> dt.astimezone(eastern)
     datetime.datetime(2012, 9, 11, 8, 43, 42, 518871, tzinfo=<DstTzInfo 'US/Eastern' EDT-1 day, 20:00:00 DST>)
 
 
-Contributors
-------------
+Maintainer
+----------
 
 * Lennart Regebro, regebro@gmail.com
+
+Contributors
+---------
+
+* Marc Van Olmen
+* Benjamen Meyer
+* Manuel Ebert
+
+(Sorry if I forgot someone)
 
 License
 -------
