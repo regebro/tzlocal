@@ -4,7 +4,8 @@ Changes
 1.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Timezones that has 3 items did not work on Mac OS X.
+  (Marc Van Olmen)
 
 
 1.1.1 (2014-01-29)
