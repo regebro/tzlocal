@@ -37,7 +37,10 @@ def _get_localzone(_root='/'):
 
     tzenv = os.environ.get('TZ')
     if tzenv:
-        return _tz_from_env(tzenv)
+        try:
+            return _tz_from_env(tzenv)
+        except pytz.UnknownTimeZoneError:
+            pass
 
     # Now look for distribution specific configuration files
     # that contain the timezone name.

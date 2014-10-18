@@ -7,6 +7,8 @@ Changes
 - Timezones that has 3 items did not work on Mac OS X.
   (Marc Van Olmen)
 
+- Now doesn't fail if the TZ environment variable isn't an Olsen time zone.
+
 
 1.1.1 (2014-01-29)
 ------------------
@@ -42,7 +44,7 @@ Changes
 
 - Python 3.3 tested, it worked.
 
-- Got rid of relative imports, because I don't actually like them, 
+- Got rid of relative imports, because I don't actually like them,
   so I don't know why I used them in the first place.
 
 - For each Windows zone, use the default zoneinfo zone, not the last one.
