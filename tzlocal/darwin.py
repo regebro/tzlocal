@@ -10,7 +10,7 @@ def _get_localzone():
     if not tzname or tzname not in pytz.all_timezones_set:
         # link will be something like /usr/share/zoneinfo/America/Los_Angeles.
         link = os.readlink("/etc/localtime")
-        tzname = link[link.rfind('/', 0, link.rfind('/'))+1:]
+        tzname = link[link.rfind("zoneinfo/") + 9:]
     return pytz.timezone(tzname)
 
 def get_localzone():
@@ -25,4 +25,4 @@ def reload_localzone():
     global _cache_tz
     _cache_tz = _get_localzone()
     return _cache_tz
-    
+
