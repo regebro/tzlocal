@@ -6,7 +6,7 @@ import pytz
 import tzlocal.unix
 
 class TzLocalTests(unittest.TestCase):
-    
+
     def test_env(self):
         tz_harare = tzlocal.unix._tz_from_env(':Africa/Harare')
         self.assertEqual(tz_harare.zone, 'Africa/Harare')
@@ -23,7 +23,7 @@ class TzLocalTests(unittest.TestCase):
         # of the Harare timezone.
         dt = datetime(2012, 1, 1, 5)
         self.assertEqual(tz_harare.localize(dt), tz_local.localize(dt))
-        
+
         # Non-zoneinfo timezones are not supported in the TZ environment.
         self.assertRaises(pytz.UnknownTimeZoneError, tzlocal.unix._tz_from_env, 'GMT+03:00')
 
@@ -51,14 +51,14 @@ class TzLocalTests(unittest.TestCase):
         self.assertEqual(tz.zone, 'local')
         dt = datetime(2012, 1, 1, 5)
         self.assertEqual(pytz.timezone('Africa/Harare').localize(dt), tz.localize(dt))
-        
+
 if sys.platform == 'win32':
-    
+
     import tzlocal.win32
     class TzWin32Tests(unittest.TestCase):
-        
+
         def test_win32(self):
-            tz = tzlocal.win32.get_localzone()
-        
+            tzlocal.win32.get_localzone()
+
 if __name__ == '__main__':
     unittest.main()

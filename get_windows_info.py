@@ -22,7 +22,7 @@ tz_win = {}
 for mapping in element.getElementsByTagName('mapZone'):
     if mapping.getAttribute('territory') == '001':
         win_tz[mapping.getAttribute('other')] = mapping.getAttribute('type').split(' ')[0]
-        
+
     for tz_name in mapping.getAttribute('type').split(' '):
         tz_win[tz_name] = mapping.getAttribute('other')
 
