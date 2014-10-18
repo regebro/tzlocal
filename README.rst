@@ -65,7 +65,7 @@ Maintainer
 * Lennart Regebro, regebro@gmail.com
 
 Contributors
----------
+------------
 
 * Marc Van Olmen
 * Benjamen Meyer
