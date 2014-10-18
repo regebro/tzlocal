@@ -11,6 +11,7 @@ Changes
 
 - Some timezones on Windows can apparently be empty (perhaps the are deleted).
   Now these are ignored.
+  (Xiaokun Zhu)
 
 
 1.1.1 (2014-01-29)

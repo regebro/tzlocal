@@ -70,6 +70,7 @@ Contributors
 * Marc Van Olmen
 * Benjamen Meyer
 * Manuel Ebert
+* Xiaokun Zhu
 
 (Sorry if I forgot someone)
 
