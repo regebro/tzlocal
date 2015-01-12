@@ -90,6 +90,20 @@ def _get_localzone(_root='/'):
                 # We found a timezone
                 return pytz.timezone(etctz.replace(' ', '_'))
 
+    # systemd distributions use symlinks that include the zone name, 
+    # see manpage of localtime(5) and timedatectl(1)
+    tzpath = os.path.join(_root, 'etc/localtime')
+    if os.path.exists(tzpath) and os.path.islink(tzpath):
+        tzpath = os.path.realpath(tzpath)
+        start = tzpath.find("/")+1
+        while start is not 0:
+            tzpath = tzpath[start:]
+            try:
+                return pytz.timezone(tzpath)
+            except pytz.UnknownTimeZoneError:
+                pass
+            start = tzpath.find("/")+1
+
     # No explicit setting existed. Use localtime
     for filename in ('etc/localtime', 'usr/local/etc/localtime'):
         tzpath = os.path.join(_root, filename)
