@@ -71,6 +71,7 @@ Contributors
 * Benjamen Meyer
 * Manuel Ebert
 * Xiaokun Zhu
+* Cameris
 
 (Sorry if I forgot someone)
 
