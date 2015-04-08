@@ -39,24 +39,24 @@ Load the local timezone:
     >>> from tzlocal import get_localzone
     >>> tz = get_localzone()
     >>> tz
-    <DstTzInfo 'Europe/Warsaw' WMT+1:24:00 STD>
+    <DstTzInfo 'Europe/Warsaw' LMT+1:24:00 STD>
 
 Create a local datetime:
 
     >>> from datetime import datetime
-    >>> dt = tz.localize(datetime.now())
+    >>> dt = datetime.now(tz)
     >>> dt
-    datetime.datetime(2012, 9, 11, 14, 43, 42, 518871, tzinfo=<DstTzInfo 'Europe/Warsaw' CEST+2:00:00 DST>)
+    datetime.datetime(2014, 12, 28, 2, 9, 30, 288934, tzinfo=<DstTzInfo 'Europe/Warsaw' CET+1:00:00 STD>)
 
 Lookup another timezone with `pytz`:
 
     >>> import pytz
-    >>> eastern = pytz.timezone('US/Eastern')
+    >>> new_tz = pytz.timezone('America/New_York')
 
 Convert the datetime:
 
-    >>> dt.astimezone(eastern)
-    datetime.datetime(2012, 9, 11, 8, 43, 42, 518871, tzinfo=<DstTzInfo 'US/Eastern' EDT-1 day, 20:00:00 DST>)
+    >>> new_tz.normalize(dt.astimezone(new_tz))
+    datetime.datetime(2014, 12, 27, 20, 9, 30, 288934, tzinfo=<DstTzInfo 'America/New_York' EST-1 day, 19:00:00 STD>)
 
 
 Maintainer
