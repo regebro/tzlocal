@@ -44,9 +44,9 @@ Load the local timezone:
 Create a local datetime:
 
     >>> from datetime import datetime
-    >>> dt = tz.localize(datetime.now())
+    >>> dt = tz.localize(datetime(2015, 4, 10, 7, 22))
     >>> dt
-    datetime.datetime(2012, 9, 11, 14, 43, 42, 518871, tzinfo=<DstTzInfo 'Europe/Warsaw' CEST+2:00:00 DST>)
+    datetime.datetime(2015, 4, 10, 7, 22, tzinfo=<DstTzInfo 'Europe/Warsaw' CEST+2:00:00 DST>)
 
 Lookup another timezone with `pytz`:
 
@@ -56,7 +56,7 @@ Lookup another timezone with `pytz`:
 Convert the datetime:
 
     >>> dt.astimezone(eastern)
-    datetime.datetime(2012, 9, 11, 8, 43, 42, 518871, tzinfo=<DstTzInfo 'US/Eastern' EDT-1 day, 20:00:00 DST>)
+    datetime.datetime(2015, 4, 10, 1, 2, tzinfo=<DstTzInfo 'US/Eastern' EDT-1 day, 20:00:00 DST>)
 
 
 Maintainer
