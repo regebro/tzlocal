@@ -1,8 +1,8 @@
 Changes
 =======
 
-1.1.3 (unreleased)
-------------------
+1.2 (2015-06-14)
+----------------
 
 - Systemd stores no time zone name, forcing us to look at the name of the file
   that localtime symlinks to. (cameris)
