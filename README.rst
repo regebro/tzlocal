@@ -56,7 +56,7 @@ Lookup another timezone with `pytz`:
 Convert the datetime:
 
     >>> dt.astimezone(eastern)
-    datetime.datetime(2015, 4, 10, 1, 2, tzinfo=<DstTzInfo 'US/Eastern' EDT-1 day, 20:00:00 DST>)
+    datetime.datetime(2015, 4, 10, 1, 22, tzinfo=<DstTzInfo 'US/Eastern' EDT-1 day, 20:00:00 DST>)
 
 
 Maintainer
