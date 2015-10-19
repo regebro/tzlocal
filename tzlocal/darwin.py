@@ -1,11 +1,14 @@
 from __future__ import with_statement
 import os
 import pytz
+import subprocess
 
 _cache_tz = None
 
 def _get_localzone():
-    tzname = os.popen("systemsetup -gettimezone").read().replace("Time Zone: ", "").strip()
+    pipe = Popen("systemsetup -gettimezone", shell=True, stderr=PIPE, stdout=PIPE)
+    tzname = pipe.stdout.read().replace('Time Zone: ', '').strip()
+
     if not tzname or tzname not in pytz.all_timezones_set:
         # link will be something like /usr/share/zoneinfo/America/Los_Angeles.
         link = os.readlink("/etc/localtime")

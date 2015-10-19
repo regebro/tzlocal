@@ -72,6 +72,7 @@ Contributors
 * Manuel Ebert
 * Xiaokun Zhu
 * Cameris
+* McK KIM
 
 (Sorry if I forgot someone)
 
