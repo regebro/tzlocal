@@ -4,8 +4,7 @@ Changes
 1.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Tetss failed if TZ was set in the environment. (EdwardBetts)
 
 1.2 (2015-06-14)
 ----------------
