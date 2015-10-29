@@ -6,6 +6,9 @@ import pytz
 import tzlocal.unix
 
 class TzLocalTests(unittest.TestCase):
+    def setUp(self):
+        if 'TZ' in os.environ:
+            del os.environ['TZ']
 
     def test_env(self):
         tz_harare = tzlocal.unix._tz_from_env(':Africa/Harare')
