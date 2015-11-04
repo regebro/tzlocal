@@ -5,8 +5,14 @@ import subprocess
 
 _cache_tz = None
 
+
 def _get_localzone():
-    pipe = Popen("systemsetup -gettimezone", shell=True, stderr=PIPE, stdout=PIPE)
+    pipe = subprocess.Popen(
+        "systemsetup -gettimezone",
+        shell=True,
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
     tzname = pipe.stdout.read().replace('Time Zone: ', '').strip()
 
     if not tzname or tzname not in pytz.all_timezones_set:
@@ -15,6 +21,7 @@ def _get_localzone():
         tzname = link[link.rfind("zoneinfo/") + 9:]
     return pytz.timezone(tzname)
 
+
 def get_localzone():
     """Get the computers configured local timezone, if any."""
     global _cache_tz
@@ -22,9 +29,9 @@ def get_localzone():
         _cache_tz = _get_localzone()
     return _cache_tz
 
+
 def reload_localzone():
     """Reload the cached localzone. You need to call this if the timezone has changed."""
     global _cache_tz
     _cache_tz = _get_localzone()
     return _cache_tz
-
