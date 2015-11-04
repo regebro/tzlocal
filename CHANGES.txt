@@ -7,7 +7,7 @@ Changes
 - Tests failed if TZ was set in the environment. (EdwardBetts)
 
 - Replaces os.popen() with subprocess.Popen() for OS X to
-  handle when systemsetup doesn't exist. (mckabi)
+  handle when systemsetup doesn't exist. (mckabi, cewing)
 
 
 1.2 (2015-06-14)
