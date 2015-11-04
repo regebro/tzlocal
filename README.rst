@@ -73,6 +73,7 @@ Contributors
 * Xiaokun Zhu
 * Cameris
 * McK KIM
+* Cris Ewing
 
 (Sorry if I forgot someone)
 
