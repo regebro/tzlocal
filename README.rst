@@ -74,6 +74,7 @@ Contributors
 * Cameris
 * Edward Betts
 * McK KIM
+* Cris Ewing
 
 (Sorry if I forgot someone)
 
