@@ -6,7 +6,12 @@ import subprocess
 _cache_tz = None
 
 def _get_localzone():
-    pipe = Popen("systemsetup -gettimezone", shell=True, stderr=PIPE, stdout=PIPE)
+    pipe = subprocess.Popen(
+        "systemsetup -gettimezone",
+        shell=True,
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
     tzname = pipe.stdout.read().replace('Time Zone: ', '').strip()
 
     if not tzname or tzname not in pytz.all_timezones_set:
