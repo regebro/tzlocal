@@ -1,5 +1,6 @@
 from __future__ import with_statement
 import os
+import sys
 import pytz
 import subprocess
 
@@ -11,7 +12,8 @@ def _get_localzone():
         "systemsetup -gettimezone",
         shell=True,
         stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
+        stdout=subprocess.PIPE,
+        universal_newlines=True,
     )
     tzname = pipe.stdout.read().replace('Time Zone: ', '').strip()
 
