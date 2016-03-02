@@ -13,7 +13,7 @@ def _get_localzone():
         stderr=subprocess.PIPE,
         stdout=subprocess.PIPE
     )
-    tzname = pipe.stdout.read().replace('Time Zone: ', '').strip()
+    tzname = pipe.stdout.read().replace(b'Time Zone: ', b'').strip()
 
     if not tzname or tzname not in pytz.all_timezones_set:
         # link will be something like /usr/share/zoneinfo/America/Los_Angeles.
