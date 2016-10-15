@@ -54,6 +54,12 @@ class TzLocalTests(unittest.TestCase):
         tz = tzlocal.unix._get_localzone(_root=os.path.join(local_path, 'test_data', 'symlink_localtime'))
         self.assertEqual(tz.zone, 'Africa/Harare')
 
+    def test_vardbzoneinfo_setting(self):
+        # A ZONE setting in /etc/conf.d/clock, f ex Gentoo
+        local_path = os.path.split(__file__)[0]
+        tz = tzlocal.unix._get_localzone(_root=os.path.join(local_path, 'test_data', 'vardbzoneinfo'))
+        self.assertEqual(tz.zone, 'Africa/Harare')
+
     def test_only_localtime(self):
         local_path = os.path.split(__file__)[0]
         tz = tzlocal.unix._get_localzone(_root=os.path.join(local_path, 'test_data', 'localtime'))
