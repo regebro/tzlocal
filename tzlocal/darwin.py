@@ -19,6 +19,8 @@ def _get_localzone():
         # link will be something like /usr/share/zoneinfo/America/Los_Angeles.
         link = os.readlink("/etc/localtime")
         tzname = link[link.rfind("zoneinfo/") + 9:]
+    pipe.stdout.close()
+    pipe.stderr.close()
     return pytz.timezone(tzname)
 
 
