@@ -7,20 +7,19 @@ _cache_tz = None
 
 
 def _get_localzone():
-    pipe = subprocess.Popen(
+    with subprocess.Popen(
         "systemsetup -gettimezone",
         shell=True,
         stderr=subprocess.PIPE,
         stdout=subprocess.PIPE
-    )
-    tzname = pipe.stdout.read().replace(b'Time Zone: ', b'').strip()
+    ) as pipe:
+        tzname = pipe.stdout.read().replace(b'Time Zone: ', b'').strip()
 
     if not tzname or tzname not in pytz.all_timezones_set:
         # link will be something like /usr/share/zoneinfo/America/Los_Angeles.
         link = os.readlink("/etc/localtime")
         tzname = link[link.rfind("zoneinfo/") + 9:]
-    pipe.stdout.close()
-    pipe.stderr.close()
+
     return pytz.timezone(tzname)
 
 
