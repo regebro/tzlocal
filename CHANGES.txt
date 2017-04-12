@@ -4,8 +4,13 @@ Changes
 1.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Ensure closing of subprocess on OS X (ayalash)
 
+- Removed unused imports (jwilk)
+
+- Closes stdout and stderr to get rid of ResourceWarnings (johnwquarles)
+
+- Updated Windows timezones (axil)
 
 1.3 (2016-10-15)
 ----------------

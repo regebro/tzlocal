@@ -75,6 +75,10 @@ Contributors
 * Edward Betts
 * McK KIM
 * Cris Ewing
+* Ayala Shachar
+* Lev Maximov
+* Jakub Wilk
+* John Quarles
 
 (Sorry if I forgot someone)
 
