@@ -11,5 +11,7 @@ python:
   - "3.6"
   - "nightly" # currently points to 3.7-dev
 # command to run tests
+install:
+# Nothing needed
 script: python setup.py test
 
