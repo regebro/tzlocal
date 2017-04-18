@@ -4,7 +4,7 @@ Changes
 1.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- I use MIT on my other projects, so relicensing.
 
 
 1.4b1 (2017-04-14)
