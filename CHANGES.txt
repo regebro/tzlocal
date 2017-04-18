@@ -1,7 +1,7 @@
 Changes
 =======
 
-1.4 (unreleased)
+1.4 (2017-04-18)
 ----------------
 
 - I use MIT on my other projects, so relicensing.
