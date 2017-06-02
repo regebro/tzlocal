@@ -3,10 +3,20 @@
 # http://unicode.org/cldr/data/common/supplemental/supplementalData.xml
 # and parsing it, and from this generating the file windows_tz.py.
 #
-# It must be run with Python 3.
+# It must be run with Python 2.7 or 3.
 
 XML_SOURCE = 'http://unicode.org/cldr/data/common/supplemental/windowsZones.xml'
-from urllib.request import urlopen
+
+import sys
+
+if (sys.version_info > (3, 0)):
+    from urllib.request import urlopen
+elif (sys.version_info >= (2, 7)):
+    from urllib import urlopen
+else:
+    print >>sys.stderr, "Must be run with Python 2.7 or 3!"
+    sys.exit(-1)
+
 from xml.dom import minidom
 from pprint import pprint
 
