@@ -91,3 +91,4 @@ def reload_localzone():
     """Reload the cached localzone. You need to call this if the timezone has changed."""
     global _cache_tz
     _cache_tz = pytz.timezone(get_localzone_name())
+    return _cache_tz
