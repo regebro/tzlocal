@@ -24,6 +24,16 @@ def _tz_from_env(tzenv):
             "tzlocal() does not support non-zoneinfo timezones like %s. \n"
             "Please use a timezone in the form of Continent/City")
 
+
+def _try_tz_from_env():
+    tzenv = os.environ.get('TZ')
+    if tzenv:
+        try:
+            return pytz.unix._tz_from_env(tzenv)
+        except pytz.UnknownTimeZoneError:
+            pass
+
+
 def _get_localzone(_root='/'):
     """Tries to find the local timezone configuration.
 
@@ -35,12 +45,9 @@ def _get_localzone(_root='/'):
     beneath the _root directory. This is primarily used by the tests.
     In normal usage you call the function without parameters."""
 
-    tzenv = os.environ.get('TZ')
+    tzenv = _try_tz_from_env()
     if tzenv:
-        try:
-            return _tz_from_env(tzenv)
-        except pytz.UnknownTimeZoneError:
-            pass
+        return tzenv
 
     # Now look for distribution specific configuration files
     # that contain the timezone name.

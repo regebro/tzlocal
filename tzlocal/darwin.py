@@ -3,6 +3,7 @@ import os
 import pytz
 import subprocess
 import sys
+import tzlocal.unix
 
 _cache_tz = None
 
@@ -28,6 +29,10 @@ else:
 
 
 def _get_localzone(_root='/'):
+    tzenv = tzlocal.unix._try_tz_from_env()
+    if tzenv:
+        return tzenv
+
     with Popen(
         "systemsetup -gettimezone",
         shell=True,
