@@ -4,7 +4,6 @@ import pytz
 import subprocess
 import sys
 
-_cache_tz = None
 
 if sys.version_info[0] == 2:
 
@@ -27,7 +26,7 @@ else:
     from subprocess import Popen
 
 
-def _get_localzone(_root='/'):
+def get_localzone_name(_root='/'):
     with Popen(
         "systemsetup -gettimezone",
         shell=True,
@@ -41,19 +40,9 @@ def _get_localzone(_root='/'):
         link = os.readlink(os.path.join(_root, "etc/localtime"))
         tzname = link[link.rfind("zoneinfo/") + 9:]
 
-    return pytz.timezone(tzname)
+    return tzname
 
 
-def get_localzone():
-    """Get the computers configured local timezone, if any."""
-    global _cache_tz
-    if _cache_tz is None:
-        _cache_tz = _get_localzone()
-    return _cache_tz
-
-
-def reload_localzone():
-    """Reload the cached localzone. You need to call this if the timezone has changed."""
-    global _cache_tz
-    _cache_tz = _get_localzone()
-    return _cache_tz
+def _get_localzone():
+    """Returns the zoneinfo-based tzinfo object that matches the Windows-configured timezone."""
+    return pytz.timezone(get_localzone_name())

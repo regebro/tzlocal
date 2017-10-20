@@ -6,7 +6,6 @@ except ImportError:
 from tzlocal.windows_tz import win_tz
 import pytz
 
-_cache_tz = None
 
 def valuestodict(key):
     """Convert a registry key's values to a dictionary."""
@@ -80,15 +79,7 @@ def get_localzone_name():
 
     return timezone
 
-def get_localzone():
-    """Returns the zoneinfo-based tzinfo object that matches the Windows-configured timezone."""
-    global _cache_tz
-    if _cache_tz is None:
-        _cache_tz = pytz.timezone(get_localzone_name())
-    return _cache_tz
 
-def reload_localzone():
-    """Reload the cached localzone. You need to call this if the timezone has changed."""
-    global _cache_tz
-    _cache_tz = pytz.timezone(get_localzone_name())
-    return _cache_tz
+def _get_localzone():
+    """Returns the zoneinfo-based tzinfo object that matches the Windows-configured timezone."""
+    return pytz.timezone(get_localzone_name())

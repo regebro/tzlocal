@@ -1,9 +1,11 @@
 from setuptools import setup, find_packages
 
-version = '1.5.dev0'
+
+from tzlocal import __version__
+
 
 setup(name='tzlocal',
-      version=version,
+      version=__version__,
       description="tzinfo object for the local timezone",
       long_description=open('README.rst', 'rt').read() + '\n\n' + open('CHANGES.txt', 'rt').read(),
       classifiers=[
