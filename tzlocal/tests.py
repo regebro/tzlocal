@@ -73,7 +73,8 @@ class TzLocalTests(unittest.TestCase):
         # Basic test of OS X code. The systemcall will fail if this is not OS X
         # And a symlink will be used. This means that on OS X, this test will
         # actually fail! No matter, this exersizes the code.
-        tz = tzlocal.darwin._get_localzone(_root=os.path.join(self.path, 'test_data', 'symlink_localtime'))
+        tz_name = tzlocal.darwin.get_localzone_name(_root=os.path.join(self.path, 'test_data', 'symlink_localtime'))
+        tz = pytz.timezone(tz_name)
         self.assertEqual(tz.zone, 'Africa/Harare')
 
 if sys.platform == 'win32':
@@ -82,7 +83,7 @@ if sys.platform == 'win32':
     class TzWin32Tests(unittest.TestCase):
 
         def test_win32(self):
-            tzlocal.win32.get_localzone()
+            tzlocal.win32.get_localzone_name()
 
 if __name__ == '__main__':
     unittest.main()
