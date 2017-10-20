@@ -3,7 +3,6 @@ import os
 import re
 import pytz
 
-_cache_tz = None
 
 def _tz_from_env(tzenv):
     if tzenv[0] == ':':
@@ -115,16 +114,3 @@ def _get_localzone(_root='/'):
             return pytz.tzfile.build_tzinfo('local', tzfile)
 
     raise pytz.UnknownTimeZoneError('Can not find any timezone configuration')
-
-def get_localzone():
-    """Get the computers configured local timezone, if any."""
-    global _cache_tz
-    if _cache_tz is None:
-        _cache_tz = _get_localzone()
-    return _cache_tz
-
-def reload_localzone():
-    """Reload the cached localzone. You need to call this if the timezone has changed."""
-    global _cache_tz
-    _cache_tz = _get_localzone()
-    return _cache_tz
