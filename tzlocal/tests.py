@@ -4,7 +4,7 @@ from datetime import datetime
 import unittest
 import pytz
 import tzlocal.unix
-import tzlocal.darwin
+
 
 class TzLocalTests(unittest.TestCase):
     def setUp(self):
@@ -69,12 +69,6 @@ class TzLocalTests(unittest.TestCase):
         dt = datetime(2012, 1, 1, 5)
         self.assertEqual(pytz.timezone('Africa/Harare').localize(dt), tz.localize(dt))
 
-    def test_darwin(self):
-        # Basic test of OS X code. The systemcall will fail if this is not OS X
-        # And a symlink will be used. This means that on OS X, this test will
-        # actually fail! No matter, this exersizes the code.
-        tz = tzlocal.darwin._get_localzone(_root=os.path.join(self.path, 'test_data', 'symlink_localtime'))
-        self.assertEqual(tz.zone, 'Africa/Harare')
 
 if sys.platform == 'win32':
 
