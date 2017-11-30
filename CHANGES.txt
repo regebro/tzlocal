@@ -6,6 +6,11 @@ Changes
 
 - No longer treats macOS as special, but as a unix.
 
+- get_windows_info.py is renamed to update_windows_mappings.py
+
+- Windows mappings now also contain mappings from deprecated zoneinfo names.
+  (Preston-Landers, regebro)
+
 
 1.4 (2017-04-18)
 ----------------

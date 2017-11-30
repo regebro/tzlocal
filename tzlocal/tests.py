@@ -63,7 +63,6 @@ class TzLocalTests(unittest.TestCase):
         self.assertEqual(tz.zone, 'Africa/Harare')
 
     def test_only_localtime(self):
-
         tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'localtime'))
         self.assertEqual(tz.zone, 'local')
         dt = datetime(2012, 1, 1, 5)
