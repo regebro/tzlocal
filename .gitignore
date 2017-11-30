@@ -3,3 +3,5 @@
 *.wpu
 *.egg-info
 *.egg
+.idea
+env
