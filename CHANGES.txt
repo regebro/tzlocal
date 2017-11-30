@@ -1,7 +1,7 @@
 Changes
 =======
 
-1.5 (unreleased)
+1.5 (2017-11-30)
 ----------------
 
 - No longer treats macOS as special, but as a unix.
