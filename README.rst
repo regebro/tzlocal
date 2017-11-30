@@ -79,6 +79,7 @@ Contributors
 * Lev Maximov
 * Jakub Wilk
 * John Quarles
+* Preston Landers
 
 (Sorry if I forgot someone)
 

@@ -13,13 +13,9 @@ install:
 script: python setup.py test
 
 # osx Python installs must be run as generic language, because Python isn't
-# installed. Also, the queue for their macs is long so let's just test 2.7
-# and 3.6.
+# installed. Also, the queue for their macs is long so let's just test 3.6.
 matrix:
   include:
-    - os: osx
-      language: generic
-      python: "2.7"
     - os: osx
       language: generic
       python: "3.6"
