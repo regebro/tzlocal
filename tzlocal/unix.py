@@ -29,7 +29,7 @@ def _try_tz_from_env():
     tzenv = os.environ.get('TZ')
     if tzenv:
         try:
-            return pytz.unix._tz_from_env(tzenv)
+            return _tz_from_env(tzenv)
         except pytz.UnknownTimeZoneError:
             pass
 
