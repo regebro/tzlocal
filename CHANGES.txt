@@ -4,7 +4,8 @@ Changes
 1.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- 1.5 had a bug that slipped through testing, fixed that,
+  increased test coverage.
 
 
 1.5 (2017-11-30)
@@ -37,6 +38,9 @@ Changes
 ------------------
 
 - Ensure closing of subprocess on OS X (ayalash)
+DOING: Implementing feedback on the unsubscribe button
+DOING: Investigating remaining issues with DOCX export
+BLOCKERS: None
 
 - Removed unused imports (jwilk)
 

@@ -1,4 +1,3 @@
-from __future__ import with_statement
 import os
 import re
 import pytz
@@ -29,7 +28,7 @@ def _try_tz_from_env():
     tzenv = os.environ.get('TZ')
     if tzenv:
         try:
-            return pytz.unix._tz_from_env(tzenv)
+            return _tz_from_env(tzenv)
         except pytz.UnknownTimeZoneError:
             pass
 
@@ -59,14 +58,16 @@ def _get_localzone(_root='/'):
 
                 # Issue #3 was that /etc/timezone was a zoneinfo file.
                 # That's a misconfiguration, but we need to handle it gracefully:
-                if data[:5] != 'TZif2':
-                    etctz = data.strip().decode()
-                    # Get rid of host definitions and comments:
-                    if ' ' in etctz:
-                        etctz, dummy = etctz.split(' ', 1)
-                    if '#' in etctz:
-                        etctz, dummy = etctz.split('#', 1)
-                    return pytz.timezone(etctz.replace(' ', '_'))
+                if data[:5] == 'TZif2':
+                    continue
+
+                etctz = data.strip().decode()
+                # Get rid of host definitions and comments:
+                if ' ' in etctz:
+                    etctz, dummy = etctz.split(' ', 1)
+                if '#' in etctz:
+                    etctz, dummy = etctz.split('#', 1)
+                return pytz.timezone(etctz.replace(' ', '_'))
 
     # CentOS has a ZONE setting in /etc/sysconfig/clock,
     # OpenSUSE has a TIMEZONE setting in /etc/sysconfig/clock and

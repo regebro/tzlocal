@@ -29,6 +29,7 @@ def get_localzone_name():
     localtz = winreg.OpenKey(handle, TZLOCALKEYNAME)
     keyvalues = valuestodict(localtz)
     localtz.Close()
+
     if 'TimeZoneKeyName' in keyvalues:
         # Windows 7 (and Vista?)
 

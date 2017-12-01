@@ -28,5 +28,8 @@ setup(name='tzlocal',
       install_requires=[
           'pytz',
       ],
+      tests_require=[
+          'mock',
+      ],
       test_suite='tzlocal.tests',
       )
