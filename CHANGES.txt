@@ -1,8 +1,8 @@
 Changes
 =======
 
-1.6 (unreleased)
-----------------
+1.5.1 (2017-12-01)
+------------------
 
 - 1.5 had a bug that slipped through testing, fixed that,
   increased test coverage.
