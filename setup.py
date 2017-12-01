@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '1.5.1'
+version = '1.5.2.dev0'
 
 setup(name='tzlocal',
       version=version,
