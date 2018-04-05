@@ -1,6 +1,9 @@
+import ctypes
+import datetime
 import os
 import re
 import pytz
+import warnings
 
 _cache_tz = None
 
@@ -31,6 +34,39 @@ def _try_tz_from_env():
             return _tz_from_env(tzenv)
         except pytz.UnknownTimeZoneError:
             pass
+
+
+def _get_system_offset():
+    """Get system's timezone offset using libc built-in function tzset().
+
+    The  tzset()  function  initializes  the tzname variable from the TZ
+    environment variable. In a System-V-like environment, it will also set the
+    variables timezone (seconds West of UTC).
+
+    Adapted from release 3.74 of the Linux man-pages project.
+    Also available on macOS."""
+    libc = ctypes.CDLL(None)
+    libc.tzset()
+    return ctypes.c_long.in_dll(libc, 'timezone').value * -1
+
+
+def _get_tz_offset(tz):
+    """Get timezone's offset using built-in function datetime.utcoffset()."""
+    return int(datetime.datetime.now(tz).utcoffset().total_seconds())
+
+
+def _assert_tz_offset(tz):
+    """Assert that system's timezone offset equals to the timezone offset found.
+
+    If they don't match, we probably have a misconfiguration, for example, an
+    incorrect timezone set in /etc/timezone file in systemd distributions."""
+    tz_offset = _get_tz_offset(tz)
+    system_offset = _get_system_offset()
+    msg = ('Timezone offset does not match system offset: {0} != {1}. '
+           'Please, check your config files.').format(
+        tz_offset, system_offset
+    )
+    assert tz_offset == system_offset, msg
 
 
 def _get_localzone(_root='/'):
@@ -124,15 +160,20 @@ def _get_localzone(_root='/'):
 
     raise pytz.UnknownTimeZoneError('Can not find any timezone configuration')
 
+
 def get_localzone():
     """Get the computers configured local timezone, if any."""
     global _cache_tz
     if _cache_tz is None:
         _cache_tz = _get_localzone()
+
+    _assert_tz_offset(_cache_tz)
     return _cache_tz
+
 
 def reload_localzone():
     """Reload the cached localzone. You need to call this if the timezone has changed."""
     global _cache_tz
     _cache_tz = _get_localzone()
+    _assert_tz_offset(_cache_tz)
     return _cache_tz
