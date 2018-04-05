@@ -3,7 +3,6 @@ import datetime
 import os
 import re
 import pytz
-import warnings
 
 _cache_tz = None
 
