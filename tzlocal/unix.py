@@ -1,8 +1,8 @@
-import ctypes
 import datetime
 import os
-import re
 import pytz
+import re
+import time
 
 _cache_tz = None
 
@@ -36,17 +36,11 @@ def _try_tz_from_env():
 
 
 def _get_system_offset():
-    """Get system's timezone offset using libc built-in function tzset().
-
-    The  tzset()  function  initializes  the tzname variable from the TZ
-    environment variable. In a System-V-like environment, it will also set the
-    variables timezone (seconds West of UTC).
-
-    Adapted from release 3.74 of the Linux man-pages project.
-    Also available on macOS."""
-    libc = ctypes.CDLL(None)
-    libc.tzset()
-    return ctypes.c_long.in_dll(libc, 'timezone').value * -1
+    """Get system's timezone offset using built-in library time."""
+    if time.daylight and time.localtime().tm_isdst > 0:
+        return time.altzone
+    else:
+        return time.timezone
 
 
 def _get_tz_offset(tz):
