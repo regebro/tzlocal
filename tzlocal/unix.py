@@ -2,7 +2,7 @@ import os
 import pytz
 import re
 
-from . import utils
+from tzlocal import utils
 
 _cache_tz = None
 
