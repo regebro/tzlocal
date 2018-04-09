@@ -2,7 +2,6 @@ import datetime
 import os
 import pytz
 import re
-import time
 
 _cache_tz = None
 
@@ -36,7 +35,15 @@ def _try_tz_from_env():
 
 
 def _get_system_offset():
-    """Get system's timezone offset using built-in library time."""
+    """Get system's timezone offset using built-in library time.
+
+    For the Timezone constants (altzone, daylight, timezone, and tzname), the
+    value is determined by the timezone rules in effect at module load time or
+    the last time tzset() is called and may be incorrect for times in the past.
+
+    To keep compatibility with Windows, we're always importing time module here.
+    """
+    import time
     if time.daylight and time.localtime().tm_isdst > 0:
         return time.altzone
     else:
