@@ -1,9 +1,11 @@
-import datetime
 import os
 import pytz
 import re
 
+from . import utils
+
 _cache_tz = None
+
 
 def _tz_from_env(tzenv):
     if tzenv[0] == ':':
@@ -32,41 +34,6 @@ def _try_tz_from_env():
             return _tz_from_env(tzenv)
         except pytz.UnknownTimeZoneError:
             pass
-
-
-def _get_system_offset():
-    """Get system's timezone offset using built-in library time.
-
-    For the Timezone constants (altzone, daylight, timezone, and tzname), the
-    value is determined by the timezone rules in effect at module load time or
-    the last time tzset() is called and may be incorrect for times in the past.
-
-    To keep compatibility with Windows, we're always importing time module here.
-    """
-    import time
-    if time.daylight and time.localtime().tm_isdst > 0:
-        return time.altzone
-    else:
-        return time.timezone
-
-
-def _get_tz_offset(tz):
-    """Get timezone's offset using built-in function datetime.utcoffset()."""
-    return int(datetime.datetime.now(tz).utcoffset().total_seconds())
-
-
-def _assert_tz_offset(tz):
-    """Assert that system's timezone offset equals to the timezone offset found.
-
-    If they don't match, we probably have a misconfiguration, for example, an
-    incorrect timezone set in /etc/timezone file in systemd distributions."""
-    tz_offset = _get_tz_offset(tz)
-    system_offset = _get_system_offset()
-    msg = ('Timezone offset does not match system offset: {0} != {1}. '
-           'Please, check your config files.').format(
-        tz_offset, system_offset
-    )
-    assert tz_offset == system_offset, msg
 
 
 def _get_localzone(_root='/'):
@@ -167,7 +134,7 @@ def get_localzone():
     if _cache_tz is None:
         _cache_tz = _get_localzone()
 
-    _assert_tz_offset(_cache_tz)
+    utils.assert_tz_offset(_cache_tz)
     return _cache_tz
 
 
@@ -175,5 +142,5 @@ def reload_localzone():
     """Reload the cached localzone. You need to call this if the timezone has changed."""
     global _cache_tz
     _cache_tz = _get_localzone()
-    _assert_tz_offset(_cache_tz)
+    utils.assert_tz_offset(_cache_tz)
     return _cache_tz
