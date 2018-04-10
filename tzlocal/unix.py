@@ -48,6 +48,12 @@ def _get_localzone(_root='/'):
     if tzenv:
         return tzenv
 
+    # Are we under Termux on Android?
+    if os.path.exists('/system/bin/getprop'):
+        import subprocess
+        androidtz = subprocess.check_output(['getprop', 'persist.sys.timezone']).strip().decode()
+        return pytz.timezone(androidtz)
+
     # Now look for distribution specific configuration files
     # that contain the timezone name.
     for configfile in ('etc/timezone', 'var/db/zoneinfo'):
