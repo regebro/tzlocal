@@ -25,18 +25,18 @@ These are the systems that are in theory supported:
 
  * Windows 2000 and later
 
- * Any unix-like system with a /etc/localtime or /usr/local/etc/localtime
+ * Any unix-like system with a ``/etc/localtime`` or ``/usr/local/etc/localtime``
 
 If you have one of the above systems and it does not work, it's a bug.
 Please report it.
 
-Please note that you getting a time zone called ``local``, this is not a bug, it's
+Please note that if you getting a time zone called ``local``, this is not a bug, it's
 actually the main feature of ``tzlocal``, that even if your system does NOT have a configuration file
 with the zoneinfo name of your time zone, it will still work.
 
 You can also use ``tzlocal`` to get the name of your local timezone, but only if your system is 
-configured to make that possible. ``tzlocal`` looks for the timezone name in /etc/timezone, /var/db/zoneinfo,
-/etc/sysconfig/clock and /etc/conf.d/clock. If your /etc/localtime is a symlink it can also extract the
+configured to make that possible. ``tzlocal`` looks for the timezone name in ``/etc/timezone``, ``/var/db/zoneinfo``,
+``/etc/sysconfig/clock`` and ``/etc/conf.d/clock``. If your ``/etc/localtime`` is a symlink it can also extract the
 name from that symlink.
 
 If you need the name of your local time zone, then please make sure your system is properly configured to allow that.
@@ -91,6 +91,7 @@ Contributors
 * Jakub Wilk
 * John Quarles
 * Preston Landers
+* Jean Jordaan
 
 (Sorry if I forgot someone)
 
