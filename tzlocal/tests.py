@@ -7,6 +7,10 @@ import unittest
 
 from datetime import datetime
 
+from tzlocal import utils
+
+utils.assert_tz_offset = mock.MagicMock()
+
 
 class TzLocalTests(unittest.TestCase):
     def setUp(self):
@@ -42,7 +46,6 @@ class TzLocalTests(unittest.TestCase):
         os.environ['TZ'] = 'Just Nonsense'
         tz_harare = tzlocal.unix._try_tz_from_env()
         self.assertIsNone(tz_harare)
-
 
     def test_timezone(self):
         # Most versions of Ubuntu
