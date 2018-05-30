@@ -92,6 +92,11 @@ class TzLocalTests(unittest.TestCase):
         tz_harare = tzlocal.unix.reload_localzone()
         self.assertEqual(tz_harare.zone, 'Africa/Johannesburg')
 
+    def test_bad_timezone(self):
+        # Missconfigured timezone with working localtime
+        tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'bad_timezone'))
+        self.assertEqual(tz.zone, 'Africa/Harare')
+
     def test_fail(self):
         with self.assertRaises(pytz.exceptions.UnknownTimeZoneError):
             tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data'))

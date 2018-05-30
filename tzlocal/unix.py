@@ -67,7 +67,10 @@ def _get_localzone(_root='/'):
                     etctz, dummy = etctz.split(' ', 1)
                 if '#' in etctz:
                     etctz, dummy = etctz.split('#', 1)
-                return pytz.timezone(etctz.replace(' ', '_'))
+                try:
+                    return pytz.timezone(etctz.replace(' ', '_'))
+                except pytz.UnknownTimeZoneError:
+                    pass
 
     # CentOS has a ZONE setting in /etc/sysconfig/clock,
     # OpenSUSE has a TIMEZONE setting in /etc/sysconfig/clock and
