@@ -55,7 +55,7 @@ def _get_localzone(_root='/'):
     # that contain the timezone name.
     for configfile in ('etc/timezone', 'var/db/zoneinfo'):
         tzpath = os.path.join(_root, configfile)
-        if os.path.exists(tzpath):
+        try:
             with open(tzpath, 'rb') as tzfile:
                 data = tzfile.read()
 
@@ -74,6 +74,9 @@ def _get_localzone(_root='/'):
                 if '#' in etctz:
                     etctz, dummy = etctz.split('#', 1)
                 return pytz.timezone(etctz.replace(' ', '_'))
+        except IOError:
+            # File doesn't exist or is a directory
+            continue
 
     # CentOS has a ZONE setting in /etc/sysconfig/clock,
     # OpenSUSE has a TIMEZONE setting in /etc/sysconfig/clock and
@@ -86,24 +89,26 @@ def _get_localzone(_root='/'):
 
     for filename in ('etc/sysconfig/clock', 'etc/conf.d/clock'):
         tzpath = os.path.join(_root, filename)
-        if not os.path.exists(tzpath):
+        try:
+            with open(tzpath, 'rt') as tzfile:
+                data = tzfile.readlines()
+
+            for line in data:
+                # Look for the ZONE= setting.
+                match = zone_re.match(line)
+                if match is None:
+                    # No ZONE= setting. Look for the TIMEZONE= setting.
+                    match = timezone_re.match(line)
+                if match is not None:
+                    # Some setting existed
+                    line = line[match.end():]
+                    etctz = line[:end_re.search(line).start()]
+
+                    # We found a timezone
+                    return pytz.timezone(etctz.replace(' ', '_'))
+        except IOError:
+            # File doesn't exist or is a directory
             continue
-        with open(tzpath, 'rt') as tzfile:
-            data = tzfile.readlines()
-
-        for line in data:
-            # Look for the ZONE= setting.
-            match = zone_re.match(line)
-            if match is None:
-                # No ZONE= setting. Look for the TIMEZONE= setting.
-                match = timezone_re.match(line)
-            if match is not None:
-                # Some setting existed
-                line = line[match.end():]
-                etctz = line[:end_re.search(line).start()]
-
-                # We found a timezone
-                return pytz.timezone(etctz.replace(' ', '_'))
 
     # systemd distributions use symlinks that include the zone name,
     # see manpage of localtime(5) and timedatectl(1)

@@ -17,6 +17,8 @@ Changes
 
 - Got rid of a BytesWarning (Mickaël Schoentgen)
 
+- Now handles if config file paths exists, but are directories.
+
 
 1.5.1 (2017-12-01)
 ------------------
