@@ -8,6 +8,10 @@ Changes
   the local computer is configured with. If it doesn't, something is
   configured incorrectly. (Victor Torres, regebro)
 
+- Get timezone via Termux `getprop` wrapper on Android. It's not officially
+  supported because we can't test it, but at least we make an effort.
+  (Jean Jordaan)
+
 
 1.5.1 (2017-12-01)
 ------------------

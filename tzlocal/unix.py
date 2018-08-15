@@ -116,6 +116,13 @@ def _get_localzone(_root='/'):
                 pass
             start = tzpath.find("/")+1
 
+    # Are we under Termux on Android? It's not officially supported, because
+    # there is no reasonable way to run tests for this, but let's make an effort.
+    if os.path.exists('/system/bin/getprop'):
+        import subprocess
+        androidtz = subprocess.check_output(['getprop', 'persist.sys.timezone'])
+        return pytz.timezone(androidtz.strip().decode())
+
     # No explicit setting existed. Use localtime
     for filename in ('etc/localtime', 'usr/local/etc/localtime'):
         tzpath = os.path.join(_root, filename)
