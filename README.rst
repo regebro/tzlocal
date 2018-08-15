@@ -93,6 +93,7 @@ Contributors
 * Preston Landers
 * Victor Torres
 * Jean Jordaan
+* Zackary Welch
 
 (Sorry if I forgot someone)
 

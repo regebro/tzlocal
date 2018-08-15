@@ -65,6 +65,9 @@ def _get_localzone(_root='/'):
                     continue
 
                 etctz = data.strip().decode()
+                if not etctz:
+                    # Empty file, skip
+                    continue
                 # Get rid of host definitions and comments:
                 if ' ' in etctz:
                     etctz, dummy = etctz.split(' ', 1)

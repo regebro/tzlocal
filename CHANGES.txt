@@ -12,6 +12,9 @@ Changes
   supported because we can't test it, but at least we make an effort.
   (Jean Jordaan)
 
+- Now verifies that the config files actually contain something before
+  reading them. (Zackary Welch, regebro)
+
 
 1.5.1 (2017-12-01)
 ------------------
