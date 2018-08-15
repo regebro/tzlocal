@@ -31,5 +31,5 @@ setup(name='tzlocal',
       tests_require=[
           'mock',
       ],
-      test_suite='tzlocal.tests',
+      test_suite='tests',
       )

@@ -19,6 +19,10 @@ Changes
 
 - Now handles if config file paths exists, but are directories.
 
+- Moved tests out from distributions
+
+- Support wheels
+
 
 1.5.1 (2017-12-01)
 ------------------
