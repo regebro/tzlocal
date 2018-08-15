@@ -1,8 +1,8 @@
 Changes
 =======
 
-1.5.2 (unreleased)
-------------------
+2.0.0b1 (2018-08-15)
+--------------------
 
 - tzlocal now verifies that the timezone it finds has the same offset as
   the local computer is configured with. If it doesn't, something is
