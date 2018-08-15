@@ -94,6 +94,7 @@ Contributors
 * Victor Torres
 * Jean Jordaan
 * Zackary Welch
+* Mickaël Schoentgen
 
 (Sorry if I forgot someone)
 

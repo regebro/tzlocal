@@ -15,6 +15,8 @@ Changes
 - Now verifies that the config files actually contain something before
   reading them. (Zackary Welch, regebro)
 
+- Got rid of a BytesWarning (Mickaël Schoentgen)
+
 
 1.5.1 (2017-12-01)
 ------------------
