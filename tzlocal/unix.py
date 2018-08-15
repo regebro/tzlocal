@@ -55,7 +55,7 @@ def _get_localzone(_root='/'):
     # that contain the timezone name.
     for configfile in ('etc/timezone', 'var/db/zoneinfo'):
         tzpath = os.path.join(_root, configfile)
-        if os.path.exists(tzpath):
+        if os.path.exists(tzpath) and os.path.getsize(tzpath) > 0:
             with open(tzpath, 'rb') as tzfile:
                 data = tzfile.read()
 
