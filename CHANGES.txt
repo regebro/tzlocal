@@ -67,9 +67,6 @@ Changes
 ------------------
 
 - Ensure closing of subprocess on OS X (ayalash)
-DOING: Implementing feedback on the unsubscribe button
-DOING: Investigating remaining issues with DOCX export
-BLOCKERS: None
 
 - Removed unused imports (jwilk)
 

@@ -2,10 +2,13 @@ from setuptools import setup, find_packages
 
 version = '2.0.0.dev0'
 
+long_description = open('README.rst', 'rt').read() + '\n\n' + open('CHANGES.txt', 'rt').read()
+
+
 setup(name='tzlocal',
       version=version,
       description="tzinfo object for the local timezone",
-      long_description=open('README.rst', 'rt').read() + '\n\n' + open('CHANGES.txt', 'rt').read(),
+      long_description=long_description,
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'License :: OSI Approved :: MIT License',
