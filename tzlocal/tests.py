@@ -7,6 +7,7 @@ import unittest
 
 from datetime import datetime
 
+from tzlocal import utils
 
 class TzLocalTests(unittest.TestCase):
     def setUp(self):
@@ -42,7 +43,6 @@ class TzLocalTests(unittest.TestCase):
         os.environ['TZ'] = 'Just Nonsense'
         tz_harare = tzlocal.unix._try_tz_from_env()
         self.assertIsNone(tz_harare)
-
 
     def test_timezone(self):
         # Most versions of Ubuntu
@@ -80,7 +80,10 @@ class TzLocalTests(unittest.TestCase):
         dt = datetime(2012, 1, 1, 5)
         self.assertEqual(pytz.timezone('Africa/Harare').localize(dt), tz.localize(dt))
 
-    def test_get_reload(self):
+    @mock.patch('tzlocal.utils.assert_tz_offset')
+    def test_get_reload(self, atomock):
+        # Clear any cached zone
+        tzlocal.unix._cache_tz = None
         os.environ['TZ'] = 'Africa/Harare'
         tz_harare = tzlocal.unix.get_localzone()
         self.assertEqual(tz_harare.zone, 'Africa/Harare')
@@ -96,6 +99,17 @@ class TzLocalTests(unittest.TestCase):
         with self.assertRaises(pytz.exceptions.UnknownTimeZoneError):
             tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data'))
 
+    def test_assert_tz_offset(self):
+        # The local zone should be the local zone:
+        local = tzlocal.get_localzone()
+        tzlocal.utils.assert_tz_offset(local)
+
+        # Get a non local zone. Let's use Chatham, population 600.
+        other = pytz.timezone('Pacific/Chatham')
+        with self.assertRaises(ValueError):
+            tzlocal.utils.assert_tz_offset(other)
+
+
 if sys.platform == 'win32':
 
     import tzlocal.win32
@@ -108,7 +122,8 @@ else:
 
     class TzWin32Tests(unittest.TestCase):
 
-        def test_win32_on_unix(self):
+        @mock.patch('tzlocal.utils.assert_tz_offset')
+        def test_win32_on_unix(self, atomock):
             # Yes, winreg is all mocked out, but this test means we at least
             # catch syntax errors, etc.
             winreg = mock.MagicMock()

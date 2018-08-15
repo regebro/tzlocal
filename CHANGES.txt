@@ -4,7 +4,9 @@ Changes
 1.5.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- tzlocal now verifies that the timezone it finds has the same offset as
+  the local computer is configured with. If it doesn't, something is
+  configured incorrectly. (Victor Torres, regebro)
 
 
 1.5.1 (2017-12-01)

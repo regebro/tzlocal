@@ -34,7 +34,7 @@ Please note that you getting a time zone called ``local``, this is not a bug, it
 actually the main feature of ``tzlocal``, that even if your system does NOT have a configuration file
 with the zoneinfo name of your time zone, it will still work.
 
-You can also use ``tzlocal`` to get the name of your local timezone, but only if your system is 
+You can also use ``tzlocal`` to get the name of your local timezone, but only if your system is
 configured to make that possible. ``tzlocal`` looks for the timezone name in /etc/timezone, /var/db/zoneinfo,
 /etc/sysconfig/clock and /etc/conf.d/clock. If your /etc/localtime is a symlink it can also extract the
 name from that symlink.
@@ -91,6 +91,7 @@ Contributors
 * Jakub Wilk
 * John Quarles
 * Preston Landers
+* Victor Torres
 
 (Sorry if I forgot someone)
 
