@@ -1,4 +1,5 @@
 include *.py
 include *.rst
 include *.txt
-recursive-include tzlocal/test_data *
+recursive-include tests/test_data *
+include tests/*.py
