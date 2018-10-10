@@ -1,8 +1,13 @@
 from setuptools import setup, find_packages
+from io import open
 
 version = '2.0.0.dev0'
 
-long_description = open('README.rst', 'rt').read() + '\n\n' + open('CHANGES.txt', 'rt').read()
+with open("README.rst", 'rt', encoding='UTF-8') as file:
+    long_description = file.read() + '\n\n'
+
+with open("CHANGES.txt", 'rt', encoding='UTF-8') as file:
+    long_description += file.read()
 
 
 setup(name='tzlocal',
