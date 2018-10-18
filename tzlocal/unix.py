@@ -57,14 +57,19 @@ def _get_localzone(_root='/'):
         tzpath = os.path.join(_root, configfile)
         try:
             with open(tzpath, 'rb') as tzfile:
-                data = tzfile.read()
+                tzfile_lines = tzfile.readlines()
+
+            for l in tzfile_lines:
+                # Skip lines which are commented
+                if l.startswith(b'#'):
+                    continue
 
                 # Issue #3 was that /etc/timezone was a zoneinfo file.
                 # That's a misconfiguration, but we need to handle it gracefully:
-                if data[:5] == b'TZif2':
+                if l[:5] == b'TZif2':
                     continue
 
-                etctz = data.strip().decode()
+                etctz = l.strip().decode()
                 if not etctz:
                     # Empty file, skip
                     continue
@@ -73,6 +78,8 @@ def _get_localzone(_root='/'):
                     etctz, dummy = etctz.split(' ', 1)
                 if '#' in etctz:
                     etctz, dummy = etctz.split('#', 1)
+
+                # Return the first valid line we find.
                 return pytz.timezone(etctz.replace(' ', '_'))
         except IOError:
             # File doesn't exist or is a directory
