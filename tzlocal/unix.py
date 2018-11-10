@@ -68,12 +68,15 @@ def _get_localzone(_root='/'):
                 if not etctz:
                     # Empty file, skip
                     continue
-                # Get rid of host definitions and comments:
-                if ' ' in etctz:
-                    etctz, dummy = etctz.split(' ', 1)
-                if '#' in etctz:
-                    etctz, dummy = etctz.split('#', 1)
-                return pytz.timezone(etctz.replace(' ', '_'))
+                for etctz in data.decode().splitlines():
+                    # Get rid of host definitions and comments:
+                    if ' ' in etctz:
+                        etctz, dummy = etctz.split(' ', 1)
+                    if '#' in etctz:
+                        etctz, dummy = etctz.split('#', 1)
+                    if not etctz:
+                        continue
+                    return pytz.timezone(etctz.replace(' ', '_'))
         except IOError:
             # File doesn't exist or is a directory
             continue
