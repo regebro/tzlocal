@@ -50,6 +50,10 @@ class TzLocalTests(unittest.TestCase):
         tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'timezone'))
         self.assertEqual(tz.zone, 'Africa/Harare')
 
+    def test_timezone_top_line_comment(self):
+        tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'top_line_comment'))
+        self.assertEqual(tz.zone, 'Africa/Harare')
+
     def test_zone_setting(self):
         # A ZONE setting in /etc/sysconfig/clock, f ex CentOS
 
