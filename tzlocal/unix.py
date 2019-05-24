@@ -12,7 +12,7 @@ def _tz_from_env(tzenv):
         tzenv = tzenv[1:]
 
     # TZ specifies a file
-    if os.path.exists(tzenv):
+    if os.path.isabs(tzenv) and os.path.exists(tzenv):
         with open(tzenv, 'rb') as tzfile:
             return pytz.tzfile.build_tzinfo('local', tzfile)
 
