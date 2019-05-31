@@ -1,8 +1,8 @@
 Changes
 =======
 
-2.0.0 (unreleased)
-------------------
+2.0.0b2 (2019-05-31)
+--------------------
 
 - Skip comment lines when parsing /etc/timezone. (Edward Betts)
 

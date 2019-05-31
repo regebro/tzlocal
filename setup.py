@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from io import open
 
-version = '2.0.0.dev0'
+version = '2.0.0b2'
 
 with open("README.rst", 'rt', encoding='UTF-8') as file:
     long_description = file.read() + '\n\n'
