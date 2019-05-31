@@ -82,7 +82,13 @@ def _get_localzone(_root='/'):
                         etctz, dummy = etctz.split('#', 1)
                     if not etctz:
                         continue
-                    return pytz.timezone(etctz.replace(' ', '_'))
+                    tz = pytz.timezone(etctz.replace(' ', '_'))
+                    if _root == '/':
+                        # We are using a file in etc to name the timezone.
+                        # Verify that the timezone specified there is actually used:
+                        utils.assert_tz_offset(tz)
+                    return tz
+
         except IOError:
             # File doesn't exist or is a directory
             continue
@@ -114,7 +120,13 @@ def _get_localzone(_root='/'):
                     etctz = line[:end_re.search(line).start()]
 
                     # We found a timezone
-                    return pytz.timezone(etctz.replace(' ', '_'))
+                    tz = pytz.timezone(etctz.replace(' ', '_'))
+                    if _root == '/':
+                        # We are using a file in etc to name the timezone.
+                        # Verify that the timezone specified there is actually used:
+                        utils.assert_tz_offset(tz)
+                    return tz
+
         except IOError:
             # File doesn't exist or is a directory
             continue
@@ -158,7 +170,6 @@ def get_localzone():
     if _cache_tz is None:
         _cache_tz = _get_localzone()
 
-    utils.assert_tz_offset(_cache_tz)
     return _cache_tz
 
 
@@ -166,5 +177,4 @@ def reload_localzone():
     """Reload the cached localzone. You need to call this if the timezone has changed."""
     global _cache_tz
     _cache_tz = _get_localzone()
-    utils.assert_tz_offset(_cache_tz)
     return _cache_tz
