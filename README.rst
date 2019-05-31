@@ -95,6 +95,7 @@ Contributors
 * Jean Jordaan
 * Zackary Welch
 * Mickaël Schoentgen
+* Gabriel Corona
 
 (Sorry if I forgot someone)
 

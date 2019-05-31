@@ -4,7 +4,9 @@ Changes
 2.0.0 (unreleased)
 ------------------
 
-- Skip comment lines when parsing /etc/timezone (Edward Betts)
+- Skip comment lines when parsing /etc/timezone. (Edward Betts)
+
+- Don't load timezone from current directory. (Gabriel Corona)
 
 
 2.0.0b1 (2018-08-15)
