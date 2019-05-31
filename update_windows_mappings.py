@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 from xml.dom import minidom
 
-WIN_ZONES_URL = 'http://unicode.org/repos/cldr/trunk/common/supplemental/windowsZones.xml'
+WIN_ZONES_URL = 'https://raw.githubusercontent.com/unicode-org/cldr/master/common/supplemental/windowsZones.xml'
 ZONEINFO_URL = 'ftp://ftp.iana.org/tz/tzdata-latest.tar.gz'
 
 logging.basicConfig(level=logging.INFO)
