@@ -1,8 +1,8 @@
 Changes
 =======
 
-2.0.0 (unreleased)
-------------------
+2.0.0b3 (2019-07-13)
+--------------------
 
 - When no time zone configuration can be find, tzlocal now return UTC.
   This is a major difference from 1.x, where an exception would be raised.
