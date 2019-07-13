@@ -40,7 +40,7 @@ configured to make that possible. ``tzlocal`` looks for the timezone name in ``/
 name from that symlink.
 
 If you need the name of your local time zone, then please make sure your system is properly configured to allow that.
-
+If it isn't configured, tzlocal will default to UTC.
 
 Usage
 -----

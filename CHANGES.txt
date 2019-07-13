@@ -4,7 +4,10 @@ Changes
 2.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- When no time zone configuration can be find, tzlocal now return UTC.
+  This is a major difference from 1.x, where an exception would be raised.
+  This change is because Docker images often have no configuration at all,
+  and the unix utilities will then default to UTC, so we follow that.
 
 
 2.0.0b2 (2019-05-31)
