@@ -1,6 +1,7 @@
 import os
 import pytz
 import re
+import warnings
 
 from tzlocal import utils
 
@@ -154,8 +155,8 @@ def _get_localzone(_root='/'):
         with open(tzpath, 'rb') as tzfile:
             return pytz.tzfile.build_tzinfo('local', tzfile)
 
-    raise pytz.UnknownTimeZoneError('Can not find any timezone configuration')
-
+    warnings.warn('Can not find any timezone configuration, defaulting to UTC.')
+    return pytz.utc
 
 def get_localzone():
     """Get the computers configured local timezone, if any."""

@@ -6,6 +6,10 @@ import tzlocal.unix
 import unittest
 
 from datetime import datetime
+try:
+    from cStringIO import StringIO  # Python 2
+except ImportError:
+    from io import StringIO  # Python 3
 
 from tzlocal import utils
 
@@ -100,8 +104,17 @@ class TzLocalTests(unittest.TestCase):
         self.assertEqual(tz_harare.zone, 'Africa/Johannesburg')
 
     def test_fail(self):
-        with self.assertRaises(pytz.exceptions.UnknownTimeZoneError):
-            tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data'))
+        out = StringIO()
+        stderr = sys.stderr
+        try:
+            sys.stderr = out
+            tz = tzlocal.unix._get_localzone(
+                _root=os.path.join(self.path, 'test_data'))
+        finally:
+            sys.stderr = stderr
+        self.assertEqual(tz, pytz.utc)
+        self.assertIn('Can not find any timezone configuration',
+            out.getvalue())
 
     def test_assert_tz_offset(self):
         # The local zone should be the local zone:
