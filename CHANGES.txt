@@ -1,7 +1,7 @@
 Changes
 =======
 
-2.0.0 (unreleased)
+2.0.0 (2019-07-23)
 ------------------
 
 - No differences since 2.0.0b3
