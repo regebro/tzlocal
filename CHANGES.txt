@@ -4,7 +4,8 @@ Changes
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- The is_dst flag is wrong for Europe/Dublin on some Unix releases.
+  I changed to another way of determining if DST is in effect or not.
 
 
 2.0.0 (2019-07-23)
