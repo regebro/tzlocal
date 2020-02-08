@@ -1,7 +1,7 @@
 Changes
 =======
 
-2.0.1 (unreleased)
+2.1b1 (2020-02-08)
 ------------------
 
 - The is_dst flag is wrong for Europe/Dublin on some Unix releases.
