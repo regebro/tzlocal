@@ -2,12 +2,9 @@ os:
   - linux
 language: python
 python:
-  - "2.7"
   - "3.6"
   - "3.7"
   - "3.8"
   - "nightly"
 # command to run tests
-install:
-# Nothing needed
 script: python setup.py test
