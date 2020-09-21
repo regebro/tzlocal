@@ -2,7 +2,7 @@ from pathlib import Path
 
 from setuptools import setup, find_packages
 
-version = '3.0b1'
+version = '3.0b2.dev0'
 
 long_description = (Path('README.rst').read_text('utf-8') + '\n\n'
                     + Path('CHANGES.txt').read_text('utf-8'))
