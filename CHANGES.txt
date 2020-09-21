@@ -4,7 +4,8 @@ Changes
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Dropped Python 2 support
+- Switched timezone provider from pytz to zoneinfo (PEP 615)
 
 
 2.1 (2020-05-08)
