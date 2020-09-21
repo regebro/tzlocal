@@ -1,13 +1,11 @@
+from pathlib import Path
+
 from setuptools import setup, find_packages
-from io import open
 
 version = '2.2.dev0'
 
-with open("README.rst", 'rt', encoding='UTF-8') as file:
-    long_description = file.read() + '\n\n'
-
-with open("CHANGES.txt", 'rt', encoding='UTF-8') as file:
-    long_description += file.read()
+long_description = (Path('README.rst').read_text('utf-8') + '\n\n'
+                    + Path('CHANGES.txt').read_text('utf-8'))
 
 
 setup(name='tzlocal',
@@ -20,8 +18,8 @@ setup(name='tzlocal',
           'Operating System :: Microsoft :: Windows',
           'Operating System :: Unix',
           'Operating System :: MacOS :: MacOS X',
-          'Programming Language :: Python :: 2.7',
           'Programming Language :: Python :: 3',
+          'Programming Language :: Python :: 3 :: Only',
           'Programming Language :: Python :: 3.6',
           'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: 3.8',
@@ -35,10 +33,7 @@ setup(name='tzlocal',
       include_package_data=True,
       zip_safe=True,
       install_requires=[
-          'pytz',
-      ],
-      tests_require=[
-          'mock',
+          'backports.zoneinfo; python_version < "3.9"',
       ],
       test_suite='tests',
       )

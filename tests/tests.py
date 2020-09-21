@@ -1,17 +1,18 @@
-import mock
 import os
-import pytz
 import sys
-import tzlocal.unix
 import unittest
+from datetime import datetime, timezone
+from io import StringIO
+from unittest import mock
 
-from datetime import datetime
-try:
-    from cStringIO import StringIO  # Python 2
-except ImportError:
-    from io import StringIO  # Python 3
-
+import tzlocal.unix
 from tzlocal import utils
+
+if sys.version_info >= (3, 9):
+    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+else:
+    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+
 
 class TzLocalTests(unittest.TestCase):
     def setUp(self):
@@ -22,27 +23,27 @@ class TzLocalTests(unittest.TestCase):
 
     def test_env(self):
         tz_harare = tzlocal.unix._tz_from_env(':Africa/Harare')
-        self.assertEqual(tz_harare.zone, 'Africa/Harare')
+        self.assertEqual(tz_harare.key, 'Africa/Harare')
 
         # Some Unices allow this as well, so we must allow it:
         tz_harare = tzlocal.unix._tz_from_env('Africa/Harare')
-        self.assertEqual(tz_harare.zone, 'Africa/Harare')
+        self.assertEqual(tz_harare.key, 'Africa/Harare')
 
         tz_local = tzlocal.unix._tz_from_env(':' + os.path.join(self.path, 'test_data', 'Harare'))
-        self.assertEqual(tz_local.zone, 'local')
+        self.assertEqual(tz_local.key, 'local')
         # Make sure the local timezone is the same as the Harare one above.
         # We test this with a past date, so that we don't run into future changes
         # of the Harare timezone.
         dt = datetime(2012, 1, 1, 5)
-        self.assertEqual(tz_harare.localize(dt), tz_local.localize(dt))
+        self.assertEqual(dt.replace(tzinfo=tz_harare), dt.replace(tzinfo=tz_local))
 
         # Non-zoneinfo timezones are not supported in the TZ environment.
-        self.assertRaises(pytz.UnknownTimeZoneError, tzlocal.unix._tz_from_env, 'GMT+03:00')
+        self.assertRaises(ZoneInfoNotFoundError, tzlocal.unix._tz_from_env, 'GMT+03:00')
 
         # Test the _try function
         os.environ['TZ'] = 'Africa/Harare'
         tz_harare = tzlocal.unix._try_tz_from_env()
-        self.assertEqual(tz_harare.zone, 'Africa/Harare')
+        self.assertEqual(tz_harare.key, 'Africa/Harare')
         # With a zone that doesn't exist
         os.environ['TZ'] = 'Just Nonsense'
         tz_harare = tzlocal.unix._try_tz_from_env()
@@ -52,41 +53,41 @@ class TzLocalTests(unittest.TestCase):
         # Most versions of Ubuntu
 
         tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'timezone'))
-        self.assertEqual(tz.zone, 'Africa/Harare')
+        self.assertEqual(tz.key, 'Africa/Harare')
 
     def test_timezone_top_line_comment(self):
         tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'top_line_comment'))
-        self.assertEqual(tz.zone, 'Africa/Harare')
+        self.assertEqual(tz.key, 'Africa/Harare')
 
     def test_zone_setting(self):
         # A ZONE setting in /etc/sysconfig/clock, f ex CentOS
 
         tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'zone_setting'))
-        self.assertEqual(tz.zone, 'Africa/Harare')
+        self.assertEqual(tz.key, 'Africa/Harare')
 
     def test_timezone_setting(self):
         # A ZONE setting in /etc/conf.d/clock, f ex Gentoo
 
         tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'timezone_setting'))
-        self.assertEqual(tz.zone, 'Africa/Harare')
+        self.assertEqual(tz.key, 'Africa/Harare')
 
     def test_symlink_localtime(self):
         # A ZONE setting in the target path of a symbolic linked localtime, f ex systemd distributions
 
         tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'symlink_localtime'))
-        self.assertEqual(tz.zone, 'Africa/Harare')
+        self.assertEqual(tz.key, 'Africa/Harare')
 
     def test_vardbzoneinfo_setting(self):
         # A ZONE setting in /etc/conf.d/clock, f ex Gentoo
 
         tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'vardbzoneinfo'))
-        self.assertEqual(tz.zone, 'Africa/Harare')
+        self.assertEqual(tz.key, 'Africa/Harare')
 
     def test_only_localtime(self):
         tz = tzlocal.unix._get_localzone(_root=os.path.join(self.path, 'test_data', 'localtime'))
-        self.assertEqual(tz.zone, 'local')
+        self.assertEqual(tz.key, 'local')
         dt = datetime(2012, 1, 1, 5)
-        self.assertEqual(pytz.timezone('Africa/Harare').localize(dt), tz.localize(dt))
+        self.assertEqual(dt.replace(tzinfo=ZoneInfo('Africa/Harare')), dt.replace(tzinfo=tz))
 
     @mock.patch('tzlocal.utils.assert_tz_offset')
     def test_get_reload(self, atomock):
@@ -94,14 +95,14 @@ class TzLocalTests(unittest.TestCase):
         tzlocal.unix._cache_tz = None
         os.environ['TZ'] = 'Africa/Harare'
         tz_harare = tzlocal.unix.get_localzone()
-        self.assertEqual(tz_harare.zone, 'Africa/Harare')
+        self.assertEqual(tz_harare.key, 'Africa/Harare')
         # Changing the TZ makes no difference, because it's cached
         os.environ['TZ'] = 'Africa/Johannesburg'
         tz_harare = tzlocal.unix.get_localzone()
-        self.assertEqual(tz_harare.zone, 'Africa/Harare')
+        self.assertEqual(tz_harare.key, 'Africa/Harare')
         # So we reload it
         tz_harare = tzlocal.unix.reload_localzone()
-        self.assertEqual(tz_harare.zone, 'Africa/Johannesburg')
+        self.assertEqual(tz_harare.key, 'Africa/Johannesburg')
 
     def test_fail(self):
         out = StringIO()
@@ -112,7 +113,7 @@ class TzLocalTests(unittest.TestCase):
                 _root=os.path.join(self.path, 'test_data'))
         finally:
             sys.stderr = stderr
-        self.assertEqual(tz, pytz.utc)
+        self.assertEqual(tz, timezone.utc)
         self.assertIn('Can not find any timezone configuration',
             out.getvalue())
 
@@ -122,7 +123,7 @@ class TzLocalTests(unittest.TestCase):
         tzlocal.utils.assert_tz_offset(local)
 
         # Get a non local zone. Let's use Chatham, population 600.
-        other = pytz.timezone('Pacific/Chatham')
+        other = ZoneInfo('Pacific/Chatham')
         with self.assertRaises(ValueError):
             tzlocal.utils.assert_tz_offset(other)
 
@@ -153,14 +154,14 @@ else:
             sys.modules['winreg'] = winreg
             import tzlocal.win32
             tz = tzlocal.win32.get_localzone()
-            self.assertEqual(tz.zone, 'Europe/Minsk')
+            self.assertEqual(tz.key, 'Europe/Minsk')
 
             tzlocal.win32.valuestodict = mock.Mock(return_value={
                 'StandardName': 'Mocked Standard Time',
                 'Std': 'Mocked Standard Time',
             })
             tz = tzlocal.win32.reload_localzone()
-            self.assertEqual(tz.zone, 'America/Bahia')
+            self.assertEqual(tz.key, 'America/Bahia')
 
 if __name__ == '__main__':
     unittest.main()

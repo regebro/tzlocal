@@ -96,6 +96,7 @@ Contributors
 * Zackary Welch
 * Mickaël Schoentgen
 * Gabriel Corona
+* Alex Grönholm
 
 (Sorry if I forgot someone)
 
