@@ -3,3 +3,4 @@
 *.wpu
 *.egg-info
 *.egg
+.tox
