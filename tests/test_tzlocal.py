@@ -20,17 +20,15 @@ def clear_tz_env_variable():
     os.environ.pop('TZ', None)
 
 
-@pytest.fixture
-def tz_path(request):
+def tz_path(zonefile: str = None) -> str:
     path = Path(__file__).parent.joinpath('test_data')
-    if hasattr(request, 'param'):
-        return str(path / request.param)
+    if zonefile:
+        return str(path / zonefile)
     else:
         return str(path)
 
 
-@pytest.mark.parametrize('tz_path', ['Harare'], indirect=True)
-def test_env(tz_path, monkeypatch):
+def test_env(monkeypatch):
     tz_harare = tzlocal.unix._tz_from_env(':Africa/Harare')
     assert tz_harare.key == 'Africa/Harare'
 
@@ -38,7 +36,7 @@ def test_env(tz_path, monkeypatch):
     tz_harare = tzlocal.unix._tz_from_env('Africa/Harare')
     assert tz_harare.key == 'Africa/Harare'
 
-    tz_local = tzlocal.unix._tz_from_env(':' + tz_path)
+    tz_local = tzlocal.unix._tz_from_env(':' + tz_path('Harare'))
     assert tz_local.key == 'local'
     # Make sure the local timezone is the same as the Harare one above.
     # We test this with a past date, so that we don't run into future changes
@@ -60,55 +58,48 @@ def test_env(tz_path, monkeypatch):
     assert tz_harare is None
 
 
-@pytest.mark.parametrize('tz_path', ['timezone'], indirect=True)
-def test_timezone(tz_path):
+def test_timezone():
     # Most versions of Ubuntu
 
-    tz = tzlocal.unix._get_localzone(_root=tz_path)
+    tz = tzlocal.unix._get_localzone(_root=tz_path('timezone'))
     assert tz.key == 'Africa/Harare'
 
 
-@pytest.mark.parametrize('tz_path', ['top_line_comment'], indirect=True)
-def test_timezone_top_line_comment(tz_path):
-    tz = tzlocal.unix._get_localzone(_root=tz_path)
+def test_timezone_top_line_comment():
+    tz = tzlocal.unix._get_localzone(_root=tz_path('top_line_comment'))
     assert tz.key == 'Africa/Harare'
 
 
-@pytest.mark.parametrize('tz_path', ['zone_setting'], indirect=True)
-def test_zone_setting(tz_path):
+def test_zone_setting():
     # A ZONE setting in /etc/sysconfig/clock, f ex CentOS
 
-    tz = tzlocal.unix._get_localzone(_root=tz_path)
+    tz = tzlocal.unix._get_localzone(_root=tz_path('zone_setting'))
     assert tz.key == 'Africa/Harare'
 
 
-@pytest.mark.parametrize('tz_path', ['timezone_setting'], indirect=True)
-def test_timezone_setting(tz_path):
+def test_timezone_setting():
     # A ZONE setting in /etc/conf.d/clock, f ex Gentoo
 
-    tz = tzlocal.unix._get_localzone(_root=tz_path)
+    tz = tzlocal.unix._get_localzone(_root=tz_path('timezone_setting'))
     assert tz.key == 'Africa/Harare'
 
 
-@pytest.mark.parametrize('tz_path', ['symlink_localtime'], indirect=True)
-def test_symlink_localtime(tz_path):
+def test_symlink_localtime():
     # A ZONE setting in the target path of a symbolic linked localtime, f ex systemd distributions
 
-    tz = tzlocal.unix._get_localzone(_root=tz_path)
+    tz = tzlocal.unix._get_localzone(_root=tz_path('symlink_localtime'))
     assert tz.key == 'Africa/Harare'
 
 
-@pytest.mark.parametrize('tz_path', ['vardbzoneinfo'], indirect=True)
-def test_vardbzoneinfo_setting(tz_path):
+def test_vardbzoneinfo_setting():
     # A ZONE setting in /etc/conf.d/clock, f ex Gentoo
 
-    tz = tzlocal.unix._get_localzone(_root=tz_path)
+    tz = tzlocal.unix._get_localzone(_root=tz_path('vardbzoneinfo'))
     assert tz.key == 'Africa/Harare'
 
 
-@pytest.mark.parametrize('tz_path', ['localtime'], indirect=True)
-def test_only_localtime(tz_path):
-    tz = tzlocal.unix._get_localzone(_root=tz_path)
+def test_only_localtime():
+    tz = tzlocal.unix._get_localzone(_root=tz_path('localtime'))
     assert tz.key == 'local'
     dt = datetime(2012, 1, 1, 5)
     assert dt.replace(tzinfo=ZoneInfo('Africa/Harare')) == dt.replace(tzinfo=tz)
@@ -130,9 +121,9 @@ def test_get_reload(mocker, monkeypatch):
     assert tz_harare.key == 'Africa/Johannesburg'
 
 
-def test_fail(tz_path, recwarn):
+def test_fail(recwarn):
     with pytest.warns(UserWarning, match='Can not find any timezone configuration'):
-        tz = tzlocal.unix._get_localzone(_root=tz_path)
+        tz = tzlocal.unix._get_localzone(_root=tz_path())
     assert tz == timezone.utc
 
 
