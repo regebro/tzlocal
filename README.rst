@@ -1,15 +1,14 @@
 tzlocal
 =======
 
-This Python module returns a ``tzinfo`` object with the local timezone information under Unix and Win-32.
-It requires ``pytz``, and returns ``pytz`` ``tzinfo`` objects.
+This Python module returns a ``tzinfo`` object with the local timezone information
+under Unix and Windows.
+It requires either Python 3.9+ or the ``backports.tzinfo`` package, and returns
+``zoneinfo.ZoneInfo`` objects.
 
-This module attempts to fix a glaring hole in ``pytz``, that there is no way to
-get the local timezone information, unless you know the zoneinfo name, and
-under several Linux distros that's hard or impossible to figure out.
-
-Also, with Windows different timezone system using pytz isn't of much use
-unless you separately configure the zoneinfo timezone name.
+This module attempts to fix a glaring hole in the ``zoneinfo`` module, that
+there is no way to get the local timezone information, unless you know the
+zoneinfo name, andunder several Linux distros that's hard or impossible to figure out.
 
 With ``tzlocal`` you only need to call ``get_localzone()`` and you will get a
 ``tzinfo`` object with the local time zone info. On some Unices you will still
@@ -55,14 +54,15 @@ Load the local timezone:
 Create a local datetime:
 
     >>> from datetime import datetime
-    >>> dt = tz.localize(datetime(2015, 4, 10, 7, 22))
+    >>> dt = datetime(2015, 4, 10, 7, 22, tzinfo=tz)
     >>> dt
     datetime.datetime(2015, 4, 10, 7, 22, tzinfo=<DstTzInfo 'Europe/Warsaw' CEST+2:00:00 DST>)
 
-Lookup another timezone with `pytz`:
+Lookup another timezone with ``zoneinfo`` (``backports.zoneinfo`` on Python 3.8 or earlier):
 
-    >>> import pytz
-    >>> eastern = pytz.timezone('US/Eastern')
+    >>> from zoneinfo import ZoneInfo
+    >>> eastern = ZoneInfo('US/Eastern')
+
 
 Convert the datetime:
 
