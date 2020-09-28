@@ -4,7 +4,7 @@ Changes
 3.0b2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Modernized the packaging, moving to setup.cfg etc.
 
 
 3.0b1 (2020-09-21)
