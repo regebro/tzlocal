@@ -1,4 +1,5 @@
 import os
+import platform
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -84,6 +85,8 @@ def test_timezone_setting():
     assert tz.key == 'Africa/Harare'
 
 
+@pytest.mark.skipif(platform.system() == 'Windows',
+                    reason='Symbolic links are not available on Windows')
 def test_symlink_localtime():
     # A ZONE setting in the target path of a symbolic linked localtime, f ex systemd distributions
 
