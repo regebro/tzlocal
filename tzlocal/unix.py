@@ -101,6 +101,7 @@ def _get_localzone(_root='/'):
             continue
 
     # CentOS has a ZONE setting in /etc/sysconfig/clock,
+    # Centos 8 has a binary /etc/sysconfig/clock, this will fail
     # OpenSUSE has a TIMEZONE setting in /etc/sysconfig/clock and
     # Gentoo has a TIMEZONE setting in /etc/conf.d/clock
     # We look through these files for a timezone:
