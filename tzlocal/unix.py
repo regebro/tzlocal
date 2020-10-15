@@ -101,7 +101,6 @@ def _get_localzone(_root='/'):
             continue
 
     # CentOS has a ZONE setting in /etc/sysconfig/clock,
-    # Centos 8 /etc/sysconfig/clock is binary and we should skip this check
     # OpenSUSE has a TIMEZONE setting in /etc/sysconfig/clock and
     # Gentoo has a TIMEZONE setting in /etc/conf.d/clock
     # We look through these files for a timezone:
@@ -135,8 +134,8 @@ def _get_localzone(_root='/'):
                         utils.assert_tz_offset(tz)
                     return tz
 
-        except Exception as e:
-            # File doesn't exist or is a directory
+        except (IOError, UnicodeDecodeError) as e:
+            #Handle IO or Unicode Decode Errors
             continue
 
     # systemd distributions use symlinks that include the zone name,
