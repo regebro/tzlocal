@@ -135,7 +135,7 @@ def _get_localzone(_root='/'):
                     return tz
 
         except (IOError, UnicodeDecodeError) as e:
-            #Handle IO or Unicode Decode Errors
+            #UnicodeDecode handles edge case where /etc/sysconfig/clock is symlink to /etc/localtime
             continue
 
     # systemd distributions use symlinks that include the zone name,
