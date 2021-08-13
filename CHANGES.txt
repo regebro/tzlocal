@@ -6,6 +6,8 @@ Changes
 
 - Modernized the packaging, moving to setup.cfg etc.
 
+- Handles if the text config files incorrectly is a TZ file. (revanSZ)
+
 
 3.0b1 (2020-09-21)
 ------------------
