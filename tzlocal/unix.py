@@ -134,8 +134,8 @@ def _get_localzone(_root='/'):
                         utils.assert_tz_offset(tz)
                     return tz
 
-        except IOError:
-            # File doesn't exist or is a directory
+        except (IOError, UnicodeDecodeError) as e:
+            #UnicodeDecode handles edge case where /etc/sysconfig/clock is symlink to /etc/localtime
             continue
 
     # systemd distributions use symlinks that include the zone name,
