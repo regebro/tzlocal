@@ -66,22 +66,21 @@ def _get_localzone(_root='/'):
 
     # Now look for distribution specific configuration files
     # that contain the timezone name.
+
+    # Stick all of them in a dict, to compare later.
+    found_configs = {}
+
     for configfile in ('etc/timezone', 'var/db/zoneinfo'):
         tzpath = os.path.join(_root, configfile)
         try:
-            with open(tzpath, 'rb') as tzfile:
+            with open(tzpath, 'rt') as tzfile:
                 data = tzfile.read()
 
-                # Issue #3 was that /etc/timezone was a zoneinfo file.
-                # That's a misconfiguration, but we need to handle it gracefully:
-                if data[:5] == b'TZif2':
-                    continue
-
-                etctz = data.strip().decode()
+                etctz = data.strip()
                 if not etctz:
                     # Empty file, skip
                     continue
-                for etctz in data.decode().splitlines():
+                for etctz in data.splitlines():
                     # Get rid of host definitions and comments:
                     if ' ' in etctz:
                         etctz, dummy = etctz.split(' ', 1)
@@ -89,12 +88,8 @@ def _get_localzone(_root='/'):
                         etctz, dummy = etctz.split('#', 1)
                     if not etctz:
                         continue
-                    tz = ZoneInfo(etctz.replace(' ', '_'))
-                    if _root == '/':
-                        # We are using a file in etc to name the timezone.
-                        # Verify that the timezone specified there is actually used:
-                        utils.assert_tz_offset(tz)
-                    return tz
+
+                    found_configs[tzpath] = etctz.replace(' ', '_')
 
         except (IOError, UnicodeDecodeError):
             # File doesn't exist or is a directory, or it's a binary file.
@@ -127,12 +122,7 @@ def _get_localzone(_root='/'):
                     etctz = line[:end_re.search(line).start()]
 
                     # We found a timezone
-                    tz = ZoneInfo(etctz.replace(' ', '_'))
-                    if _root == '/':
-                        # We are using a file in etc to name the timezone.
-                        # Verify that the timezone specified there is actually used:
-                        utils.assert_tz_offset(tz)
-                    return tz
+                    found_configs[tzpath] = etctz.replace(' ', '_')
 
         except (IOError, UnicodeDecodeError) as e:
             # UnicodeDecode handles when clock is symlink to /etc/localtime
@@ -142,15 +132,35 @@ def _get_localzone(_root='/'):
     # see manpage of localtime(5) and timedatectl(1)
     tzpath = os.path.join(_root, 'etc/localtime')
     if os.path.exists(tzpath) and os.path.islink(tzpath):
-        tzpath = os.path.realpath(tzpath)
-        start = tzpath.find("/")+1
+        etctz = tzpath = os.path.realpath(tzpath)
+        start = etctz.find("/")+1
         while start != 0:
-            tzpath = tzpath[start:]
+            etctz = etctz[start:]
             try:
-                return ZoneInfo(tzpath)
+                ZoneInfo(etctz)
+                found_configs[tzpath] = etctz.replace(' ', '_')
             except ZoneInfoNotFoundError:
                 pass
-            start = tzpath.find("/")+1
+            start = etctz.find("/")+1
+
+    if len(found_configs) > 0:
+        # We found some explicit config of some sort!
+        if len(found_configs) > 1:
+            # Uh-oh, multiple configs. See if they match:
+            unique_tzs = set(found_configs.values())
+            if len(unique_tzs) != 1:
+                message = "Multiple time zone configurations found, don't know which is correct:\n"
+                for key, value in found_configs.items():
+                    message += f"{key}: {value}\n"
+                raise ZoneInfoNotFoundError(message)
+
+        # We found exactly one config! Use it.
+        tz = ZoneInfo(list(found_configs.values())[0])
+        if _root == '/':
+            # We are using a file in etc to name the timezone.
+            # Verify that the timezone specified there is actually used:
+            utils.assert_tz_offset(tz)
+        return tz
 
     # No explicit setting existed. Use localtime
     for filename in ('etc/localtime', 'usr/local/etc/localtime'):
