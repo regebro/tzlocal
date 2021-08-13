@@ -97,6 +97,9 @@ Contributors
 * Mickaël Schoentgen
 * Gabriel Corona
 * Alex Grönholm
+* Julin S
+* Miroslav Šedivý
+* revansSZ
 
 (Sorry if I forgot someone)
 
