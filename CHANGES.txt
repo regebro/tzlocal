@@ -1,8 +1,8 @@
 Changes
 =======
 
-3.1 (unreleased)
-----------------
+4.0a1 (2021-08-14)
+------------------
 
 - Now finds and compares all the configs (under Unix-like systems) and
   tells you what files it found and how they conflict. This should make
