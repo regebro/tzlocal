@@ -70,6 +70,21 @@ Convert the datetime:
     datetime.datetime(2015, 4, 10, 1, 22, tzinfo=<DstTzInfo 'US/Eastern' EDT-1 day, 20:00:00 DST>)
 
 
+Development
+-----------
+
+To create a development environment, create a virtualenv and make a development installation::
+
+    $ virtualenv ve
+    $ source ve/bin/activation
+    (ve) $ pip install -e .[test,devenv]
+
+To run tests, just use pytest, coverage is nice as well::
+
+    (ve) $ pytest --cov=tzlocal
+
+
+
 Maintainer
 ----------
 

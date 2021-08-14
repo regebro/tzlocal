@@ -4,7 +4,9 @@ Changes
 3.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Now finds and compares all the configs (under Unix-like systems) and
+  tells you what files it found and how they conflict. This should make
+  it a lot easier to figure out what goes wrong.
 
 
 3.0 (2021-08-13)
