@@ -1,6 +1,18 @@
 tzlocal
 =======
 
+API CHANGE!
+-----------
+
+With version 3.0 of tzlocal, it no longer returns `pytz` objects, but `zoneinfo` objects.
+This, and the dropping of Python 2 support, are the only differences, so if you need to
+use `pytz` objects, you can continue to use tzlocal 2.1. 
+
+If there is demand for it, I may continue to support the 2.1 branch for some time.
+
+Info
+----
+
 This Python module returns a ``tzinfo`` object with the local timezone information
 under Unix and Windows.
 It requires either Python 3.9+ or the ``backports.tzinfo`` package, and returns
