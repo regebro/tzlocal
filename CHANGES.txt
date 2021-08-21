@@ -1,7 +1,7 @@
 Changes
 =======
 
-4.0 (unreleased)
+4.0b1 (2021-08-21)
 ------------------
 
 - Now finds and compares all the configs (under Unix-like systems) and
