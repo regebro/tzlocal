@@ -9,9 +9,9 @@ from tzlocal.windows_tz import win_tz
 from tzlocal import utils
 
 if sys.version_info >= (3, 9):
-    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
 else:
-    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
 
 _cache_tz = None
 
@@ -39,18 +39,18 @@ def get_localzone_name():
     keyvalues = valuestodict(localtz)
     localtz.Close()
 
-    if 'TimeZoneKeyName' in keyvalues:
+    if "TimeZoneKeyName" in keyvalues:
         # Windows 7 (and Vista?)
 
         # For some reason this returns a string with loads of NUL bytes at
         # least on some systems. I don't know if this is a bug somewhere, I
         # just work around it.
-        tzkeyname = keyvalues['TimeZoneKeyName'].split('\x00', 1)[0]
+        tzkeyname = keyvalues["TimeZoneKeyName"].split("\x00", 1)[0]
     else:
         # Windows 2000 or XP
 
         # This is the localized name:
-        tzwin = keyvalues['StandardName']
+        tzwin = keyvalues["StandardName"]
 
         # Open the list of timezones to look up the real name:
         TZKEYNAME = r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones"
@@ -64,7 +64,7 @@ def get_localzone_name():
             data = valuestodict(sub)
             sub.Close()
             try:
-                if data['Std'] == tzwin:
+                if data["Std"] == tzwin:
                     tzkeyname = subkey
                     break
             except KeyError:
@@ -76,7 +76,7 @@ def get_localzone_name():
         handle.Close()
 
     if tzkeyname is None:
-        raise LookupError('Can not find Windows timezone configuration')
+        raise LookupError("Can not find Windows timezone configuration")
 
     timezone = win_tz.get(tzkeyname)
     if timezone is None:
