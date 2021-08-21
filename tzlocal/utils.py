@@ -40,7 +40,7 @@ def assert_tz_offset(tz):
     system_offset = get_system_offset()
     if tz_offset != system_offset:
         msg = (
-            "Timezone offset does not match system offset: {0} != {1}. "
+            "Timezone offset does not match system offset: {} != {}. "
             "Please, check your config files."
         ).format(tz_offset, system_offset)
         raise ValueError(msg)
