@@ -1,4 +1,5 @@
 import sys
+import os
 
 try:
     import _winreg as winreg
@@ -32,6 +33,10 @@ def get_localzone_name():
     # translated to the language of the operating system, so we need to
     # do a backwards lookup, by going through all time zones and see which
     # one matches.
+    tzenv = _try_tz_from_env()
+    if tzenv:
+        return tzenv
+
     handle = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
 
     TZLOCALKEYNAME = r"SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
@@ -107,3 +112,27 @@ def reload_localzone():
     _cache_tz = ZoneInfo(get_localzone_name())
     utils.assert_tz_offset(_cache_tz)
     return _cache_tz
+
+
+def _try_tz_from_env():
+    tzenv = os.environ.get("TZ")
+    if tzenv:
+        try:
+            return _tz_from_env(tzenv)
+        except ZoneInfoNotFoundError:
+            pass
+
+def _tz_from_env(tzenv):
+    if tzenv[0] == ":":
+        tzenv = tzenv[1:]
+
+    # TZ specifies a zoneinfo zone.
+    try:
+        tz = ZoneInfo(tzenv)
+        # That worked, so we return this:
+        return tz
+    except ZoneInfoNotFoundError:
+        raise ZoneInfoNotFoundError(
+            "tzlocal() does not support non-zoneinfo timezones like %s. \n"
+            "Please use a timezone in the form of Continent/City"
+        ) from None        
