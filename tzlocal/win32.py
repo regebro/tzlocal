@@ -122,17 +122,14 @@ def _try_tz_from_env():
         except ZoneInfoNotFoundError:
             pass
 
-def _tz_from_env(tzenv):
-    if tzenv[0] == ":":
-        tzenv = tzenv[1:]
-
-    # TZ specifies a zoneinfo zone.
-    try:
-        tz = ZoneInfo(tzenv)
-        # That worked, so we return this:
-        return tz
-    except ZoneInfoNotFoundError:
-        raise ZoneInfoNotFoundError(
+def _try_tz_from_env():
+    tzenv = os.getenv("TZ")
+    if tzenv:
+        try:
+            ZoneInfo(tzenv)
+        except ZoneInfoNotFoundError:
+            raise ZoneInfoNotFoundError(
             "tzlocal() does not support non-zoneinfo timezones like %s. \n"
             "Please use a timezone in the form of Continent/City"
-        ) from None        
+        )  
+    return tzenv        
