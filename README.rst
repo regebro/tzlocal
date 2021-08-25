@@ -88,7 +88,7 @@ Development
 To create a development environment, create a virtualenv and make a development installation::
 
     $ virtualenv ve
-    $ source ve/bin/activation
+    $ source ve/bin/activation (Win32: .\ve\Scripts\activate)
     (ve) $ pip install -e .[test,devenv]
 
 To run tests, just use pytest, coverage is nice as well::
