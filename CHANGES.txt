@@ -4,7 +4,10 @@ Changes
 4.0b2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Adding a Windows OS environment variable 'TZ' will allow an  
+  override for setting the timezone. The override timezone will 
+  still be asserted for timezone validity and compared against 
+  the systems timezone offset. 
 
 
 4.0b1 (2021-08-21)

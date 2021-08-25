@@ -127,6 +127,7 @@ Contributors
 * Julin S
 * Miroslav Šedivý
 * revansSZ
+* Sam Treweek
 
 (Sorry if I forgot someone)
 
