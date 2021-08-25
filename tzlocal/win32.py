@@ -115,6 +115,7 @@ def reload_localzone():
 
 
 def _try_tz_from_env():
+    """Check if there is a valid TZ timezone environment variable set"""
     tzenv = os.getenv("TZ")
     if tzenv:
         try:
