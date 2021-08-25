@@ -197,11 +197,12 @@ def test_noconflict():
     assert tz.key == "UTC"
 
 def test_win32_env(mocker, monkeypatch):
-    monkeypatch.setenv("TZ", "Europe/Berlin")
-    mocker.patch("tzlocal.utils.assert_tz_offset")
-    winreg = MagicMock()
-    sys.modules["winreg"] = winreg
+    sys.modules["winreg"] = MagicMock()
     import tzlocal.win32
+
+    mocker.patch("tzlocal.utils.assert_tz_offset")
+    monkeypatch.setattr(tzlocal.win32, "_cache_tz", None)
+    monkeypatch.setenv("TZ", "Europe/Berlin")
 
     tz = tzlocal.win32.get_localzone()
     assert tz.key == "Europe/Berlin"
