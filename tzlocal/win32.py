@@ -115,14 +115,6 @@ def reload_localzone():
 
 
 def _try_tz_from_env():
-    tzenv = os.environ.get("TZ")
-    if tzenv:
-        try:
-            return _tz_from_env(tzenv)
-        except ZoneInfoNotFoundError:
-            pass
-
-def _try_tz_from_env():
     tzenv = os.getenv("TZ")
     if tzenv:
         try:

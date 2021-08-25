@@ -195,3 +195,13 @@ def test_conflicting():
 def test_noconflict():
     tz = tzlocal.unix._get_localzone(_root=tz_path("noconflict"))
     assert tz.key == "UTC"
+
+def test_win32_env(mocker, monkeypatch):
+    monkeypatch.setenv("TZ", "Europe/Berlin")
+    mocker.patch("tzlocal.utils.assert_tz_offset")
+    winreg = MagicMock()
+    sys.modules["winreg"] = winreg
+    import tzlocal.win32
+
+    tz = tzlocal.win32.get_localzone()
+    assert tz.key == "Europe/Berlin"
