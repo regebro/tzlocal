@@ -4,10 +4,14 @@ Changes
 4.0b2 (unreleased)
 ------------------
 
-- Adding a Windows OS environment variable 'TZ' will allow an  
-  override for setting the timezone. The override timezone will 
-  still be asserted for timezone validity and compared against 
-  the systems timezone offset. 
+- Adding a Windows OS environment variable 'TZ' will allow an
+  override for setting the timezone. The override timezone will
+  still be asserted for timezone validity and compared against
+  the systems timezone offset.
+
+- Deprecated the get_localzone() functions, and implementyed
+  get_localzone_name() functions, which is what 3.0 should have
+  done in the first place, instead of switching to zoneinfo.
 
 
 4.0b1 (2021-08-21)

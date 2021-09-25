@@ -30,15 +30,15 @@ def tz_path(zonefile: str = None) -> str:
 
 
 def test_env(monkeypatch):
-    tz_harare = tzlocal.unix._tz_from_env(":Africa/Harare")
+    tz_harare = tzlocal.utils._tz_from_env(":Africa/Harare")
     assert tz_harare.key == "Africa/Harare"
 
     # Some Unices allow this as well, so we must allow it:
-    tz_harare = tzlocal.unix._tz_from_env("Africa/Harare")
+    tz_harare = tzlocal.utils._tz_from_env("Africa/Harare")
     assert tz_harare.key == "Africa/Harare"
 
-    tz_local = tzlocal.unix._tz_from_env(":" + tz_path("Harare"))
-    assert tz_local.key == "local"
+    tz_local = tzlocal.utils._tz_from_env(":" + tz_path("Harare"))
+    assert tz_local.key == "Harare"
     # Make sure the local timezone is the same as the Harare one above.
     # We test this with a past date, so that we don't run into future changes
     # of the Harare timezone.
@@ -46,17 +46,11 @@ def test_env(monkeypatch):
     assert dt.replace(tzinfo=tz_harare) == dt.replace(tzinfo=tz_local)
 
     # Non-zoneinfo timezones are not supported in the TZ environment.
-    pytest.raises(ZoneInfoNotFoundError, tzlocal.unix._tz_from_env, "GMT+03:00")
+    pytest.raises(ZoneInfoNotFoundError, tzlocal.utils._tz_from_env, "GMT+03:00")
 
-    # Test the _try function
-    monkeypatch.setenv("TZ", "Africa/Harare")
-    tz_harare = tzlocal.unix._try_tz_from_env()
-    assert tz_harare.key == "Africa/Harare"
-
-    # With a zone that doesn't exist
+    # With a zone that doesn't exist, raises error
     monkeypatch.setenv("TZ", "Just Nonsense")
-    tz_harare = tzlocal.unix._try_tz_from_env()
-    assert tz_harare is None
+    pytest.raises(ZoneInfoNotFoundError, tzlocal.utils._tz_from_env)
 
 
 def test_timezone():
@@ -114,6 +108,7 @@ def test_get_reload(mocker, monkeypatch):
     # Clear any cached zone
     monkeypatch.setattr(tzlocal.unix, "_cache_tz", None)
     monkeypatch.setenv("TZ", "Africa/Harare")
+
     tz_harare = tzlocal.unix.get_localzone()
     assert tz_harare.key == "Africa/Harare"
     # Changing the TZ makes no difference, because it's cached
@@ -204,5 +199,8 @@ def test_win32_env(mocker, monkeypatch):
     monkeypatch.setattr(tzlocal.win32, "_cache_tz", None)
     monkeypatch.setenv("TZ", "Europe/Berlin")
 
+    tzlocal.win32._cache_tz_name = None
+    tzname = tzlocal.win32.get_localzone_name()
+    assert tzname == "Europe/Berlin"
     tz = tzlocal.win32.get_localzone()
     assert tz.key == "Europe/Berlin"

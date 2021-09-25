@@ -1,5 +1,6 @@
 import sys
 import os
+import warnings
 
 try:
     import _winreg as winreg
@@ -15,6 +16,7 @@ else:
     from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
 
 _cache_tz = None
+_cache_tz_name = None
 
 
 def valuestodict(key):
@@ -27,13 +29,13 @@ def valuestodict(key):
     return dict
 
 
-def get_localzone_name():
+def _get_localzone_name():
     # Windows is special. It has unique time zone names (in several
     # meanings of the word) available, but unfortunately, they can be
     # translated to the language of the operating system, so we need to
     # do a backwards lookup, by going through all time zones and see which
     # one matches.
-    tzenv = _try_tz_from_env()
+    tzenv = utils._tz_name_from_env()
     if tzenv:
         return tzenv
 
@@ -96,8 +98,20 @@ def get_localzone_name():
     return timezone
 
 
+def get_localzone_name():
+    """Get the zoneinfo timezone name that matches the Windows-configured timezone."""
+    global _cache_tz_name
+    if _cache_tz_name is None:
+        _cache_tz_name = _get_localzone_name()
+
+    return _cache_tz_name
+
+
 def get_localzone():
     """Returns the zoneinfo-based tzinfo object that matches the Windows-configured timezone."""
+    warnings.warn("get_localzone() is deprecated for get_localzone_name()",
+                  DeprecationWarning)
+
     global _cache_tz
     if _cache_tz is None:
         _cache_tz = ZoneInfo(get_localzone_name())
@@ -109,20 +123,8 @@ def get_localzone():
 def reload_localzone():
     """Reload the cached localzone. You need to call this if the timezone has changed."""
     global _cache_tz
-    _cache_tz = ZoneInfo(get_localzone_name())
+    global _cache_tz_name
+    _cache_tz_name = _get_localzone_name()
+    _cache_tz = ZoneInfo(_cache_tz_name)
     utils.assert_tz_offset(_cache_tz)
     return _cache_tz
-
-
-def _try_tz_from_env():
-    """Check if there is a valid TZ timezone environment variable set"""
-    tzenv = os.getenv("TZ")
-    if tzenv:
-        try:
-            ZoneInfo(tzenv)
-        except ZoneInfoNotFoundError:
-            raise ZoneInfoNotFoundError(
-            "tzlocal() does not support non-zoneinfo timezones like %s. \n"
-            "Please use a timezone in the form of Continent/City"
-        )  
-    return tzenv        
