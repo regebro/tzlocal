@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
+import os
 import time
 import datetime
 import calendar
+try:
+    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
+except ImportError:
+    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
+
+from tzlocal import windows_tz
 
 
 def get_system_offset():
@@ -44,3 +51,69 @@ def assert_tz_offset(tz):
             "Please, check your config files."
         ).format(tz_offset, system_offset)
         raise ValueError(msg)
+
+
+def _tz_name_from_env(tzenv=None):
+    if tzenv is None:
+        tzenv = os.environ.get("TZ")
+
+    if not tzenv:
+        return None
+
+    if tzenv in windows_tz.tz_win:
+        # Yup, it's a timezone
+        return tzenv
+
+    if os.path.isabs(tzenv) and os.path.exists(tzenv):
+        # It's a file specification
+        parts = tzenv.split(os.sep)
+
+        # Is it a zone info zone?
+        possible_tz = '/'.join(parts[-2:])
+        if possible_tz in windows_tz.tz_win:
+            # Yup, it is
+            return tzenv
+
+        # Maybe it's a short one, like UTC?
+        if parts[-1] in windows_tz.tz_win:
+            # Indeed
+            return parts[-1]
+
+    # Nope, we didn't find a timezone name in TZ
+    return None
+
+
+def _tz_from_env(tzenv=None):
+    if tzenv is None:
+        tzenv = os.environ.get("TZ")
+
+    if not tzenv:
+        return None
+
+    # Some weird format that exists:
+    if tzenv[0] == ":":
+        tzenv = tzenv[1:]
+
+    # TZ specifies a file
+    if os.path.isabs(tzenv) and os.path.exists(tzenv):
+        # Try to see if we can figure out the name
+        tzname = _tz_name_from_env(tzenv)
+        if not tzname:
+            # Nope, not a standard timezone name, just take the filename
+            tzname = tzenv.split(os.sep)[-1]
+        with open(tzenv, "rb") as tzfile:
+            return ZoneInfo.from_file(tzfile, key=tzname)
+
+    # TZ must specify a zoneinfo zone.
+    try:
+        tz = ZoneInfo(tzenv)
+        # That worked, so we return this:
+        return tz
+    except ZoneInfoNotFoundError:
+        # Nope, it's something like "PST4DST" etc, we can't handle that.
+        raise ZoneInfoNotFoundError(
+            "tzlocal() does not support non-zoneinfo timezones like %s. \n"
+            "Please use a timezone in the form of Continent/City"
+        ) from None
+
+
