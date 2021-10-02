@@ -5,7 +5,7 @@ import sys
 import tzlocal.unix
 import unittest
 
-from datetime import datetime
+from datetime import datetime, timezone
 try:
     from cStringIO import StringIO  # Python 2
 except ImportError:
@@ -126,6 +126,21 @@ class TzLocalTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             tzlocal.utils.assert_tz_offset(other)
 
+    def test_pytz_compatibility(self):
+        os.environ['TZ'] = 'Africa/Harare'
+        tz_harare = tzlocal.unix.get_localzone()
+        os.environ['TZ'] = 'America/New_York'
+        tzlocal.unix.reload_localzone()
+        tz_newyork = tzlocal.unix.get_localzone()
+
+        dt = datetime(2021, 10, 1, 12, 00)
+        dt = tz_harare.localize(dt)
+        tz_harare.normalize(dt)
+        self.assertEqual(dt.utcoffset().total_seconds(), 7200)
+        dt = dt.astimezone(tz_newyork)
+        dt = tz_newyork.normalize(dt)
+        self.assertEqual(dt.utcoffset().total_seconds(), -14400)
+
 
 if sys.platform == 'win32':
 
@@ -161,6 +176,7 @@ else:
             })
             tz = tzlocal.win32.reload_localzone()
             self.assertEqual(tz.zone, 'America/Bahia')
+
 
 if __name__ == '__main__':
     unittest.main()
