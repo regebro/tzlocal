@@ -3,12 +3,22 @@ import os
 import time
 import datetime
 import calendar
+import pytz_deprecation_shim as pds
+
 try:
-    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
+    import zoneinfo  # pragma: no cover
 except ImportError:
-    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
+    from backports import zoneinfo  # pragma: no cover
 
 from tzlocal import windows_tz
+
+
+class ZoneInfoNotFoundError(pds.UnknownTimeZoneError, zoneinfo.ZoneInfoNotFoundError):
+    """An exception derived from both pytz and zoneinfo
+
+    This exception will be trappable both by pytz expecting clients and
+    zoneinfo expecting clients.
+    """
 
 
 def get_system_offset():
@@ -69,7 +79,7 @@ def _tz_name_from_env(tzenv=None):
         parts = tzenv.split(os.sep)
 
         # Is it a zone info zone?
-        possible_tz = '/'.join(parts[-2:])
+        possible_tz = "/".join(parts[-2:])
         if possible_tz in windows_tz.tz_win:
             # Yup, it is
             return tzenv
@@ -102,18 +112,17 @@ def _tz_from_env(tzenv=None):
             # Nope, not a standard timezone name, just take the filename
             tzname = tzenv.split(os.sep)[-1]
         with open(tzenv, "rb") as tzfile:
-            return ZoneInfo.from_file(tzfile, key=tzname)
+            zone = zoneinfo.ZoneInfo.from_file(tzfile, key=tzname)
+            return pds.wrap_zone(zone)
 
     # TZ must specify a zoneinfo zone.
     try:
-        tz = ZoneInfo(tzenv)
+        tz = pds.timezone(tzenv)
         # That worked, so we return this:
         return tz
-    except ZoneInfoNotFoundError:
+    except pds.UnknownTimeZoneError:
         # Nope, it's something like "PST4DST" etc, we can't handle that.
         raise ZoneInfoNotFoundError(
             "tzlocal() does not support non-zoneinfo timezones like %s. \n"
             "Please use a timezone in the form of Continent/City"
         ) from None
-
-

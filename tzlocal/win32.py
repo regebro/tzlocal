@@ -1,6 +1,4 @@
-import sys
-import os
-import warnings
+import pytz_deprecation_shim as pds
 
 try:
     import _winreg as winreg
@@ -9,11 +7,6 @@ except ImportError:
 
 from tzlocal.windows_tz import win_tz
 from tzlocal import utils
-
-if sys.version_info >= (3, 9):
-    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
-else:
-    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
 
 _cache_tz = None
 _cache_tz_name = None
@@ -93,7 +86,7 @@ def _get_localzone_name():
 
     # Return what we have.
     if timezone is None:
-        raise ZoneInfoNotFoundError(tzkeyname)
+        raise utils.ZoneInfoNotFoundError(tzkeyname)
 
     return timezone
 
@@ -109,14 +102,17 @@ def get_localzone_name():
 
 def get_localzone():
     """Returns the zoneinfo-based tzinfo object that matches the Windows-configured timezone."""
-    warnings.warn("get_localzone() is deprecated for get_localzone_name()",
-                  DeprecationWarning)
 
     global _cache_tz
     if _cache_tz is None:
-        _cache_tz = ZoneInfo(get_localzone_name())
+        _cache_tz = pds.timezone(get_localzone_name())
 
-    utils.assert_tz_offset(_cache_tz)
+    if not utils._tz_name_from_env():
+        # If the timezone does NOT come from a TZ environment variable,
+        # verify that it's correct. If it's from the environment,
+        # we accept it, this is so you can run tests with different timezones.
+        utils.assert_tz_offset(_cache_tz)
+
     return _cache_tz
 
 
@@ -125,6 +121,6 @@ def reload_localzone():
     global _cache_tz
     global _cache_tz_name
     _cache_tz_name = _get_localzone_name()
-    _cache_tz = ZoneInfo(_cache_tz_name)
+    _cache_tz = pds.timezone(_cache_tz_name)
     utils.assert_tz_offset(_cache_tz)
     return _cache_tz
