@@ -2,14 +2,14 @@ import os
 import re
 import sys
 import warnings
-from datetime import timezone
 
-from tzlocal import utils
+from tzlocal import utils, pytzshim
+import pytz_deprecation_shim as pds
 
 if sys.version_info >= (3, 9):
-    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+    from zoneinfo import ZoneInfo
 else:
-    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+    from backports.zoneinfo import ZoneInfo
 
 _cache_tz = None
 
@@ -21,15 +21,16 @@ def _tz_from_env(tzenv):
     # TZ specifies a file
     if os.path.isabs(tzenv) and os.path.exists(tzenv):
         with open(tzenv, 'rb') as tzfile:
-            return ZoneInfo.from_file(tzfile, key='local')
+            tz = ZoneInfo.from_file(tzfile, key='local')
+            return pds.wrap_zone(tz)
 
     # TZ specifies a zoneinfo zone.
     try:
-        tz = ZoneInfo(tzenv)
+        tz = pds.timezone(tzenv)
         # That worked, so we return this:
         return tz
-    except ZoneInfoNotFoundError:
-        raise ZoneInfoNotFoundError(
+    except pds.UnknownTimeZoneError:
+        raise pytzshim.TimezoneNotFoundError(
             "tzlocal() does not support non-zoneinfo timezones like %s. \n"
             "Please use a timezone in the form of Continent/City") from None
 
@@ -39,7 +40,7 @@ def _try_tz_from_env():
     if tzenv:
         try:
             return _tz_from_env(tzenv)
-        except ZoneInfoNotFoundError:
+        except pds.UnknownTimeZoneError:
             pass
 
 
@@ -62,7 +63,7 @@ def _get_localzone(_root='/'):
     if os.path.exists('/system/bin/getprop'):
         import subprocess
         androidtz = subprocess.check_output(['getprop', 'persist.sys.timezone']).strip().decode()
-        return ZoneInfo(androidtz)
+        return pds.timezone(androidtz)
 
     # Now look for distribution specific configuration files
     # that contain the timezone name.
@@ -89,7 +90,7 @@ def _get_localzone(_root='/'):
                         etctz, dummy = etctz.split('#', 1)
                     if not etctz:
                         continue
-                    tz = ZoneInfo(etctz.replace(' ', '_'))
+                    tz = pds.timezone(etctz.replace(' ', '_'))
                     if _root == '/':
                         # We are using a file in etc to name the timezone.
                         # Verify that the timezone specified there is actually used:
@@ -127,14 +128,14 @@ def _get_localzone(_root='/'):
                     etctz = line[:end_re.search(line).start()]
 
                     # We found a timezone
-                    tz = ZoneInfo(etctz.replace(' ', '_'))
+                    tz = pds.timezone(etctz.replace(' ', '_'))
                     if _root == '/':
                         # We are using a file in etc to name the timezone.
                         # Verify that the timezone specified there is actually used:
                         utils.assert_tz_offset(tz)
                     return tz
 
-        except (IOError, UnicodeDecodeError) as e:
+        except (IOError, UnicodeDecodeError):
             # UnicodeDecode handles when clock is symlink to /etc/localtime
             continue
 
@@ -147,8 +148,8 @@ def _get_localzone(_root='/'):
         while start != 0:
             tzpath = tzpath[start:]
             try:
-                return ZoneInfo(tzpath)
-            except ZoneInfoNotFoundError:
+                return pds.timezone(tzpath)
+            except pds.UnknownTimeZoneError:
                 pass
             start = tzpath.find("/")+1
 
@@ -159,10 +160,11 @@ def _get_localzone(_root='/'):
         if not os.path.exists(tzpath):
             continue
         with open(tzpath, 'rb') as tzfile:
-            return ZoneInfo.from_file(tzfile, key='local')
+            tz = ZoneInfo.from_file(tzfile, key='local')
+            return pds.wrap_zone(tz)
 
     warnings.warn('Can not find any timezone configuration, defaulting to UTC.')
-    return timezone.utc
+    return pds.UTC
 
 def get_localzone():
     """Get the computers configured local timezone, if any."""

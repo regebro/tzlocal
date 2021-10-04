@@ -9,6 +9,7 @@ import pytest
 
 import tzlocal.unix
 import tzlocal.utils
+import pytz_deprecation_shim as pds
 
 if sys.version_info >= (3, 9):
     from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -89,7 +90,6 @@ def test_timezone_setting():
                     reason='Symbolic links are not available on Windows')
 def test_symlink_localtime():
     # A ZONE setting in the target path of a symbolic linked localtime, f ex systemd distributions
-
     tz = tzlocal.unix._get_localzone(_root=tz_path('symlink_localtime'))
     assert tz.key == 'Africa/Harare'
 
@@ -127,7 +127,7 @@ def test_get_reload(mocker, monkeypatch):
 def test_fail(recwarn):
     with pytest.warns(UserWarning, match='Can not find any timezone configuration'):
         tz = tzlocal.unix._get_localzone(_root=tz_path())
-    assert tz == timezone.utc
+    assert tz.key == "UTC"
 
 
 def test_assert_tz_offset():
@@ -163,3 +163,37 @@ def test_win32(mocker):
     })
     tz = tzlocal.win32.reload_localzone()
     assert tz.key == 'America/Bahia'
+
+
+def test_pytz_compatibility():
+    os.environ['TZ'] = 'Africa/Harare'
+    tzlocal.unix.reload_localzone()
+    tz_harare = tzlocal.unix.get_localzone()
+    os.environ['TZ'] = 'America/New_York'
+    tzlocal.unix.reload_localzone()
+    tz_newyork = tzlocal.unix.get_localzone()
+
+    dt = datetime(2021, 10, 1, 12, 00)
+    dt = tz_harare.localize(dt)
+    tz_harare.normalize(dt)
+    assert dt.tzinfo.zone == 'Africa/Harare'
+    assert dt.utcoffset().total_seconds() == 7200
+    dt = dt.astimezone(tz_newyork)
+    dt = tz_newyork.normalize(dt)
+    assert dt.tzinfo.zone == 'America/New_York'
+    assert dt.utcoffset().total_seconds() == -14400
+
+
+def test_zoneinfo_compatibility():
+    os.environ['TZ'] = 'Africa/Harare'
+    tzlocal.unix.reload_localzone()
+    tz_harare = tzlocal.unix.get_localzone()
+    os.environ['TZ'] = 'America/New_York'
+    tzlocal.unix.reload_localzone()
+    tz_newyork = tzlocal.unix.get_localzone()
+
+    dt = datetime(2021, 10, 1, 12, 00)
+    dt = dt.replace(tzinfo=tz_harare)
+    assert dt.utcoffset().total_seconds() == 7200
+    dt = dt.replace(tzinfo=tz_newyork)
+    assert dt.utcoffset().total_seconds() == -14400
