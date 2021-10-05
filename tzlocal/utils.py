@@ -38,9 +38,9 @@ def get_system_offset():
     # so we check that the difference is less than one minute, because nobody
     # has that small DST differences.
     if abs(offset - time.altzone) < 60:
-        return -time.altzone
+        return -time.altzone  #pragma: no cover
     else:
-        return -time.timezone
+        return -time.timezone  #pragma: no cover
 
 
 def get_tz_offset(tz):
@@ -82,15 +82,12 @@ def _tz_name_from_env(tzenv=None):
         possible_tz = "/".join(parts[-2:])
         if possible_tz in windows_tz.tz_win:
             # Yup, it is
-            return tzenv
+            return possible_tz
 
         # Maybe it's a short one, like UTC?
         if parts[-1] in windows_tz.tz_win:
             # Indeed
             return parts[-1]
-
-    # Nope, we didn't find a timezone name in TZ
-    return None
 
 
 def _tz_from_env(tzenv=None):

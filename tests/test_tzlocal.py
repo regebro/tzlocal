@@ -37,20 +37,27 @@ def test_env(monkeypatch):
     tz_harare = tzlocal.utils._tz_from_env("Africa/Harare")
     assert str(tz_harare) == "Africa/Harare"
 
-    tz_local = tzlocal.utils._tz_from_env(":" + tz_path("Harare"))
-    assert str(tz_local) == "Harare"
+    path = tz_path(os.path.join("Africa", "Harare"))
+    tz_local = tzlocal.utils._tz_from_env(":" + path)
+    assert str(tz_local) == "Africa/Harare"
     # Make sure the local timezone is the same as the Harare one above.
     # We test this with a past date, so that we don't run into future changes
     # of the Harare timezone.
     dt = datetime(2012, 1, 1, 5)
     assert dt.replace(tzinfo=tz_harare) == dt.replace(tzinfo=tz_local)
 
+    tz_local = tzlocal.utils._tz_from_env(tz_path("UTC"))
+    assert str(tz_local) == "UTC"
+
+    path = tz_path(os.path.join("localtime", "etc", "localtime"))
+    tz_local = tzlocal.utils._tz_from_env(path)
+    assert str(tz_local) == "localtime"
+
     # Non-zoneinfo timezones are not supported in the TZ environment.
     pytest.raises(ZoneInfoNotFoundError, tzlocal.utils._tz_from_env, "GMT+03:00")
 
     # With a zone that doesn't exist, raises error
-    monkeypatch.setenv("TZ", "Just Nonsense")
-    pytest.raises(ZoneInfoNotFoundError, tzlocal.utils._tz_from_env)
+    pytest.raises(ZoneInfoNotFoundError, tzlocal.utils._tz_from_env, "Just Nonsense")
 
 
 def test_timezone():
@@ -208,34 +215,43 @@ def test_win32_env(mocker, monkeypatch):
 
 
 def test_pytz_compatibility():
-    os.environ['TZ'] = 'Africa/Harare'
+    os.environ["TZ"] = "Africa/Harare"
     tzlocal.unix.reload_localzone()
     tz_harare = tzlocal.unix.get_localzone()
-    os.environ['TZ'] = 'America/New_York'
+    os.environ["TZ"] = "America/New_York"
     tzlocal.unix.reload_localzone()
     tz_newyork = tzlocal.unix.get_localzone()
 
     dt = datetime(2021, 10, 1, 12, 00)
     dt = tz_harare.localize(dt)
     tz_harare.normalize(dt)
-    assert dt.tzinfo.zone == 'Africa/Harare'
+    assert dt.tzinfo.zone == "Africa/Harare"
     assert dt.utcoffset().total_seconds() == 7200
     dt = dt.astimezone(tz_newyork)
     dt = tz_newyork.normalize(dt)
-    assert dt.tzinfo.zone == 'America/New_York'
+    assert dt.tzinfo.zone == "America/New_York"
     assert dt.utcoffset().total_seconds() == -14400
 
 
 def test_zoneinfo_compatibility():
-    os.environ['TZ'] = 'Africa/Harare'
+    os.environ["TZ"] = "Africa/Harare"
     tzlocal.unix.reload_localzone()
     tz_harare = tzlocal.unix.get_localzone()
-    os.environ['TZ'] = 'America/New_York'
+    assert str(tz_harare) == "Africa/Harare"
+
+    os.environ["TZ"] = "America/New_York"
     tzlocal.unix.reload_localzone()
     tz_newyork = tzlocal.unix.get_localzone()
+    assert str(tz_newyork) == "America/New_York"
 
     dt = datetime(2021, 10, 1, 12, 00)
     dt = dt.replace(tzinfo=tz_harare)
     assert dt.utcoffset().total_seconds() == 7200
     dt = dt.replace(tzinfo=tz_newyork)
     assert dt.utcoffset().total_seconds() == -14400
+
+
+def test_get_localzone_name():
+    tzlocal.unix._cache_tz_name = None
+    os.environ["TZ"] = "America/New_York"
+    assert tzlocal.unix.get_localzone_name() == "America/New_York"
