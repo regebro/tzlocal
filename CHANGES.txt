@@ -11,6 +11,8 @@ Changes
   timezone validity bit not compared against the systems timezone offset.
   This allows for overriding the timezone when running tests.
 
+- Dropped support for Windows 2000, XP and Vista, supports Windows 7, 8 and 10.
+
 
 4.0b2 (2021-09-26)
 ------------------

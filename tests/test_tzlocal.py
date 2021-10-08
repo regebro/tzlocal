@@ -145,9 +145,14 @@ def test_assert_tz_offset():
 
 def test_win32(mocker):
     if sys.platform == "win32":
+        # Ironically, these tests don't work on Windows.
         import tzlocal.win32
 
-        tzlocal.win32.get_localzone()
+        # Just check on Windows that the code works, and that we get
+        # something reasonable back.
+        tz = tzlocal.win32.get_localzone()
+        # It should be a timezone with a slash in it, at least:
+        assert '/' in str(tz)
         return
 
     # Yes, winreg is all mocked out, but this test means we at least
@@ -157,21 +162,32 @@ def test_win32(mocker):
     winreg.EnumValue.configure_mock(
         return_value=("TimeZoneKeyName", "Belarus Standard Time")
     )
-    winreg.EnumKey.configure_mock(return_value="Bahia Standard Time")
     sys.modules["winreg"] = winreg
-    import tzlocal.win32
 
+    import tzlocal.win32
     tz = tzlocal.win32.get_localzone()
     assert str(tz) == "Europe/Minsk"
 
+    tz = tzlocal.win32.reload_localzone()
+    assert str(tz) == "Europe/Minsk"
+
+    winreg.EnumValue.configure_mock(
+        return_value=("TimeZoneKeyName", "Not a real timezone")
+    )
+    pytest.raises(ZoneInfoNotFoundError, tzlocal.win32._get_localzone_name)
+
+    # Old XP style reginfo should fail
+    winreg.EnumValue.configure_mock(
+        return_value=("TimeZoneKeyName", "Belarus Standard Time")
+    )
     tzlocal.win32.valuestodict = Mock(
         return_value={
             "StandardName": "Mocked Standard Time",
             "Std": "Mocked Standard Time",
         }
     )
-    tz = tzlocal.win32.reload_localzone()
-    assert str(tz) == "America/Bahia"
+    pytest.raises(LookupError, tzlocal.win32._get_localzone_name)
+
 
 
 def test_termux(mocker):
