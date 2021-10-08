@@ -95,7 +95,7 @@ def _get_localzone_name(_root="/"):
                     match = timezone_re.match(line)
                 if match is not None:
                     # Some setting existed
-                    line = line[match.end() :]
+                    line = line[match.end():]
                     etctz = line[: end_re.search(line).start()]
 
                     # We found a timezone

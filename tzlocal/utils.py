@@ -38,9 +38,9 @@ def get_system_offset():
     # so we check that the difference is less than one minute, because nobody
     # has that small DST differences.
     if abs(offset - time.altzone) < 60:
-        return -time.altzone  #pragma: no cover
+        return -time.altzone  # pragma: no cover
     else:
-        return -time.timezone  #pragma: no cover
+        return -time.timezone  # pragma: no cover
 
 
 def get_tz_offset(tz):
