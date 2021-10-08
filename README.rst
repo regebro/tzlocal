@@ -8,15 +8,9 @@ With version 3.0 of tzlocal, it no longer returns `pytz` objects, but `zoneinfo`
 This, and the dropping of Python 2 support, are the only differences, so if you need to
 use `pytz` objects, you can continue to use tzlocal 2.1.
 
-If there is demand for it, I may continue to support the 2 branch for some time.
-
 Also, the upcoming 4.0 version will add an official function to get the timezone name,
-instead of a timezone object, and getting the timezone object will be deprecated, as
-Python3.9's `zoneinfo` library supports `ZoneInfo('localtime')`, which is what tzlocal
-returns if it can't find a timezone name. Therefore, tzlocal is now only useful to
-get the timezone name.
-
-In hindsight, that SHOULD have been the API change for 3.0. Sorry about that.
+instead of a timezone object. It will also use Paul Ganssle's `pytz_deprecation_shim`
+to restore a partial compatibility for pytz-users.
 
 
 Info
