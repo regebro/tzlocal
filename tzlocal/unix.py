@@ -3,13 +3,14 @@ import re
 import sys
 import warnings
 from datetime import timezone
+import pytz_deprecation_shim as pds
 
 from tzlocal import utils
 
 if sys.version_info >= (3, 9):
-    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
+    from zoneinfo import ZoneInfo  # pragma: no cover
 else:
-    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pragma: no cover
+    from backports.zoneinfo import ZoneInfo  # pragma: no cover
 
 _cache_tz = None
 _cache_tz_name = None
@@ -113,9 +114,9 @@ def _get_localzone_name(_root="/"):
         while start != 0:
             etctz = etctz[start:]
             try:
-                ZoneInfo(etctz)
+                pds.timezone(etctz)
                 found_configs[tzpath] = etctz.replace(" ", "_")
-            except ZoneInfoNotFoundError:
+            except pds.UnknownTimeZoneError:
                 pass
             start = etctz.find("/") + 1
 
@@ -126,15 +127,15 @@ def _get_localzone_name(_root="/"):
             unique_tzs = set()
             for tzname in found_configs.values():
                 # Get rid of any Etc's
-                tzname = tzname.replace('Etc/', '')
+                tzname = tzname.replace("Etc/", "")
                 # In practice these are the same:
-                tzname = tzname.replace('UTC', 'GMT')
+                tzname = tzname.replace("UTC", "GMT")
                 # Let's handle these synonyms as well. Many systems have tons
                 # of synonyms, including country names and "Zulu" and other
                 # nonsense. Those will be seen as different ones. Let's stick
                 # to the official zoneinfo Continent/City names.
-                if tzname in ['GMT0', 'GMT+0', 'GMT-0']:
-                    tzname = 'GMT'
+                if tzname in ["GMT0", "GMT+0", "GMT-0"]:
+                    tzname = "GMT"
                 unique_tzs.add(tzname)
 
             if len(unique_tzs) != 1:
@@ -142,7 +143,7 @@ def _get_localzone_name(_root="/"):
                 for key, value in found_configs.items():
                     message += f"{key}: {value}\n"
                 message += "Fix the configuration, or set the time zone in a TZ environment variable.\n"
-                raise ZoneInfoNotFoundError(message)
+                raise utils.ZoneInfoNotFoundError(message)
 
         # We found exactly one config! Use it.
         return list(found_configs.values())[0]
@@ -172,13 +173,13 @@ def _get_localzone(_root="/"):
             if not os.path.exists(tzpath):
                 continue
             with open(tzpath, "rb") as tzfile:
-                tz = ZoneInfo.from_file(tzfile, key="local")
+                tz = pds.wrap_zone(ZoneInfo.from_file(tzfile, key="local"))
                 break
         else:
             warnings.warn("Can not find any timezone configuration, defaulting to UTC.")
             tz = timezone.utc
     else:
-        tz = ZoneInfo(tzname)
+        tz = pds.timezone(tzname)
 
     if _root == "/":
         # We are using a file in etc to name the timezone.
@@ -198,8 +199,6 @@ def get_localzone_name():
 
 def get_localzone():
     """Get the computers configured local timezone, if any."""
-    warnings.warn("get_localzone() is deprecated for get_localzone_name()",
-                  DeprecationWarning)
 
     global _cache_tz
     if _cache_tz is None:
