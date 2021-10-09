@@ -78,11 +78,16 @@ Lookup another timezone with ``zoneinfo`` (``backports.zoneinfo`` on Python 3.8 
     >>> from zoneinfo import ZoneInfo
     >>> eastern = ZoneInfo('US/Eastern')
 
-
 Convert the datetime:
 
     >>> dt.astimezone(eastern)
     datetime.datetime(2015, 4, 10, 1, 22, tzinfo=<DstTzInfo 'US/Eastern' EDT-1 day, 20:00:00 DST>)
+
+If you just want the name of the local timezone, use `get_localzone_name()`:
+
+    >>> from tzlocal import get_localzone_name
+    >>> get_localzone_name()
+    "Europe/Warsaw"
 
 
 Development
