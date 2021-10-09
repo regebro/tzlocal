@@ -12,6 +12,9 @@ Also, the upcoming 4.0 version will add an official function to get the timezone
 instead of a timezone object. It will also use Paul Ganssle's `pytz_deprecation_shim`
 to restore a partial compatibility for pytz-users.
 
+4.0 also adds way more information on what is going wrong in your configuration when
+the configuration files are unclear or contradictory. 
+
 
 Info
 ----
