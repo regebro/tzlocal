@@ -4,7 +4,8 @@ Changes
 4.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Handle UCT and Zulu as synonyms for UTC, while treating GMT and
+  UTC as different.
 
 
 4.0 (2021-10-18)

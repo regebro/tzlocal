@@ -128,14 +128,14 @@ def _get_localzone_name(_root="/"):
             for tzname in found_configs.values():
                 # Get rid of any Etc's
                 tzname = tzname.replace("Etc/", "")
-                # In practice these are the same:
-                tzname = tzname.replace("UTC", "GMT")
                 # Let's handle these synonyms as well. Many systems have tons
-                # of synonyms, including country names and "Zulu" and other
+                # of synonyms, including country names and other non-zoneinfo
                 # nonsense. Those will be seen as different ones. Let's stick
                 # to the official zoneinfo Continent/City names.
                 if tzname in ["GMT0", "GMT+0", "GMT-0"]:
                     tzname = "GMT"
+                if tzname in ["UCT", "Zulu"]:
+                    tzname = "UTC"
                 unique_tzs.add(tzname)
 
             if len(unique_tzs) != 1:
