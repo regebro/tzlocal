@@ -1,3 +1,4 @@
+from datetime import datetime
 import pytz_deprecation_shim as pds
 
 try:
@@ -14,12 +15,27 @@ _cache_tz_name = None
 
 def valuestodict(key):
     """Convert a registry key's values to a dictionary."""
-    dict = {}
+    result = {}
     size = winreg.QueryInfoKey(key)[1]
     for i in range(size):
         data = winreg.EnumValue(key, i)
-        dict[data[0]] = data[1]
-    return dict
+        result[data[0]] = data[1]
+    return result
+
+
+def _get_dst_info(tz):
+    # Find the offset for when it doesn't have DST:
+    dst_offset = std_offset = None
+    has_dst = False
+    year = datetime.now().year
+    for dt in (datetime(year, 1, 1), datetime(year, 6, 1)):
+        if tz.dst(dt).total_seconds() == 0.0:
+            # OK, no DST during winter, get this offset
+            std_offset = tz.utcoffset(dt).total_seconds()
+        else:
+            has_dst = True
+
+    return has_dst, std_offset, dst_offset
 
 
 def _get_localzone_name():
@@ -59,6 +75,29 @@ def _get_localzone_name():
     # Return what we have.
     if timezone is None:
         raise utils.ZoneInfoNotFoundError(tzkeyname)
+
+    if keyvalues.get("DynamicDaylightTimeDisabled", 0) == 1:
+        # DST is disabled, so don't return the timezone name,
+        # instead return Etc/GMT+offset
+
+        tz = pds.timezone(timezone)
+        has_dst, std_offset, dst_offset = _get_dst_info(tz)
+        if not has_dst:
+            # The DST is turned off in the windows configuration,
+            # but this timezone doesn't have DST so it doesn't matter
+            return timezone
+
+        if std_offset is None:
+            raise utils.ZoneInfoNotFoundError(
+                f"{tzkeyname} claims to not have a non-DST time!?")
+
+        if std_offset % 3600:
+            # I can't convert this to an hourly offset
+            raise utils.ZoneInfoNotFoundError(
+                f"tzlocal can't support disabling DST in the {timezone} zone.")
+
+        # This has whole hours as offset, return it as Etc/GMT
+        return f"Etc/GMT{std_offset//3600:+.0f}"
 
     return timezone
 

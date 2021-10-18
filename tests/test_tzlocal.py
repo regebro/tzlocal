@@ -189,6 +189,48 @@ def test_win32(mocker):
     pytest.raises(LookupError, tzlocal.win32._get_localzone_name)
 
 
+def test_win32_no_dst(mocker):
+    mocker.patch("tzlocal.utils.assert_tz_offset")
+    valuesmock = mocker.patch("tzlocal.win32.valuestodict")
+
+    # If you turn off the DST, tzlocal returns "Etc/GMT+zomething":
+    valuesmock.configure_mock(
+        return_value={
+            "TimeZoneKeyName": "Romance Standard Time",
+            "DynamicDaylightTimeDisabled": 1
+        })
+    tzlocal.win32._cache_tz_name = None
+    tzlocal.win32._cache_tz = None
+    assert str(tzlocal.win32.get_localzone()) == "Etc/GMT+1"
+
+    # Except if the timezone doesn't have daylight savings at all,
+    # then just return the timezone in question, because why not?
+    valuesmock.configure_mock(
+        return_value={
+            "TimeZoneKeyName": "Belarus Standard Time",
+            "DynamicDaylightTimeDisabled": 1
+        })
+    tz = tzlocal.win32._get_localzone_name()
+    assert tz == "Europe/Minsk"
+
+    # Now, if you disable this in a timezone with DST, that has a
+    # non-whole hour offset, then there's nothing we can return.
+    valuesmock.configure_mock(
+        return_value={
+            "TimeZoneKeyName": "Cen. Australia Standard Time",
+            "DynamicDaylightTimeDisabled": 1
+        })
+    pytest.raises(ZoneInfoNotFoundError, tzlocal.win32._get_localzone_name)
+
+    # But again, if there is no DST, that works fine:
+    valuesmock.configure_mock(
+        return_value={
+            "TimeZoneKeyName": "Aus Central W. Standard Time",
+            "DynamicDaylightTimeDisabled": 1
+        })
+    tz = tzlocal.win32._get_localzone_name()
+    assert tz == "Australia/Eucla"
+
 
 def test_termux(mocker):
     subprocess = MagicMock()

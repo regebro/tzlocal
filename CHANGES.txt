@@ -4,7 +4,9 @@ Changes
 4.0b4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added support for turning off DST in Windows. That only works in
+  whole hour timezones, and honestly, if you need to turn off DST,
+  you should just use UTC as a timezone.
 
 
 4.0b3 (2021-10-08)
