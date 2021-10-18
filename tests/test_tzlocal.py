@@ -189,6 +189,21 @@ def test_win32(mocker):
     pytest.raises(LookupError, tzlocal.win32._get_localzone_name)
 
 
+def test_win32_env(mocker, monkeypatch):
+    sys.modules["winreg"] = MagicMock()
+    import tzlocal.win32
+
+    mocker.patch("tzlocal.utils.assert_tz_offset")
+    monkeypatch.setattr(tzlocal.win32, "_cache_tz", None)
+    monkeypatch.setenv("TZ", "Europe/Berlin")
+
+    tzlocal.win32._cache_tz_name = None
+    tzname = tzlocal.win32.get_localzone_name()
+    assert tzname == "Europe/Berlin"
+    tz = tzlocal.win32.get_localzone()
+    assert str(tz) == "Europe/Berlin"
+
+
 def test_win32_no_dst(mocker):
     mocker.patch("tzlocal.utils.assert_tz_offset")
     valuesmock = mocker.patch("tzlocal.win32.valuestodict")
@@ -201,7 +216,7 @@ def test_win32_no_dst(mocker):
         })
     tzlocal.win32._cache_tz_name = None
     tzlocal.win32._cache_tz = None
-    assert str(tzlocal.win32.get_localzone()) == "Etc/GMT+1"
+    assert str(tzlocal.win32.get_localzone()) == "Etc/GMT-1"
 
     # Except if the timezone doesn't have daylight savings at all,
     # then just return the timezone in question, because why not?
@@ -255,21 +270,6 @@ def test_conflicting():
 def test_noconflict():
     tz = tzlocal.unix._get_localzone(_root=tz_path("noconflict"))
     assert str(tz) == "UTC"
-
-
-def test_win32_env(mocker, monkeypatch):
-    sys.modules["winreg"] = MagicMock()
-    import tzlocal.win32
-
-    mocker.patch("tzlocal.utils.assert_tz_offset")
-    monkeypatch.setattr(tzlocal.win32, "_cache_tz", None)
-    monkeypatch.setenv("TZ", "Europe/Berlin")
-
-    tzlocal.win32._cache_tz_name = None
-    tzname = tzlocal.win32.get_localzone_name()
-    assert tzname == "Europe/Berlin"
-    tz = tzlocal.win32.get_localzone()
-    assert str(tz) == "Europe/Berlin"
 
 
 def test_pytz_compatibility():

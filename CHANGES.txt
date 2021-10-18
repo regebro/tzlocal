@@ -4,7 +4,7 @@ Changes
 4.0b5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed a bug in the Windows DST support.
 
 
 4.0b4 (2021-10-18)

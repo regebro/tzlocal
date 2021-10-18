@@ -97,7 +97,7 @@ def _get_localzone_name():
                 f"tzlocal can't support disabling DST in the {timezone} zone.")
 
         # This has whole hours as offset, return it as Etc/GMT
-        return f"Etc/GMT{std_offset//3600:+.0f}"
+        return f"Etc/GMT{-std_offset//3600:+.0f}"
 
     return timezone
 
