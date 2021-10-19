@@ -4,35 +4,40 @@ tzlocal
 API CHANGE!
 -----------
 
-With version 3.0 of tzlocal, it no longer returns `pytz` objects, but `zoneinfo` objects.
-This, and the dropping of Python 2 support, are the only differences, so if you need to
-use `pytz` objects, you can continue to use tzlocal 2.1.
+With version 3.0 of tzlocal, tzlocal no longer returned `pytz` objects, but
+`zoneinfo` objects, which has a different API. Since 4.0, it now restored
+partial compatibility for `pytz` users through Paul Ganssle's
+`pytz_deprecation_shim`.
 
-Also, the upcoming 4.0 version will add an official function to get the timezone name,
-instead of a timezone object. It will also use Paul Ganssle's `pytz_deprecation_shim`
-to restore a partial compatibility for pytz-users.
+tzlocal 4.0 also adds an official function `get_localzone_name()` to get only
+the timezone name, instead of a timezone object. On unix, it can raise an
+error if you don't have a timezone name configured, where `get_localzone()`
+will succeed, so only use that if you need the timezone name.
 
-4.0 also adds way more information on what is going wrong in your configuration when
-the configuration files are unclear or contradictory. 
+4.0 also adds way more information on what is going wrong in your
+configuration when the configuration files are unclear or contradictory.
 
 
 Info
 ----
 
-This Python module returns a ``tzinfo`` object with the local timezone information
-under Unix and Windows.
-It requires either Python 3.9+ or the ``backports.tzinfo`` package, and returns
-``zoneinfo.ZoneInfo`` objects.
+This Python module returns a ``tzinfo`` object (with a pytz_deprecation_shim,
+for pytz compatibility) with the local timezone information, under Unix and
+Windows.
 
-This module attempts to fix a glaring hole in the ``zoneinfo`` module, that
-there is no way to get the local timezone information, unless you know the
-zoneinfo name, and under several Linux distros that's hard or impossible to figure out.
+It requires Python 3.6 or later, and will use the ``backports.tzinfo``
+package, for Python 3.6 to 3.8.
+
+This module attempts to fix a glaring hole in the ``pytz`` and ``zoneinfo``
+modules, that there is no way to get the local timezone information, unless
+you know the zoneinfo name, and under several Linux distros that's hard or
+impossible to figure out.
 
 With ``tzlocal`` you only need to call ``get_localzone()`` and you will get a
-``tzinfo`` object with the local time zone info. On some Unices you will still
-not get to know what the timezone name is, but you don't need that when you
-have the tzinfo file. However, if the timezone name is readily available it
-will be used.
+``tzinfo`` object with the local time zone info. On some Unices you will
+still not get to know what the timezone name is, but you don't need that when
+you have the tzinfo file. However, if the timezone name is readily available
+it will be used.
 
 
 Supported systems
@@ -47,17 +52,24 @@ These are the systems that are in theory supported:
 If you have one of the above systems and it does not work, it's a bug.
 Please report it.
 
-Please note that if you are getting a time zone called ``local``, this is not a bug, it's
-actually the main feature of ``tzlocal``, that even if your system does NOT have a configuration file
-with the zoneinfo name of your time zone, it will still work.
+Please note that if you are getting a time zone called ``local``, this is not
+a bug, it's actually the main feature of ``tzlocal``, that even if your
+system does NOT have a configuration file with the zoneinfo name of your time
+zone, it will still work.
 
-You can also use ``tzlocal`` to get the name of your local timezone, but only if your system is
-configured to make that possible. ``tzlocal`` looks for the timezone name in ``/etc/timezone``, ``/var/db/zoneinfo``,
-``/etc/sysconfig/clock`` and ``/etc/conf.d/clock``. If your ``/etc/localtime`` is a symlink it can also extract the
-name from that symlink.
+You can also use ``tzlocal`` to get the name of your local timezone, but only
+if your system is configured to make that possible. ``tzlocal`` looks for the
+timezone name in ``/etc/timezone``, ``/var/db/zoneinfo``,
+``/etc/sysconfig/clock`` and ``/etc/conf.d/clock``. If your
+``/etc/localtime`` is a symlink it can also extract the name from that
+symlink.
 
-If you need the name of your local time zone, then please make sure your system is properly configured to allow that.
-If it isn't configured, tzlocal will default to UTC.
+If you need the name of your local time zone, then please make sure your
+system is properly configured to allow that.
+
+If your unix system doesn't have a timezone configured, tzlocal will default
+to UTC.
+
 
 Usage
 -----
@@ -91,6 +103,9 @@ If you just want the name of the local timezone, use `get_localzone_name()`:
     >>> from tzlocal import get_localzone_name
     >>> get_localzone_name()
     "Europe/Warsaw"
+
+Please note that under Unix, `get_localzone_name()` may fail if there is no zone
+configured, where `get_localzone()` would generally succeed.
 
 
 Development
