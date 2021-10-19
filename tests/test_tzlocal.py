@@ -289,6 +289,7 @@ def test_pytz_compatibility():
     dt = tz_newyork.normalize(dt)
     assert dt.tzinfo.zone == "America/New_York"
     assert dt.utcoffset().total_seconds() == -14400
+    del os.environ["TZ"]
 
 
 def test_zoneinfo_compatibility():
@@ -307,9 +308,17 @@ def test_zoneinfo_compatibility():
     assert dt.utcoffset().total_seconds() == 7200
     dt = dt.replace(tzinfo=tz_newyork)
     assert dt.utcoffset().total_seconds() == -14400
+    del os.environ["TZ"]
 
 
 def test_get_localzone_name():
     tzlocal.unix._cache_tz_name = None
     os.environ["TZ"] = "America/New_York"
     assert tzlocal.unix.get_localzone_name() == "America/New_York"
+    del os.environ["TZ"]
+
+
+def test_ubuntu_docker_bug():
+    tz = tzlocal.unix._get_localzone(_root=tz_path("ubuntu_docker_bug"))
+    assert str(tz) == "UTC"
+

@@ -53,11 +53,11 @@ def _get_localzone_name(_root="/"):
             with open(tzpath, "rt") as tzfile:
                 data = tzfile.read()
 
-                etctz = data.strip()
+                etctz = data.strip('/ \t\r\n')
                 if not etctz:
                     # Empty file, skip
                     continue
-                for etctz in data.splitlines():
+                for etctz in etctz.splitlines():
                     # Get rid of host definitions and comments:
                     if " " in etctz:
                         etctz, dummy = etctz.split(" ", 1)

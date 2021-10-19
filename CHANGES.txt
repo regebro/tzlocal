@@ -4,7 +4,8 @@ Changes
 4.0.1b2 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- A long time bug in Ubuntu docker images seem to not get fixed,
+  so I added a workaround.
 
 
 4.0.1b1 (2021-10-18)
