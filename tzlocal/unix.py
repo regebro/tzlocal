@@ -109,13 +109,14 @@ def _get_localzone_name(_root="/"):
     # see manpage of localtime(5) and timedatectl(1)
     tzpath = os.path.join(_root, "etc/localtime")
     if os.path.exists(tzpath) and os.path.islink(tzpath):
-        etctz = tzpath = os.path.realpath(tzpath)
+        etctz = realtzpath = os.path.realpath(tzpath)
         start = etctz.find("/") + 1
         while start != 0:
             etctz = etctz[start:]
             try:
                 pds.timezone(etctz)
-                found_configs[tzpath] = etctz.replace(" ", "_")
+                tzinfo = f"{tzpath} is a symlink to"
+                found_configs[tzinfo] = etctz.replace(" ", "_")
             except pds.UnknownTimeZoneError:
                 pass
             start = etctz.find("/") + 1
