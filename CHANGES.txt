@@ -1,7 +1,7 @@
 Changes
 =======
 
-4.0.3 (unreleased)
+4.1b1 (2021-10-28)
 ------------------
 
 - It turns out a lot of Linux distributions make the links between zoneinfo
