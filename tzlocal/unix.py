@@ -126,18 +126,15 @@ def _get_localzone_name(_root="/"):
         if len(found_configs) > 1:
             # Uh-oh, multiple configs. See if they match:
             unique_tzs = set()
+            zoneinfo = os.path.join(_root, "usr", "share", "zoneinfo")
+            directory_depth = len(zoneinfo.split(os.path.sep))
+
             for tzname in found_configs.values():
-                # Get rid of any Etc's
-                tzname = tzname.replace("Etc/", "")
-                # Let's handle these synonyms as well. Many systems have tons
-                # of synonyms, including country names and other non-zoneinfo
-                # nonsense. Those will be seen as different ones. Let's stick
-                # to the official zoneinfo Continent/City names.
-                if tzname in ["GMT0", "GMT+0", "GMT-0"]:
-                    tzname = "GMT"
-                if tzname in ["UCT", "Zulu"]:
-                    tzname = "UTC"
-                unique_tzs.add(tzname)
+                # Look them up in /usr/share/zoneinfo, and find what they
+                # really point to:
+                path = os.path.realpath(os.path.join(zoneinfo, *tzname.split("/")))
+                real_zone_name = "/".join(path.split(os.path.sep)[directory_depth:])
+                unique_tzs.add(real_zone_name)
 
             if len(unique_tzs) != 1:
                 message = "Multiple conflicting time zone configurations found:\n"

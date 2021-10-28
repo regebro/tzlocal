@@ -4,7 +4,22 @@ Changes
 4.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- It turns out a lot of Linux distributions make the links between zoneinfo
+  aliases backwards, so instead of linking GB to Europe/London it actually
+  links the other way. When /etc/localtime then links to Europe/London, and you
+  also have a config file saying Europe/London, the code that checks if
+  /etc/localtime is a symlink ends up at GB instead of Europe/London and
+  we get an error, as it thinks GB and Europe/London are different zones.
+
+  So now we check the symlink of all timezones in the uniqueness test. We still
+  return the name in the config file, though, so you would only get GB or Zulu
+  returned as the time zone instead of Europe/London or UTC if your only
+  configuration is the /etc/localtime symlink, as that's checked last, and
+  tzlocal will return the first configuration found.
+
+- The above change also means that GMT and UTC are no longer seen as synonyms,
+  as zoneinfo does not see them as synonyms. This might be controversial,
+  but you just have to live with it. Pick one and stay with it. ;-)
 
 
 4.0.2 (2021-10-26)

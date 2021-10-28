@@ -271,9 +271,12 @@ def test_conflicting():
     assert "localtime is a symlink to: Africa/Harare" in message
 
 
+@pytest.mark.skipif(
+    platform.system() == "Windows", reason="Symbolic links are not available on Windows"
+)
 def test_noconflict():
     tz = tzlocal.unix._get_localzone(_root=tz_path("noconflict"))
-    assert str(tz) == "UTC"
+    assert str(tz) == "Etc/UTC"
 
 
 def test_pytz_compatibility():
