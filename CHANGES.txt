@@ -4,7 +4,9 @@ Changes
 4.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- If TZ environment variable is set to /etc/localhost, and that's a link to
+  a zoneinfo file, then tzlocal will now find the timezone name, and not
+  just return a localtime TZ object.
 
 
 4.1 (2021-10-29)
