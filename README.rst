@@ -70,6 +70,16 @@ system is properly configured to allow that.
 If your unix system doesn't have a timezone configured, tzlocal will default
 to UTC.
 
+Notes on Docker
+---------------
+
+It turns out that Docker images frequently have broken timezone setups.
+This usually resuts in a warning that the configuration is wrong, or that
+the timezone offset doesn't match the found timezone.
+
+The easiest way to fix that is to set a TZ variable in your docker setup
+to whatever timezone you want, which is usually the timezone your host
+computer has.
 
 Usage
 -----
