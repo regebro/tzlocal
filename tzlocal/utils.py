@@ -124,5 +124,5 @@ def _tz_from_env(tzenv=None):
         # Nope, it's something like "PST4DST" etc, we can't handle that.
         raise ZoneInfoNotFoundError(
             "tzlocal() does not support non-zoneinfo timezones like %s. \n"
-            "Please use a timezone in the form of Continent/City"
+            "Please use a timezone in the form of Continent/City" % tzenv
         ) from None
