@@ -117,6 +117,8 @@ def _get_localzone_name(_root="/"):
                 pds.timezone(etctz)
                 tzinfo = f"{tzpath} is a symlink to"
                 found_configs[tzinfo] = etctz.replace(" ", "_")
+                # Only need first valid relative path in simlink. 
+                break
             except pds.UnknownTimeZoneError:
                 pass
             start = etctz.find("/") + 1
