@@ -50,7 +50,7 @@ def _get_localzone_name(_root="/"):
     for configfile in ("etc/timezone", "var/db/zoneinfo"):
         tzpath = os.path.join(_root, configfile)
         try:
-            with open(tzpath, "rt") as tzfile:
+            with open(tzpath) as tzfile:
                 data = tzfile.read()
 
                 etctz = data.strip('/ \t\r\n')
@@ -68,7 +68,7 @@ def _get_localzone_name(_root="/"):
 
                     found_configs[tzpath] = etctz.replace(" ", "_")
 
-        except (IOError, UnicodeDecodeError):
+        except (OSError, UnicodeDecodeError):
             # File doesn't exist or is a directory, or it's a binary file.
             continue
 
@@ -84,7 +84,7 @@ def _get_localzone_name(_root="/"):
     for filename in ("etc/sysconfig/clock", "etc/conf.d/clock"):
         tzpath = os.path.join(_root, filename)
         try:
-            with open(tzpath, "rt") as tzfile:
+            with open(tzpath) as tzfile:
                 data = tzfile.readlines()
 
             for line in data:
@@ -101,7 +101,7 @@ def _get_localzone_name(_root="/"):
                     # We found a timezone
                     found_configs[tzpath] = etctz.replace(" ", "_")
 
-        except (IOError, UnicodeDecodeError):
+        except (OSError, UnicodeDecodeError):
             # UnicodeDecode handles when clock is symlink to /etc/localtime
             continue
 
