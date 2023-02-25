@@ -164,6 +164,7 @@ Contributors
 * Miroslav Šedivý
 * revansSZ
 * Sam Treweek
+* Peter Di Pasquale
 
 (Sorry if I forgot someone)
 
