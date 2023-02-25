@@ -25,8 +25,8 @@ This Python module returns a ``tzinfo`` object (with a pytz_deprecation_shim,
 for pytz compatibility) with the local timezone information, under Unix and
 Windows.
 
-It requires Python 3.6 or later, and will use the ``backports.tzinfo``
-package, for Python 3.6 to 3.8.
+It requires Python 3.7 or later, and will use the ``backports.tzinfo``
+package, for Python 3.7 and 3.8.
 
 This module attempts to fix a glaring hole in the ``pytz`` and ``zoneinfo``
 modules, that there is no way to get the local timezone information, unless
