@@ -6,6 +6,9 @@ Changes
 
 - Improved the error message when the ZoneInfo cannot be found
 
+- Don't error out because we find multiple possible timezones for 
+  a symlink. 
+
 
 4.2 (2022-04-02)
 ----------------
