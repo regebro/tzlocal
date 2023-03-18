@@ -8,6 +8,8 @@ Changes
 
 - Don't error out because we find multiple possible timezones for 
   a symlink. 
+  
+- More stable on Android/Termux with proot
 
 
 4.2 (2022-04-02)
