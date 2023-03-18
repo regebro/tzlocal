@@ -152,7 +152,7 @@ def test_win32(mocker):
         # something reasonable back.
         tz = tzlocal.win32.get_localzone()
         # It should be a timezone with a slash in it, at least:
-        assert '/' in str(tz)
+        assert "/" in str(tz)
         return
 
     # Yes, winreg is all mocked out, but this test means we at least
@@ -165,6 +165,7 @@ def test_win32(mocker):
     sys.modules["winreg"] = winreg
 
     import tzlocal.win32
+
     tz = tzlocal.win32.get_localzone()
     assert str(tz) == "Europe/Minsk"
 
@@ -212,8 +213,9 @@ def test_win32_no_dst(mocker):
     valuesmock.configure_mock(
         return_value={
             "TimeZoneKeyName": "Romance Standard Time",
-            "DynamicDaylightTimeDisabled": 1
-        })
+            "DynamicDaylightTimeDisabled": 1,
+        }
+    )
     tzlocal.win32._cache_tz_name = None
     tzlocal.win32._cache_tz = None
     assert str(tzlocal.win32.get_localzone()) == "Etc/GMT-1"
@@ -223,8 +225,9 @@ def test_win32_no_dst(mocker):
     valuesmock.configure_mock(
         return_value={
             "TimeZoneKeyName": "Belarus Standard Time",
-            "DynamicDaylightTimeDisabled": 1
-        })
+            "DynamicDaylightTimeDisabled": 1,
+        }
+    )
     tz = tzlocal.win32._get_localzone_name()
     assert tz == "Europe/Minsk"
 
@@ -233,16 +236,18 @@ def test_win32_no_dst(mocker):
     valuesmock.configure_mock(
         return_value={
             "TimeZoneKeyName": "Cen. Australia Standard Time",
-            "DynamicDaylightTimeDisabled": 1
-        })
+            "DynamicDaylightTimeDisabled": 1,
+        }
+    )
     pytest.raises(ZoneInfoNotFoundError, tzlocal.win32._get_localzone_name)
 
     # But again, if there is no DST, that works fine:
     valuesmock.configure_mock(
         return_value={
             "TimeZoneKeyName": "Aus Central W. Standard Time",
-            "DynamicDaylightTimeDisabled": 1
-        })
+            "DynamicDaylightTimeDisabled": 1,
+        }
+    )
     tz = tzlocal.win32._get_localzone_name()
     assert tz == "Australia/Eucla"
 
@@ -261,7 +266,7 @@ def test_termux(mocker):
 )
 def test_conflicting():
     with pytest.raises(ZoneInfoNotFoundError) as excinfo:
-        tz = tzlocal.unix._get_localzone(_root=tz_path("conflicting"))
+        tzlocal.unix._get_localzone(_root=tz_path("conflicting"))
     message = excinfo.value.args[0]
     assert "Multiple conflicting time zone configurations found:\n" in message
     assert "Europe/Paris" in message
@@ -328,4 +333,3 @@ def test_get_localzone_name():
 def test_ubuntu_docker_bug():
     tz = tzlocal.unix._get_localzone(_root=tz_path("ubuntu_docker_bug"))
     assert str(tz) == "UTC"
-

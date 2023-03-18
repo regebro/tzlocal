@@ -57,7 +57,7 @@ def _get_localzone_name(_root="/"):
             with open(tzpath) as tzfile:
                 data = tzfile.read()
 
-                etctz = data.strip('/ \t\r\n')
+                etctz = data.strip("/ \t\r\n")
                 if not etctz:
                     # Empty file, skip
                     continue
@@ -99,7 +99,7 @@ def _get_localzone_name(_root="/"):
                     match = timezone_re.match(line)
                 if match is not None:
                     # Some setting existed
-                    line = line[match.end():]
+                    line = line[match.end() :]
                     etctz = line[: end_re.search(line).start()]
 
                     # We found a timezone
@@ -113,7 +113,7 @@ def _get_localzone_name(_root="/"):
     # see manpage of localtime(5) and timedatectl(1)
     tzpath = os.path.join(_root, "etc/localtime")
     if os.path.exists(tzpath) and os.path.islink(tzpath):
-        etctz = realtzpath = os.path.realpath(tzpath)
+        etctz = os.path.realpath(tzpath)
         start = etctz.find("/") + 1
         while start != 0:
             etctz = etctz[start:]
@@ -121,7 +121,7 @@ def _get_localzone_name(_root="/"):
                 pds.timezone(etctz)
                 tzinfo = f"{tzpath} is a symlink to"
                 found_configs[tzinfo] = etctz.replace(" ", "_")
-                # Only need first valid relative path in simlink. 
+                # Only need first valid relative path in simlink.
                 break
             except pds.UnknownTimeZoneError:
                 pass
