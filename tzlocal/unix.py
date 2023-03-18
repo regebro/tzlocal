@@ -34,12 +34,16 @@ def _get_localzone_name(_root="/"):
     if os.path.exists(os.path.join(_root, "system/bin/getprop")):
         import subprocess
 
-        androidtz = (
-            subprocess.check_output(["getprop", "persist.sys.timezone"])
-            .strip()
-            .decode()
-        )
-        return androidtz
+        try:
+            androidtz = (
+                subprocess.check_output(["getprop", "persist.sys.timezone"])
+                .strip()
+                .decode()
+            )
+            return androidtz
+        except (OSError, subprocess.CalledProcessError):
+            # proot environment or failed to getprop
+            pass
 
     # Now look for distribution specific configuration files
     # that contain the timezone name.
