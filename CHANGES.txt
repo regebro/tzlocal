@@ -1,7 +1,7 @@
 Changes
 =======
 
-4.3 (unreleased)
+4.3 (2023-03-18)
 ----------------
 
 - Improved the error message when the ZoneInfo cannot be found
