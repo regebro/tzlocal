@@ -33,6 +33,6 @@ jobs:
         path: ~/.cache/pip
         key: pip-test-${{ matrix.python-version }}-${{ matrix.os }}
     - name: Install dependencies
-      run: pip install .[test]
+      run: pip install .[devenv]
     - name: Test with pytest
       run: pytest
