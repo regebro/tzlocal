@@ -1,8 +1,8 @@
 Changes
 =======
 
-4.4 (unreleased)
-----------------
+4.4b1 (2023-03-20)
+------------------
 
 - Added debug logging
 
