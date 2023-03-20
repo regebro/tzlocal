@@ -117,6 +117,28 @@ If you just want the name of the local timezone, use `get_localzone_name()`:
 Please note that under Unix, `get_localzone_name()` may fail if there is no zone
 configured, where `get_localzone()` would generally succeed.
 
+Troubleshooting
+---------------
+
+If you don't get the result you expect, try running it with debugging turned on.
+Start a python interpreter that has tzlocal installed, and run the following code::
+
+    import logging
+    logging.basicConfig(level="DEBUG")
+    import tzlocal
+    tzlocal.get_localzone()
+
+The output should look something like this, and this will tell you what
+configurations were found::
+
+    DEBUG:root:/etc/timezone found, contents:
+     Europe/Warsaw
+
+    DEBUG:root:/etc/localtime found
+    DEBUG:root:2 found:
+     {'/etc/timezone': 'Europe/Warsaw', '/etc/localtime is a symlink to': 'Europe/Warsaw'}
+    _PytzShimTimezone(zoneinfo.ZoneInfo(key='Europe/Warsaw'), 'Europe/Warsaw')
+
 
 Development
 -----------
