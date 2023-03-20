@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 import datetime
@@ -69,6 +70,8 @@ def _tz_name_from_env(tzenv=None):
     if not tzenv:
         return None
 
+    logging.debug(f"Found a TZ environment: {tzenv}")
+
     if tzenv[0] == ":":
         tzenv = tzenv[1:]
 
@@ -90,6 +93,9 @@ def _tz_name_from_env(tzenv=None):
         if parts[-1] in windows_tz.tz_win:
             # Indeed
             return parts[-1]
+
+    logging.debug("TZ does not contain a time zone name")
+    return None
 
 
 def _tz_from_env(tzenv=None):

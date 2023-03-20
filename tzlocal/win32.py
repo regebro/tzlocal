@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 import pytz_deprecation_shim as pds
 
@@ -39,6 +40,7 @@ def _get_dst_info(tz):
 
 
 def _get_localzone_name():
+    logging.debug("Looking up time zone info from registry")
     # Windows is special. It has unique time zone names (in several
     # meanings of the word) available, but unfortunately, they can be
     # translated to the language of the operating system, so we need to

@@ -15,6 +15,8 @@ if sys.version_info >= (3, 9):
 else:
     from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 @pytest.fixture(scope="session", autouse=True)
 def clear_tz_env_variable():
