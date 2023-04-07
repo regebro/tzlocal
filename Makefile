@@ -27,7 +27,7 @@ coverage:
 test:
 	$(bin_dir)/pytest
 
-release: update_mapping
+release: update_mapping check
 	$(bin_dir)/fullrelease
 
 clean:
