@@ -17,6 +17,11 @@ will succeed, so only use that if you need the timezone name.
 4.0 also adds way more information on what is going wrong in your
 configuration when the configuration files are unclear or contradictory.
 
+Version 5.0 removes the `pytz_deprecation_shim`, and now only returns
+`zoneinfo` objects, like verion 3.0 did. If you need `pytz` objects, you have
+to stay on version 4.0. If there are bugs in version 4.0, I will rekease
+updates, but there will be no further functional changes on the 4.x branch.
+
 
 Info
 ----
@@ -137,22 +142,25 @@ configurations were found::
     DEBUG:root:/etc/localtime found
     DEBUG:root:2 found:
      {'/etc/timezone': 'Europe/Warsaw', '/etc/localtime is a symlink to': 'Europe/Warsaw'}
-    _PytzShimTimezone(zoneinfo.ZoneInfo(key='Europe/Warsaw'), 'Europe/Warsaw')
+    zoneinfo.ZoneInfo(key='Europe/Warsaw')
 
 
 Development
 -----------
 
-To create a development environment, create a virtualenv and make a development installation::
+For ease of development, there is a Makefile that will help you with basic tasks,
+like creating a development environment with all the necessary tools (although
+you need a supported Python version installed first)::
 
-    $ virtualenv ve
-    $ source ve/bin/activation (Win32: .\ve\Scripts\activate)
-    (ve) $ pip install -e .[test,devenv]
+    $ make devenv
 
-To run tests, just use pytest, coverage is nice as well::
+To run tests::
 
-    (ve) $ pytest --cov=tzlocal
+    $ make test
 
+Check the syntax::
+
+    $ make check
 
 
 Maintainer

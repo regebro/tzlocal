@@ -4,14 +4,13 @@ import re
 import sys
 import warnings
 from datetime import timezone
-import pytz_deprecation_shim as pds
 
 from tzlocal import utils
 
 if sys.version_info >= (3, 9):
-    from zoneinfo import ZoneInfo  # pragma: no cover
+    import zoneinfo # pragma: no cover
 else:
-    from backports.zoneinfo import ZoneInfo  # pragma: no cover
+    from backports import zoneinfo # pragma: no cover
 
 _cache_tz = None
 _cache_tz_name = None
@@ -125,12 +124,12 @@ def _get_localzone_name(_root="/"):
         while start != 0:
             etctz = etctz[start:]
             try:
-                pds.timezone(etctz)
+                zoneinfo.ZoneInfo(etctz)
                 tzinfo = f"{tzpath} is a symlink to"
                 found_configs[tzinfo] = etctz.replace(" ", "_")
                 # Only need first valid relative path in simlink.
                 break
-            except pds.UnknownTimeZoneError:
+            except zoneinfo.ZoneInfoNotFoundError:
                 pass
             start = etctz.find("/") + 1
 
@@ -140,13 +139,13 @@ def _get_localzone_name(_root="/"):
         if len(found_configs) > 1:
             # Uh-oh, multiple configs. See if they match:
             unique_tzs = set()
-            zoneinfo = os.path.join(_root, "usr", "share", "zoneinfo")
-            directory_depth = len(zoneinfo.split(os.path.sep))
+            zoneinfopath = os.path.join(_root, "usr", "share", "zoneinfo")
+            directory_depth = len(zoneinfopath.split(os.path.sep))
 
             for tzname in found_configs.values():
                 # Look them up in /usr/share/zoneinfo, and find what they
                 # really point to:
-                path = os.path.realpath(os.path.join(zoneinfo, *tzname.split("/")))
+                path = os.path.realpath(os.path.join(zoneinfopath, *tzname.split("/")))
                 real_zone_name = "/".join(path.split(os.path.sep)[directory_depth:])
                 unique_tzs.add(real_zone_name)
 
@@ -155,7 +154,7 @@ def _get_localzone_name(_root="/"):
                 for key, value in found_configs.items():
                     message += f"{key}: {value}\n"
                 message += "Fix the configuration, or set the time zone in a TZ environment variable.\n"
-                raise utils.ZoneInfoNotFoundError(message)
+                raise zoneinfo.ZoneInfoNotFoundError(message)
 
         # We found exactly one config! Use it.
         return list(found_configs.values())[0]
@@ -186,13 +185,13 @@ def _get_localzone(_root="/"):
             if not os.path.exists(tzpath):
                 continue
             with open(tzpath, "rb") as tzfile:
-                tz = pds.wrap_zone(ZoneInfo.from_file(tzfile, key="local"))
+                tz = zoneinfo.ZoneInfo.from_file(tzfile, key="local")
                 break
         else:
             warnings.warn("Can not find any timezone configuration, defaulting to UTC.")
             tz = timezone.utc
     else:
-        tz = pds.timezone(tzname)
+        tz = zoneinfo.ZoneInfo(tzname)
 
     if _root == "/":
         # We are using a file in etc to name the timezone.
