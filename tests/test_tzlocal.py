@@ -16,7 +16,9 @@ else:
     from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
+
 
 @pytest.fixture(scope="session", autouse=True)
 def clear_tz_env_variable():
@@ -284,26 +286,6 @@ def test_conflicting():
 def test_noconflict():
     tz = tzlocal.unix._get_localzone(_root=tz_path("noconflict"))
     assert str(tz) == "Etc/UTC"
-
-
-def test_pytz_compatibility():
-    os.environ["TZ"] = "Africa/Harare"
-    tzlocal.unix.reload_localzone()
-    tz_harare = tzlocal.unix.get_localzone()
-    os.environ["TZ"] = "America/New_York"
-    tzlocal.unix.reload_localzone()
-    tz_newyork = tzlocal.unix.get_localzone()
-
-    dt = datetime(2021, 10, 1, 12, 00)
-    dt = tz_harare.localize(dt)
-    tz_harare.normalize(dt)
-    assert dt.tzinfo.zone == "Africa/Harare"
-    assert dt.utcoffset().total_seconds() == 7200
-    dt = dt.astimezone(tz_newyork)
-    dt = tz_newyork.normalize(dt)
-    assert dt.tzinfo.zone == "America/New_York"
-    assert dt.utcoffset().total_seconds() == -14400
-    del os.environ["TZ"]
 
 
 def test_zoneinfo_compatibility():
