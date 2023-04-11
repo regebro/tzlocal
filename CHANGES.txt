@@ -1,7 +1,7 @@
 Changes
 =======
 
-5.0b2 (unreleased)
+5.0b2 (2023-04-11)
 ------------------
 
 - Change how the system offset is calculated to deal with non-DST
