@@ -3,6 +3,7 @@ import os
 import time
 import datetime
 import calendar
+import warnings
 
 try:
     import zoneinfo  # pragma: no cover
@@ -39,11 +40,15 @@ def get_tz_offset(tz):
     return int(datetime.datetime.now(tz).utcoffset().total_seconds())
 
 
-def assert_tz_offset(tz):
+def assert_tz_offset(tz, error=True):
     """Assert that system's timezone offset equals to the timezone offset found.
 
     If they don't match, we probably have a misconfiguration, for example, an
-    incorrect timezone set in /etc/timezone file in systemd distributions."""
+    incorrect timezone set in /etc/timezone file in systemd distributions.
+
+    If error is True, this method will raise a ValueError, otherwise it will
+    emit a warning.
+    """
     tz_offset = get_tz_offset(tz)
     system_offset = get_system_offset()
     if tz_offset != system_offset:
@@ -51,7 +56,9 @@ def assert_tz_offset(tz):
             "Timezone offset does not match system offset: {} != {}. "
             "Please, check your config files."
         ).format(tz_offset, system_offset)
-        raise ValueError(msg)
+        if error:
+            raise ValueError(msg)
+        warnings.warn(msg)
 
 
 def _tz_name_from_env(tzenv=None):

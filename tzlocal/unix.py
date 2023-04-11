@@ -196,7 +196,7 @@ def _get_localzone(_root="/"):
     if _root == "/":
         # We are using a file in etc to name the timezone.
         # Verify that the timezone specified there is actually used:
-        utils.assert_tz_offset(tz)
+        utils.assert_tz_offset(tz, error=False)
     return tz
 
 

@@ -4,7 +4,10 @@ Changes
 5.0b2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Change the default to only warn (but still not even warn if TZ is set)
+
+- Add the assert_tz_offset() method to the top level for those who want
+  to explicitly check.
 
 
 5.0b1 (2023-04-07)
