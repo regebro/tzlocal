@@ -130,7 +130,7 @@ def get_localzone():
         # If the timezone does NOT come from a TZ environment variable,
         # verify that it's correct. If it's from the environment,
         # we accept it, this is so you can run tests with different timezones.
-        utils.assert_tz_offset(_cache_tz)
+        utils.assert_tz_offset(_cache_tz, error=False)
 
     return _cache_tz
 
@@ -141,5 +141,5 @@ def reload_localzone():
     global _cache_tz_name
     _cache_tz_name = _get_localzone_name()
     _cache_tz = zoneinfo.ZoneInfo(_cache_tz_name)
-    utils.assert_tz_offset(_cache_tz)
+    utils.assert_tz_offset(_cache_tz, error=False)
     return _cache_tz
