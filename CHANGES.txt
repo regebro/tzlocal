@@ -4,10 +4,14 @@ Changes
 5.0b2 (unreleased)
 ------------------
 
-- Change the default to only warn (but still not even warn if TZ is set)
+- Change how the system offset is calculated to deal with non-DST
+  temporary changes, such as Ramadan time in Morocco.
+
+- Change the default to only warn when the timezone offset and system
+  offset disagree (but still not even warn if TZ is set)
 
 - Add the assert_tz_offset() method to the top level for those who want
-  to explicitly check.
+  to explicitly check and fail.
 
 
 5.0b1 (2023-04-07)
