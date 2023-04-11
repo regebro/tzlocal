@@ -148,7 +148,8 @@ def test_assert_tz_offset():
 
     # But you can change it do it only warns
     other = ZoneInfo("Pacific/Chatham")
-    tzlocal.utils.assert_tz_offset(other, error=False)
+    with pytest.warns(UserWarning):
+        tzlocal.utils.assert_tz_offset(other, error=False)
 
 
 def test_win32(mocker):
