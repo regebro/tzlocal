@@ -94,14 +94,14 @@ Load the local timezone:
     >>> from tzlocal import get_localzone
     >>> tz = get_localzone()
     >>> tz
-    <DstTzInfo 'Europe/Warsaw' WMT+1:24:00 STD>
+    zoneinfo.ZoneInfo(key='Europe/Warsaw')
 
 Create a local datetime:
 
     >>> from datetime import datetime
     >>> dt = datetime(2015, 4, 10, 7, 22, tzinfo=tz)
     >>> dt
-    datetime.datetime(2015, 4, 10, 7, 22, tzinfo=<DstTzInfo 'Europe/Warsaw' CEST+2:00:00 DST>)
+    datetime.datetime(2015, 4, 10, 7, 22, tzinfo=zoneinfo.ZoneInfo(key='Europe/Warsaw'))
 
 Lookup another timezone with ``zoneinfo`` (``backports.zoneinfo`` on Python 3.8 or earlier):
 
@@ -111,7 +111,7 @@ Lookup another timezone with ``zoneinfo`` (``backports.zoneinfo`` on Python 3.8 
 Convert the datetime:
 
     >>> dt.astimezone(eastern)
-    datetime.datetime(2015, 4, 10, 1, 22, tzinfo=<DstTzInfo 'US/Eastern' EDT-1 day, 20:00:00 DST>)
+    datetime.datetime(2015, 4, 10, 1, 22, tzinfo=zoneinfo.ZoneInfo(key='US/Eastern'))
 
 If you just want the name of the local timezone, use `get_localzone_name()`:
 
