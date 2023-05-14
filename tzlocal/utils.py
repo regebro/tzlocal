@@ -29,7 +29,7 @@ def assert_tz_offset(tz, error=True):
     """
 
     tz_offset = get_tz_offset(tz)
-    system_offset = calendar.timegm(time.gmtime()) - calendar.timegm(time.localtime())
+    system_offset = calendar.timegm(time.localtime()) - calendar.timegm(time.gmtime())
     # No one has timezone offsets less than a minute, so this should be close enough:
     if abs(tz_offset - system_offset) > 60:
         msg = (
