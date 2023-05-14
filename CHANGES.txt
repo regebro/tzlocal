@@ -1,10 +1,10 @@
 Changes
 =======
 
-5.0b3 (unreleased)
-------------------
+5.0 (2023-05-14)
+----------------
 
-- Nothing changed yet.
+- Fixed a bug in the new assert_tz_offset method.
 
 
 5.0b2 (2023-04-11)
@@ -23,7 +23,7 @@ Changes
 5.0b1 (2023-04-07)
 ------------------
 
-- Removed the deprecation shim. 
+- Removed the deprecation shim.
 
 
 4.4b1 (2023-03-20)
