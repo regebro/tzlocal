@@ -44,7 +44,6 @@ def _get_dst_info(tz):
 
 
 def _get_localzone_name():
-    logging.debug("Looking up time zone info from registry")
     # Windows is special. It has unique time zone names (in several
     # meanings of the word) available, but unfortunately, they can be
     # translated to the language of the operating system, so we need to
@@ -54,6 +53,7 @@ def _get_localzone_name():
     if tzenv:
         return tzenv
 
+    logging.debug("Looking up time zone info from registry")
     handle = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
 
     TZLOCALKEYNAME = r"SYSTEM\CurrentControlSet\Control\TimeZoneInformation"

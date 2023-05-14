@@ -4,7 +4,8 @@ Changes
 5.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- The logging info under windows made it look like it looked up the registry
+  info even when you had a TZ environment, but it doesn't actually do that.
 
 
 5.0 (2023-05-14)
