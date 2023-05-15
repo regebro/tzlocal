@@ -12,6 +12,8 @@ except ImportError:
 
 from tzlocal import windows_tz
 
+log = logging.getLogger("tzlocal")
+
 
 def get_tz_offset(tz):
     """Get timezone's offset using built-in function datetime.utcoffset()."""
@@ -48,7 +50,7 @@ def _tz_name_from_env(tzenv=None):
     if not tzenv:
         return None
 
-    logging.debug(f"Found a TZ environment: {tzenv}")
+    log.debug(f"Found a TZ environment: {tzenv}")
 
     if tzenv[0] == ":":
         tzenv = tzenv[1:]
@@ -72,7 +74,7 @@ def _tz_name_from_env(tzenv=None):
             # Indeed
             return parts[-1]
 
-    logging.debug("TZ does not contain a time zone name")
+    log.debug("TZ does not contain a time zone name")
     return None
 
 

@@ -20,7 +20,7 @@ WIN_ZONES_URL = 'https://raw.githubusercontent.com/unicode-org/cldr/master/commo
 ZONEINFO_URL = 'ftp://ftp.iana.org/tz/tzdata-latest.tar.gz'
 
 logging.basicConfig(level=logging.INFO)
-log = logging.getLogger()
+log = logging.getLogger("tzlocal")
 
 
 def update_old_names():
