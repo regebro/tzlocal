@@ -17,6 +17,8 @@ from tzlocal import utils
 _cache_tz = None
 _cache_tz_name = None
 
+log = logging.getLogger("tzlocal")
+
 
 def valuestodict(key):
     """Convert a registry key's values to a dictionary."""
@@ -53,7 +55,7 @@ def _get_localzone_name():
     if tzenv:
         return tzenv
 
-    logging.debug("Looking up time zone info from registry")
+    log.debug("Looking up time zone info from registry")
     handle = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
 
     TZLOCALKEYNAME = r"SYSTEM\CurrentControlSet\Control\TimeZoneInformation"

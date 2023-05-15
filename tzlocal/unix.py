@@ -15,6 +15,7 @@ else:
 _cache_tz = None
 _cache_tz_name = None
 
+log = logging.getLogger("tzlocal")
 
 def _get_localzone_name(_root="/"):
     """Tries to find the local timezone configuration.
@@ -32,7 +33,7 @@ def _get_localzone_name(_root="/"):
 
     # Are we under Termux on Android?
     if os.path.exists(os.path.join(_root, "system/bin/getprop")):
-        logging.debug("This looks like Termux")
+        log.debug("This looks like Termux")
 
         import subprocess
 
@@ -45,7 +46,7 @@ def _get_localzone_name(_root="/"):
             return androidtz
         except (OSError, subprocess.CalledProcessError):
             # proot environment or failed to getprop
-            logging.debug("It's not termux?")
+            log.debug("It's not termux?")
             pass
 
     # Now look for distribution specific configuration files
@@ -59,7 +60,7 @@ def _get_localzone_name(_root="/"):
         try:
             with open(tzpath) as tzfile:
                 data = tzfile.read()
-                logging.debug(f"{tzpath} found, contents:\n {data}")
+                log.debug(f"{tzpath} found, contents:\n {data}")
 
                 etctz = data.strip("/ \t\r\n")
                 if not etctz:
@@ -94,7 +95,7 @@ def _get_localzone_name(_root="/"):
         try:
             with open(tzpath, "rt") as tzfile:
                 data = tzfile.readlines()
-                logging.debug(f"{tzpath} found, contents:\n {data}")
+                log.debug(f"{tzpath} found, contents:\n {data}")
 
             for line in data:
                 # Look for the ZONE= setting.
@@ -118,7 +119,7 @@ def _get_localzone_name(_root="/"):
     # see manpage of localtime(5) and timedatectl(1)
     tzpath = os.path.join(_root, "etc/localtime")
     if os.path.exists(tzpath) and os.path.islink(tzpath):
-        logging.debug(f"{tzpath} found")
+        log.debug(f"{tzpath} found")
         etctz = os.path.realpath(tzpath)
         start = etctz.find("/") + 1
         while start != 0:
@@ -134,7 +135,7 @@ def _get_localzone_name(_root="/"):
             start = etctz.find("/") + 1
 
     if len(found_configs) > 0:
-        logging.debug(f"{len(found_configs)} found:\n {found_configs}")
+        log.debug(f"{len(found_configs)} found:\n {found_configs}")
         # We found some explicit config of some sort!
         if len(found_configs) > 1:
             # Uh-oh, multiple configs. See if they match:
@@ -178,7 +179,7 @@ def _get_localzone(_root="/"):
     tzname = _get_localzone_name(_root)
     if tzname is None:
         # No explicit setting existed. Use localtime
-        logging.debug("No explicit setting existed. Use localtime")
+        log.debug("No explicit setting existed. Use localtime")
         for filename in ("etc/localtime", "usr/local/etc/localtime"):
             tzpath = os.path.join(_root, filename)
 
