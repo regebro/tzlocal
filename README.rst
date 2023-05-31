@@ -26,9 +26,9 @@ updates, but there will be no further functional changes on the 4.x branch.
 Info
 ----
 
-This Python module returns a ``tzinfo`` object (with a pytz_deprecation_shim,
-for pytz compatibility) with the local timezone information, under Unix and
-Windows.
+This Python module returns a the `IANA time zone name 
+<https://www.iana.org/time-zones>`_ for your local time zone or a ``tzinfo`` 
+object with the local timezone information, under Unix and Windows.
 
 It requires Python 3.7 or later, and will use the ``backports.tzinfo``
 package, for Python 3.7 and 3.8.
@@ -43,6 +43,16 @@ With ``tzlocal`` you only need to call ``get_localzone()`` and you will get a
 still not get to know what the timezone name is, but you don't need that when
 you have the tzinfo file. However, if the timezone name is readily available
 it will be used.
+
+What it's not for
+-----------------
+
+It's not for converting the curfrent time betwee UTC and your local time. There are
+other, simpler ways of doing this. This is of you need to know things like the name 
+of the time zone, or if you need to be able to convert between your time zone and 
+another time zone for times that are in the future or in the past.
+
+For current time conversions to and from UTC, look in the python ``time`` module. 
 
 
 Supported systems
