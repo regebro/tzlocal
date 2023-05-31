@@ -19,7 +19,7 @@ configuration when the configuration files are unclear or contradictory.
 
 Version 5.0 removes the `pytz_deprecation_shim`, and now only returns
 `zoneinfo` objects, like verion 3.0 did. If you need `pytz` objects, you have
-to stay on version 4.0. If there are bugs in version 4.0, I will rekease
+to stay on version 4.0. If there are bugs in version 4.0, I will release
 updates, but there will be no further functional changes on the 4.x branch.
 
 
