@@ -130,7 +130,7 @@ def test_get_reload(mocker, monkeypatch):
 def test_fail(recwarn):
     with pytest.warns(UserWarning, match="Can not find any timezone configuration"):
         tz = tzlocal.unix._get_localzone(_root=tz_path())
-    assert tz == timezone.utc
+    assert tz.unwrap_shim() == timezone.utc
 
 
 def test_assert_tz_offset():

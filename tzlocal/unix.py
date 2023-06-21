@@ -181,7 +181,7 @@ def _get_localzone(_root="/"):
                 break
         else:
             warnings.warn("Can not find any timezone configuration, defaulting to UTC.")
-            tz = timezone.utc
+            tz = pds.wrap_zone(timezone.utc, key="UTC")
     else:
         tz = pds.timezone(tzname)
 

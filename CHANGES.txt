@@ -1,14 +1,21 @@
 Changes
 =======
 
+4.3.1 (unreleased)
+------------------
+
+- If no configuration could be found, the UTC timezone returned was unwrapped,
+  which could create issues if you use pytz.
+
+
 4.3 (2023-03-18)
 ----------------
 
 - Improved the error message when the ZoneInfo cannot be found
 
-- Don't error out because we find multiple possible timezones for 
-  a symlink. 
-  
+- Don't error out because we find multiple possible timezones for
+  a symlink.
+
 - More stable on Android/Termux with proot
 
 
