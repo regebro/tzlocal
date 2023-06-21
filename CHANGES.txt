@@ -1,7 +1,7 @@
 Changes
 =======
 
-4.3.1 (unreleased)
+4.3.1 (2023-06-21)
 ------------------
 
 - If no configuration could be found, the UTC timezone returned was unwrapped,
