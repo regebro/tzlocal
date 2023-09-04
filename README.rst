@@ -30,8 +30,8 @@ This Python module returns a the `IANA time zone name
 <https://www.iana.org/time-zones>`_ for your local time zone or a ``tzinfo`` 
 object with the local timezone information, under Unix and Windows.
 
-It requires Python 3.7 or later, and will use the ``backports.tzinfo``
-package, for Python 3.7 and 3.8.
+It requires Python 3.8 or later, and will use the ``backports.tzinfo``
+package, for Python 3.8.
 
 This module attempts to fix a glaring hole in the ``pytz`` and ``zoneinfo``
 modules, that there is no way to get the local timezone information, unless
