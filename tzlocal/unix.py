@@ -17,6 +17,7 @@ _cache_tz_name = None
 
 log = logging.getLogger("tzlocal")
 
+
 def _get_localzone_name(_root="/"):
     """Tries to find the local timezone configuration.
 

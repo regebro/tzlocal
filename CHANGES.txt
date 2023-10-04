@@ -4,7 +4,8 @@ Changes
 5.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- The Unicode data doesn't change tz names when IANA does, so what is current
+  in IANA is treated as an alias in Unicode data. This version handles that.
 
 
 5.0.1 (2023-05-15)

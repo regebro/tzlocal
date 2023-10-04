@@ -76,12 +76,17 @@ def update_windows_zones():
         for tz_name in mapping.getAttribute('type').split(' '):
             tz_win[tz_name] = mapping.getAttribute('other')
 
-    log.info('Adding backwards data')
-    # Map in the backwards compatible zone names
+    log.info('Adding backwards and forwards data')
+    # Map in the backwards (or forwards) compatible zone names
     for backward_compat_name, standard_name in backward.items():
-        win_zone = tz_win.get(standard_name, None)
-        if win_zone:
-            tz_win[backward_compat_name] = win_zone
+        if backward_compat_name not in tz_win:
+            win_zone = tz_win.get(standard_name, None)
+            if win_zone:
+                tz_win[backward_compat_name] = win_zone
+        if standard_name not in tz_win:
+            win_zone = tz_win.get(backward_compat_name, None)
+            if win_zone:
+                tz_win[standard_name] = win_zone
 
     # Etc/UTC is a common but non-standard alias for Etc/GMT:
     tz_win['Etc/UTC'] = 'UTC'
