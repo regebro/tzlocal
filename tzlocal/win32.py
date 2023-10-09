@@ -112,7 +112,7 @@ def _get_localzone_name():
     return timezone
 
 
-def get_localzone_name():
+def get_localzone_name() -> str:
     """Get the zoneinfo timezone name that matches the Windows-configured timezone."""
     global _cache_tz_name
     if _cache_tz_name is None:
@@ -121,7 +121,7 @@ def get_localzone_name():
     return _cache_tz_name
 
 
-def get_localzone():
+def get_localzone() -> zoneinfo.ZoneInfo:
     """Returns the zoneinfo-based tzinfo object that matches the Windows-configured timezone."""
 
     global _cache_tz
@@ -137,7 +137,7 @@ def get_localzone():
     return _cache_tz
 
 
-def reload_localzone():
+def reload_localzone() -> zoneinfo.ZoneInfo:
     """Reload the cached localzone. You need to call this if the timezone has changed."""
     global _cache_tz
     global _cache_tz_name

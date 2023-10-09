@@ -202,7 +202,7 @@ def _get_localzone(_root="/"):
     return tz
 
 
-def get_localzone_name():
+def get_localzone_name() -> str:
     """Get the computers configured local timezone name, if any."""
     global _cache_tz_name
     if _cache_tz_name is None:
@@ -211,7 +211,7 @@ def get_localzone_name():
     return _cache_tz_name
 
 
-def get_localzone():
+def get_localzone() -> zoneinfo.ZoneInfo:
     """Get the computers configured local timezone, if any."""
 
     global _cache_tz
@@ -221,7 +221,7 @@ def get_localzone():
     return _cache_tz
 
 
-def reload_localzone():
+def reload_localzone() -> zoneinfo.ZoneInfo:
     """Reload the cached localzone. You need to call this if the timezone has changed."""
     global _cache_tz_name
     global _cache_tz
