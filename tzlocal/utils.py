@@ -107,6 +107,6 @@ def _tz_from_env(tzenv=None):
     except zoneinfo.ZoneInfoNotFoundError:
         # Nope, it's something like "PST4DST" etc, we can't handle that.
         raise zoneinfo.ZoneInfoNotFoundError(
-            "tzlocal() does not support non-zoneinfo timezones like %s. \n"
-            "Please use a timezone in the form of Continent/City" % tzenv
+            f"tzlocal() does not support non-zoneinfo timezones like {tzenv}. \n"
+            "Please use a timezone in the form of Continent/City"
         ) from None
