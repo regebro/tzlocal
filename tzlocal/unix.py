@@ -94,7 +94,7 @@ def _get_localzone_name(_root="/"):
     for filename in ("etc/sysconfig/clock", "etc/conf.d/clock"):
         tzpath = os.path.join(_root, filename)
         try:
-            with open(tzpath, "rt") as tzfile:
+            with open(tzpath) as tzfile:
                 data = tzfile.readlines()
                 log.debug(f"{tzpath} found, contents:\n {data}")
 

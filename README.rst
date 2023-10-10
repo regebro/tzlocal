@@ -26,8 +26,8 @@ updates, but there will be no further functional changes on the 4.x branch.
 Info
 ----
 
-This Python module returns a the `IANA time zone name 
-<https://www.iana.org/time-zones>`_ for your local time zone or a ``tzinfo`` 
+This Python module returns a the `IANA time zone name
+<https://www.iana.org/time-zones>`_ for your local time zone or a ``tzinfo``
 object with the local timezone information, under Unix and Windows.
 
 It requires Python 3.8 or later, and will use the ``backports.tzinfo``
@@ -48,11 +48,11 @@ What it's not for
 -----------------
 
 It's not for converting the curfrent time betwee UTC and your local time. There are
-other, simpler ways of doing this. This is of you need to know things like the name 
-of the time zone, or if you need to be able to convert between your time zone and 
+other, simpler ways of doing this. This is of you need to know things like the name
+of the time zone, or if you need to be able to convert between your time zone and
 another time zone for times that are in the future or in the past.
 
-For current time conversions to and from UTC, look in the python ``time`` module. 
+For current time conversions to and from UTC, look in the python ``time`` module.
 
 
 Supported systems

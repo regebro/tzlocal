@@ -11,8 +11,8 @@ try:
 except ImportError:
     from backports import zoneinfo  # pragma: no cover
 
-from tzlocal.windows_tz import win_tz
 from tzlocal import utils
+from tzlocal.windows_tz import win_tz
 
 _cache_tz = None
 _cache_tz_name = None
