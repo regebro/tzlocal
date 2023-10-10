@@ -1,6 +1,53 @@
 [build-system]
-requires = ["setuptools >= 42", "wheel"]
+requires = ["setuptools >= 64"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "tzlocal"
+description = "tzinfo object for the local timezone"
+readme = "README.rst"
+version = "5.2.dev0"
+authors = [{name = "Lennart Regebro", email = "regebro@gmail.com"}]
+license = {text = "MIT"}
+keywords = ["timezone"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: Unix",
+    "Operating System :: MacOS :: MacOS X",
+    "Typing :: Typed",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">= 3.8"
+dependencies = [
+    "backports.zoneinfo; python_version < '3.9'",
+    "tzdata; platform_system == 'Windows'",
+]
+
+[project.urls]
+"Source code" = "https://github.com/regebro/tzlocal"
+Changelog = "https://github.com/regebro/tzlocal/blob/master/CHANGES.txt"
+"Issue tracker" = "https://github.com/regebro/tzlocal/issues"
+
+[project.optional-dependencies]
+devenv = [
+    "pytest >= 4.3",
+    "pytest-mock >= 3.3",
+    "pytest-cov",
+    "black",
+    "flake8",
+    "check_manifest",
+    "pyroma",
+    "zest.releaser",
+]
+
+[tool.zest.releaser]
+create-wheel = true
 
 [tool.pytest.ini_options]
 testpaths = "tests"

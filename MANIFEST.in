@@ -1,6 +1,7 @@
 include *.py
 include *.rst
 include *.txt
+include tzlocal/py.typed
 recursive-include tests/test_data *
 include tests/*.py
 exclude Makefile
