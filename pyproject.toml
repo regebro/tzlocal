@@ -53,6 +53,7 @@ select = [
     "RUF100",       # unused noqa (yesqa)
     "UP",           # pyupgrade
 ]
+ignore = ["UP015"]
 
 [tool.zest.releaser]
 create-wheel = true
