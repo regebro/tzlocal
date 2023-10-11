@@ -39,12 +39,21 @@ devenv = [
     "pytest >= 4.3",
     "pytest-mock >= 3.3",
     "pytest-cov",
-    "black",
-    "flake8",
     "check_manifest",
-    "pyroma",
     "zest.releaser",
 ]
+
+[tool.ruff]
+line-length = 120
+select = [
+    "E", "F", "W",  # default flake-8
+    "I",            # isort
+    "ISC",          # flake8-implicit-str-concat
+    "PGH",          # pygrep-hooks
+    "RUF100",       # unused noqa (yesqa)
+    "UP",           # pyupgrade
+]
+ignore = ["UP015"]
 
 [tool.zest.releaser]
 create-wheel = true
