@@ -26,7 +26,7 @@ updates, but there will be no further functional changes on the 4.x branch.
 Info
 ----
 
-This Python module returns a the `IANA time zone name
+This Python module returns the `IANA time zone name
 <https://www.iana.org/time-zones>`_ for your local time zone or a ``tzinfo``
 object with the local timezone information, under Unix and Windows.
 
