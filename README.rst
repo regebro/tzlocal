@@ -47,12 +47,12 @@ it will be used.
 What it's not for
 -----------------
 
-It's not for converting the curfrent time betwee UTC and your local time. There are
-other, simpler ways of doing this. This is of you need to know things like the name
+It's not for converting the current time between UTC and your local time. There are
+other, simpler ways of doing this. This is ig you need to know things like the name
 of the time zone, or if you need to be able to convert between your time zone and
 another time zone for times that are in the future or in the past.
 
-For current time conversions to and from UTC, look in the python ``time`` module.
+For current time conversions to and from UTC, look in the Python ``time`` module.
 
 
 Supported systems
