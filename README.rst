@@ -30,7 +30,7 @@ This Python module returns the `IANA time zone name
 <https://www.iana.org/time-zones>`_ for your local time zone or a ``tzinfo``
 object with the local timezone information, under Unix and Windows.
 
-It requires Python 3.8 or later, and will use the ``backports.tzinfo``
+It requires Python 3.8 or later, and will use the ``backports.zoneinfo``
 package, for Python 3.8.
 
 This module attempts to fix a glaring hole in the ``pytz`` and ``zoneinfo``
@@ -48,7 +48,7 @@ What it's not for
 -----------------
 
 It's not for converting the current time between UTC and your local time. There are
-other, simpler ways of doing this. This is ig you need to know things like the name
+other, simpler ways of doing this. This is if you need to know things like the name
 of the time zone, or if you need to be able to convert between your time zone and
 another time zone for times that are in the future or in the past.
 
@@ -89,7 +89,7 @@ Notes on Docker
 ---------------
 
 It turns out that Docker images frequently have broken timezone setups.
-This usually resuts in a warning that the configuration is wrong, or that
+This usually results in a warning that the configuration is wrong, or that
 the timezone offset doesn't match the found timezone.
 
 The easiest way to fix that is to set a TZ variable in your docker setup
