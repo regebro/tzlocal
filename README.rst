@@ -91,6 +91,7 @@ Notes on Docker
 It turns out that Docker images frequently have broken timezone setups.
 This usually results in a warning that the configuration is wrong, or that
 the timezone offset doesn't match the found timezone.
+See: https://github.com/moby/moby/issues/16481
 
 The easiest way to fix that is to set a TZ variable in your docker setup
 to whatever timezone you want, which is usually the timezone your host
