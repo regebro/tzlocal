@@ -11,6 +11,8 @@ Changes
   and what's worse, they don't delete it. So we can't trust it now, 
   so when we have multiple configs, we are forced to just ignore it.
 
+- Attempts to return a ZoneInfo object also for UTC. 
+
 
 5.2 (2023-10-22)
 ----------------
