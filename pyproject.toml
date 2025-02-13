@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "tzlocal"
 description = "tzinfo object for the local timezone"
 readme = "README.rst"
-version = "5.3.dev0"
+version = "5.3"
 authors = [{name = "Lennart Regebro", email = "regebro@gmail.com"}]
 license = {text = "MIT"}
 keywords = ["timezone"]

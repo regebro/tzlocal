@@ -1,7 +1,7 @@
 Changes
 =======
 
-5.3 (unreleased)
+5.3 (2025-02-13)
 ----------------
 
 - Now supports Python 3.9 to 3.13, and no longer requires backports.zoneinfo.
