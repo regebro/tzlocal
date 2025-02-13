@@ -10,10 +10,7 @@ import pytest
 import tzlocal.unix
 import tzlocal.utils
 
-if sys.version_info >= (3, 9):
-    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
-else:
-    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import logging
 

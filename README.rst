@@ -30,9 +30,6 @@ This Python module returns the `IANA time zone name
 <https://www.iana.org/time-zones>`_ for your local time zone or a ``tzinfo``
 object with the local timezone information, under Unix and Windows.
 
-It requires Python 3.8 or later, and will use the ``backports.zoneinfo``
-package, for Python 3.8.
-
 This module attempts to fix a glaring hole in the ``pytz`` and ``zoneinfo``
 modules, that there is no way to get the local timezone information, unless
 you know the zoneinfo name, and under several Linux distros that's hard or
@@ -113,7 +110,7 @@ Create a local datetime:
     >>> dt
     datetime.datetime(2015, 4, 10, 7, 22, tzinfo=zoneinfo.ZoneInfo(key='Europe/Warsaw'))
 
-Lookup another timezone with ``zoneinfo`` (``backports.zoneinfo`` on Python 3.8 or earlier):
+Lookup another timezone with ``zoneinfo``:
 
     >>> from zoneinfo import ZoneInfo
     >>> eastern = ZoneInfo('US/Eastern')
