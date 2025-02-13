@@ -7,10 +7,7 @@ from datetime import timezone
 
 from tzlocal import utils
 
-if sys.version_info >= (3, 9):
-    import zoneinfo  # pragma: no cover
-else:
-    from backports import zoneinfo  # pragma: no cover
+import zoneinfo
 
 _cache_tz = None
 _cache_tz_name = None
