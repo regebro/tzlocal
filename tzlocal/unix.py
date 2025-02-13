@@ -196,7 +196,11 @@ def _get_localzone(_root="/"):
                 break
         else:
             warnings.warn("Can not find any timezone configuration, defaulting to UTC.")
-            tz = timezone.utc
+            utcname = [x for x in zoneinfo.available_timezones() if "UTC" in x]
+            if utcname:
+                tz = zoneinfo.ZoneInfo(utcname[0])
+            else:
+                tz = timezone.utc
     else:
         tz = zoneinfo.ZoneInfo(tzname)
 
