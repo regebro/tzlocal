@@ -6,6 +6,11 @@ Changes
 
 - Now supports Python 3.9 to 3.13, and no longer requires backports.zoneinfo.
 
+- Debian is for some reason removing support for /etc/timezone, which is bad, 
+  because that's the only place where the timezone is  stated in plain text, 
+  and what's worse, they don't delete it. So we can't trust it now, 
+  so when we have multiple configs, we are forced to just ignore it.
+
 
 5.2 (2023-10-22)
 ----------------
