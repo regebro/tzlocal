@@ -139,7 +139,7 @@ def _get_localzone_name(_root="/"):
         # and what's worse, they don't delete it. So we can't trust it now, 
         # so when we have multiple configs, we are forced to just ignore it.
         if len(found_configs) > 1 and "/etc/timezone" in found_configs:
-            log.warning("/etc/timezone is deprecated on Debian, and no longer reliable. Ignoring.")
+            log.debug("/etc/timezone is deprecated on Debian, and no longer reliable. Ignoring.")
             del found_configs["/etc/timezone"]
 
         # We found some explicit config of some sort!
