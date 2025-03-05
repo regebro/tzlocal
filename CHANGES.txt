@@ -1,8 +1,8 @@
 Changes
 =======
 
-5.4 (unreleased)
-----------------
+5.3.1 (2025-03-05)
+------------------
 
 - Now only warns bout /etc/timezone if it is actually conflicting with
   other timezone configurations.
