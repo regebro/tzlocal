@@ -4,7 +4,8 @@ Changes
 5.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Now only warns bout /etc/timezone if it is actually conflicting with
+  other timezone configurations.
 
 
 5.3 (2025-02-13)
@@ -12,10 +13,10 @@ Changes
 
 - Now supports Python 3.9 to 3.13, and no longer requires backports.zoneinfo.
 
-- Debian is for some reason removing support for /etc/timezone, which is bad, 
-  because that's the only place where the timezone is  stated in plain text, 
-  and what's worse, they don't delete it. So we can't trust it now, 
-  so when we have multiple configs, we are forced to just ignore it.
+- Some distributions are for some reason removing support for /etc/timezone, 
+  which is bad, because that's the only place where the timezone is stated 
+  in plain text, and what's worse, they don't delete it. So we can't trust 
+  it now, so when we have multiple configs, we are forced to just ignore it.
 
 - Attempts to return a ZoneInfo object also for UTC. 
 

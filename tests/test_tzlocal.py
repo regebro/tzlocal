@@ -111,6 +111,13 @@ def test_only_localtime():
     assert dt.replace(tzinfo=ZoneInfo("Africa/Harare")) == dt.replace(tzinfo=tz)
 
 
+def test_timezone_deprecated():
+    tz = tzlocal.unix._get_localzone(_root=tz_path("timezone_deprecated"))
+    assert str(tz) == "Africa/Johannesburg"
+    dt = datetime(2012, 1, 1, 5)
+    assert dt.replace(tzinfo=ZoneInfo("Africa/Harare")) == dt.replace(tzinfo=tz)
+
+
 def test_get_reload(mocker, monkeypatch):
     mocker.patch("tzlocal.utils.assert_tz_offset")
     # Clear any cached zone
@@ -275,7 +282,6 @@ def test_conflicting():
         tzlocal.unix._get_localzone(_root=tz_path("conflicting"))
     message = excinfo.value.args[0]
     assert "Multiple conflicting time zone configurations found:\n" in message
-    assert "Europe/Paris" in message
     assert "America/New_York" in message
     assert "Europe/Warsaw" in message
     assert "Africa/Johannesburg" in message
