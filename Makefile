@@ -15,8 +15,7 @@ update_mapping:
 	$(bin_dir)/python update_windows_mappings.py
 
 check:
-	$(bin_dir)/black tzlocal tests
-	$(bin_dir)/flake8 tzlocal tests
+	$(bin_dir)/ruff check tzlocal tests
 	$(bin_dir)/pyroma -d .
 
 coverage:

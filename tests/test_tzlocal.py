@@ -1,18 +1,16 @@
+import logging
 import os
 import platform
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from unittest.mock import MagicMock, Mock
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import pytest
 
 import tzlocal.unix
 import tzlocal.utils
-
-from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
-
-import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -87,9 +85,7 @@ def test_timezone_setting():
     assert str(tz) == "Africa/Harare"
 
 
-@pytest.mark.skipif(
-    platform.system() == "Windows", reason="Symbolic links are not available on Windows"
-)
+@pytest.mark.skipif(platform.system() == "Windows", reason="Symbolic links are not available on Windows")
 def test_symlink_localtime():
     # A ZONE setting in the target path of a symbolic linked localtime, f ex systemd distributions
 
@@ -172,9 +168,7 @@ def test_win32(mocker):
     # catch syntax errors, etc.
     mocker.patch("tzlocal.utils.assert_tz_offset")
     winreg = MagicMock()
-    winreg.EnumValue.configure_mock(
-        return_value=("TimeZoneKeyName", "Belarus Standard Time")
-    )
+    winreg.EnumValue.configure_mock(return_value=("TimeZoneKeyName", "Belarus Standard Time"))
     sys.modules["winreg"] = winreg
 
     import tzlocal.win32
@@ -185,15 +179,11 @@ def test_win32(mocker):
     tz = tzlocal.win32.reload_localzone()
     assert str(tz) == "Europe/Minsk"
 
-    winreg.EnumValue.configure_mock(
-        return_value=("TimeZoneKeyName", "Not a real timezone")
-    )
+    winreg.EnumValue.configure_mock(return_value=("TimeZoneKeyName", "Not a real timezone"))
     pytest.raises(ZoneInfoNotFoundError, tzlocal.win32._get_localzone_name)
 
     # Old XP style reginfo should fail
-    winreg.EnumValue.configure_mock(
-        return_value=("TimeZoneKeyName", "Belarus Standard Time")
-    )
+    winreg.EnumValue.configure_mock(return_value=("TimeZoneKeyName", "Belarus Standard Time"))
     tzlocal.win32.valuestodict = Mock(
         return_value={
             "StandardName": "Mocked Standard Time",
@@ -274,9 +264,7 @@ def test_termux(mocker):
     assert str(tz) == "Africa/Johannesburg"
 
 
-@pytest.mark.skipif(
-    platform.system() == "Windows", reason="Symbolic links are not available on Windows"
-)
+@pytest.mark.skipif(platform.system() == "Windows", reason="Symbolic links are not available on Windows")
 def test_conflicting():
     with pytest.raises(ZoneInfoNotFoundError) as excinfo:
         tzlocal.unix._get_localzone(_root=tz_path("conflicting"))
@@ -288,9 +276,7 @@ def test_conflicting():
     assert "localtime is a symlink to: Africa/Harare" in message
 
 
-@pytest.mark.skipif(
-    platform.system() == "Windows", reason="Symbolic links are not available on Windows"
-)
+@pytest.mark.skipif(platform.system() == "Windows", reason="Symbolic links are not available on Windows")
 def test_noconflict():
     tz = tzlocal.unix._get_localzone(_root=tz_path("noconflict"))
     assert str(tz) == "Etc/UTC"

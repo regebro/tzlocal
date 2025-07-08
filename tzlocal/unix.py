@@ -1,13 +1,11 @@
 import logging
 import os
 import re
-import sys
 import warnings
+import zoneinfo
 from datetime import timezone
 
 from tzlocal import utils
-
-import zoneinfo
 
 _cache_tz = None
 _cache_tz_name = None
@@ -36,11 +34,7 @@ def _get_localzone_name(_root="/"):
         import subprocess
 
         try:
-            androidtz = (
-                subprocess.check_output(["getprop", "persist.sys.timezone"])
-                .strip()
-                .decode()
-            )
+            androidtz = subprocess.check_output(["getprop", "persist.sys.timezone"]).strip().decode()
             return androidtz
         except (OSError, subprocess.CalledProcessError):
             # proot environment or failed to getprop
@@ -141,12 +135,14 @@ def _get_localzone_name(_root="/"):
             unique_tzs = _get_unique_tzs(found_configs, _root)
 
             if len(unique_tzs) != 1 and "etc/timezone" in str(found_configs.keys()):
-                # For some reason some distros are removing support for /etc/timezone, 
-                # which is bad, because that's the only place where the timezone is stated 
-                # in plain text, and what's worse, they don't delete it. So we can't trust 
+                # For some reason some distros are removing support for /etc/timezone,
+                # which is bad, because that's the only place where the timezone is stated
+                # in plain text, and what's worse, they don't delete it. So we can't trust
                 # it now, so when we have conflicting configs, we just ignore it, with a warning.
-                log.warning("/etc/timezone is deprecated in some distros, and no longer reliable. "
-                            "tzlocal is ignoring it, and you can likely delete it.")
+                log.warning(
+                    "/etc/timezone is deprecated in some distros, and no longer reliable. "
+                    "tzlocal is ignoring it, and you can likely delete it."
+                )
                 found_configs = {k: v for k, v in found_configs.items() if "etc/timezone" not in k}
                 unique_tzs = _get_unique_tzs(found_configs, _root)
 

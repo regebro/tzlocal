@@ -4,3 +4,5 @@
 *.egg-info
 *.egg
 .tox
+.coverage
+dist
