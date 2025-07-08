@@ -28,9 +28,6 @@ dependencies = [
     "tzdata; platform_system == 'Windows'",
 ]
 
-[tool.setuptools]
-py-modules = ["tzlocal"]
-
 [project.urls]
 "Source code" = "https://github.com/regebro/tzlocal"
 Changelog = "https://github.com/regebro/tzlocal/blob/master/CHANGES.txt"
@@ -46,6 +43,9 @@ devenv = [
     "pyroma",
     "ruff",
 ]
+
+[tool.setuptools]
+py-modules = ["tzlocal"]
 
 [tool.ruff]
 line-length = 120

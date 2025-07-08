@@ -23,7 +23,7 @@ coverage:
 	$(bin_dir)/coverage html
 	$(bin_dir)/coverage report
 
-test:
+test: ve/bin/fullrelease
 	$(bin_dir)/pytest
 
 release: update_mapping check

@@ -50,7 +50,7 @@ def _get_localzone_name(_root="/"):
     for configfile in ("etc/timezone", "var/db/zoneinfo"):
         tzpath = os.path.join(_root, configfile)
         try:
-            with open(tzpath) as tzfile:
+            with open(tzpath, encoding="ascii") as tzfile:
                 data = tzfile.read()
                 log.debug(f"{tzpath} found, contents:\n {data}")
 
@@ -61,9 +61,9 @@ def _get_localzone_name(_root="/"):
                 for etctz in etctz.splitlines():
                     # Get rid of host definitions and comments:
                     if " " in etctz:
-                        etctz, dummy = etctz.split(" ", 1)
+                        etctz, _ = etctz.split(" ", 1)
                     if "#" in etctz:
-                        etctz, dummy = etctz.split("#", 1)
+                        etctz, _ = etctz.split("#", 1)
                     if not etctz:
                         continue
 

@@ -4,7 +4,7 @@ Changes
 5.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Open files with Zone names as ascii.
 
 
 5.3.1 (2025-03-05)
