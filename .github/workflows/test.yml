@@ -38,6 +38,8 @@ jobs:
         path: ~/.cache/pip
         key: pip-test-${{ matrix.python-version }}-${{ matrix.os }}
     - name: Install dependencies
-      run: pip install .[devenv]
+      run: pip install -e .[devenv]
+    - name: Check with ruff
+      run: ruff check tzlocal tests
     - name: Test with pytest
       run: pytest

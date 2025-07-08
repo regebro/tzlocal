@@ -27,7 +27,7 @@ def update_old_names():
     """Fetches the list of old tz names and returns a mapping"""
 
     url = urlparse(ZONEINFO_URL)
-    log.info("Connecting to %s" % url.netloc)
+    log.info(f"Connecting to {url.netloc}")
     ftp = ftplib.FTP(url.netloc)
     ftp.login()
     gzfile = BytesIO()
