@@ -8,6 +8,8 @@ Changes
 
 - Moved tests under `tzlocal/tests` and include them in distributions.
 
+- Dropped support for Python 3.9 and added support for 3.14.
+
 
 5.3.1 (2025-03-05)
 ------------------
