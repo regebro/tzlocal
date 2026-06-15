@@ -3,5 +3,6 @@ include *.rst
 include *.txt
 include tzlocal/py.typed
 recursive-include tests/test_data *
-include tests/*.py
+recursive-include tzlocal *.py
 exclude Makefile
+exclude *.yaml
