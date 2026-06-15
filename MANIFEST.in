@@ -2,7 +2,7 @@ include *.py
 include *.rst
 include *.txt
 include tzlocal/py.typed
-recursive-include tests/test_data *
 recursive-include tzlocal *.py
+recursive-include tzlocal/tests/test_data *
 exclude Makefile
 exclude *.yaml

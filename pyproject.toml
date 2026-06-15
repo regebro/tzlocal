@@ -46,7 +46,13 @@ devenv = [
 ]
 
 [tool.setuptools]
-py-modules = ["tzlocal"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["tzlocal*"]
+
+[tool.setuptools.package-data]
+"tzlocal.tests" = ["test_data/**/*"]
 
 [tool.ruff]
 line-length = 120
@@ -66,4 +72,4 @@ ignore = ["UP015"]
 create-wheel = true
 
 [tool.pytest.ini_options]
-testpaths = "tests"
+testpaths = "tzlocal/tests"

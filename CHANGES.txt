@@ -6,6 +6,8 @@ Changes
 
 - Open files with Zone names as ascii.
 
+- Moved tests under `tzlocal/tests` and include them in distributions.
+
 
 5.3.1 (2025-03-05)
 ------------------
