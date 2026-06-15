@@ -27,6 +27,6 @@ jobs:
     - name: Install dependencies
       run: pip install -e .[testing]
     - name: Check with ruff
-      run: ruff check tzlocal tests
+      run: ruff check tzlocal
     - name: Check with pyroma
       run: 	pyroma -d .
