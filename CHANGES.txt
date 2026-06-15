@@ -1,8 +1,8 @@
 Changes
 =======
 
-5.3.2 (unreleased)
-------------------
+5.4 (2026-06-15)
+----------------
 
 - Open files with Zone names as ascii.
 
