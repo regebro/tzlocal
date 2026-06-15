@@ -38,8 +38,6 @@ devenv = [
     "pytest-mock >= 3.3",
     "pytest-cov",
     "check_manifest",
-    "zest.releaser",
-    "pyroma",
     "ruff",
 ]
 
