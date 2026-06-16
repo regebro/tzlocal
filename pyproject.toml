@@ -11,7 +11,7 @@ authors = [{name = "Lennart Regebro", email = "regebro@gmail.com"}]
 license = "MIT"
 keywords = ["timezone"]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 6 - Mature",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: Unix",
     "Operating System :: MacOS :: MacOS X",
