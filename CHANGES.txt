@@ -1,8 +1,8 @@
 Changes
 =======
 
-5.5 (unreleased)
-----------------
+5.4.1 (2026-06-16)
+------------------
 
 - Moved the tests back, removed the ones that check for symlinks.
   See issue #146
