@@ -1,18 +1,16 @@
 Changes
 =======
 
-5.4.2 (unreleased)
-------------------
-
-- Nothing changed yet.
-
-
-5.4.1 (2026-06-16)
+5.4.2 (2026-06-16)
 ------------------
 
 - Moved the tests back, removed the ones that check for symlinks.
   See issue #146
 
+5.4.1 (2026-06-16)
+------------------
+
+- [Restracted version]
 
 5.4 (2026-06-15)
 ----------------
