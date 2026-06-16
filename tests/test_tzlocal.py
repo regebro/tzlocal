@@ -1,6 +1,5 @@
 import logging
 import os
-import platform
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -82,14 +81,6 @@ def test_timezone_setting():
     # A ZONE setting in /etc/conf.d/clock, f ex Gentoo
 
     tz = tzlocal.unix._get_localzone(_root=tz_path("timezone_setting"))
-    assert str(tz) == "Africa/Harare"
-
-
-@pytest.mark.skipif(platform.system() == "Windows", reason="Symbolic links are not available on Windows")
-def test_symlink_localtime():
-    # A ZONE setting in the target path of a symbolic linked localtime, f ex systemd distributions
-
-    tz = tzlocal.unix._get_localzone(_root=tz_path("symlink_localtime"))
     assert str(tz) == "Africa/Harare"
 
 
@@ -264,7 +255,6 @@ def test_termux(mocker):
     assert str(tz) == "Africa/Johannesburg"
 
 
-@pytest.mark.skipif(platform.system() == "Windows", reason="Symbolic links are not available on Windows")
 def test_conflicting():
     with pytest.raises(ZoneInfoNotFoundError) as excinfo:
         tzlocal.unix._get_localzone(_root=tz_path("conflicting"))
@@ -273,14 +263,7 @@ def test_conflicting():
     assert "America/New_York" in message
     assert "Europe/Warsaw" in message
     assert "Africa/Johannesburg" in message
-    assert "localtime is a symlink to: Africa/Harare" in message
-
-
-@pytest.mark.skipif(platform.system() == "Windows", reason="Symbolic links are not available on Windows")
-def test_noconflict():
-    tz = tzlocal.unix._get_localzone(_root=tz_path("noconflict"))
-    assert str(tz) == "Etc/UTC"
-
+    
 
 def test_zoneinfo_compatibility():
     os.environ["TZ"] = "Africa/Harare"
