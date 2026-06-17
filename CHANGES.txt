@@ -4,19 +4,18 @@ Changes
 5.4.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Moved the tests back, removed the ones that check for symlinks.
+  See issue #146
 
 5.4.2 (2026-06-16)
 ------------------
 
-- Moved the tests back, removed the ones that check for symlinks.
-  See issue #146
+- [Yanked for distribution issues]
 
 5.4.1 (2026-06-16)
 ------------------
 
-- [Restracted version]
+- [Yanked for distribution issues]
 
 5.4 (2026-06-15)
 ----------------
