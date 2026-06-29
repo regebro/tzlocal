@@ -9,7 +9,7 @@ devenv:	ve/bin/fullrelease
 
 ve/bin/fullrelease:
 	virtualenv ve
-	$(bin_dir)/pip install -e .[devenv]
+	$(bin_dir)/pip install -e .[testing,devenv]
 
 update_mapping:
 	$(bin_dir)/python update_windows_mappings.py
