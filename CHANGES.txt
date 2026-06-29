@@ -4,7 +4,7 @@ Changes
 5.4.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Improved handling if you have a syntax error in /etc/clock.
 
 
 5.4.3 (2026-06-17)

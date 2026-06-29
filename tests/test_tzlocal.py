@@ -294,3 +294,13 @@ def test_get_localzone_name():
 def test_ubuntu_docker_bug():
     tz = tzlocal.unix._get_localzone(_root=tz_path("ubuntu_docker_bug"))
     assert str(tz) == "UTC"
+
+
+def test_broken():
+    # Various broken configs, that should be ignored, and we should fall back to UTC.
+    # The first warning is about not finding any timezone configuration, the second 
+    # is about a syntax error in the config file.
+    with pytest.warns(UserWarning, match="Can not find any timezone configuration"):
+        with pytest.warns(UserWarning, match="Syntax error in"):
+            tz = tzlocal.unix._get_localzone(_root=tz_path("broken"))
+    assert "UTC" in tz.key
