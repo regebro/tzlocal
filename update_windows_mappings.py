@@ -7,17 +7,15 @@
 #
 # It must be run with Python 3.
 
-import ftplib
 import logging
 import tarfile
 from io import BytesIO
 from pprint import pprint
-from urllib.parse import urlparse
 from urllib.request import urlopen
 from xml.dom import minidom
 
 WIN_ZONES_URL = "https://raw.githubusercontent.com/unicode-org/cldr/master/common/supplemental/windowsZones.xml"
-ZONEINFO_URL = "ftp://ftp.iana.org/tz/tzdata-latest.tar.gz"
+ZONEINFO_URL = "https://www.iana.org/time-zones/repository/tzdata-latest.tar.gz"
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("tzlocal")
@@ -26,15 +24,8 @@ log = logging.getLogger("tzlocal")
 def update_old_names():
     """Fetches the list of old tz names and returns a mapping"""
 
-    url = urlparse(ZONEINFO_URL)
-    log.info(f"Connecting to {url.netloc}")
-    ftp = ftplib.FTP(url.netloc)
-    ftp.login()
-    gzfile = BytesIO()
-
     log.info("Fetching zoneinfo database")
-    ftp.retrbinary("RETR " + url.path, gzfile.write)
-    gzfile.seek(0)
+    gzfile = BytesIO(urlopen(ZONEINFO_URL).read())
 
     log.info("Extracting backwards data")
     archive = tarfile.open(mode="r:gz", fileobj=gzfile)
