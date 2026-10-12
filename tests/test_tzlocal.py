@@ -19,7 +19,7 @@ def clear_tz_env_variable():
     os.environ.pop("TZ", None)
 
 
-def tz_path(zonefile: str = None) -> str:
+def tz_path(zonefile: str | None = None) -> str:
     path = Path(__file__).parent.joinpath("test_data")
     if zonefile:
         return str(path / zonefile)
@@ -159,7 +159,9 @@ def test_win32(mocker):
     # catch syntax errors, etc.
     mocker.patch("tzlocal.utils.assert_tz_offset")
     winreg = MagicMock()
-    winreg.EnumValue.configure_mock(return_value=("TimeZoneKeyName", "Belarus Standard Time"))
+    winreg.EnumValue.configure_mock(
+        return_value=("TimeZoneKeyName", "Belarus Standard Time")
+    )
     sys.modules["winreg"] = winreg
 
     import tzlocal.win32
@@ -170,11 +172,15 @@ def test_win32(mocker):
     tz = tzlocal.win32.reload_localzone()
     assert str(tz) == "Europe/Minsk"
 
-    winreg.EnumValue.configure_mock(return_value=("TimeZoneKeyName", "Not a real timezone"))
+    winreg.EnumValue.configure_mock(
+        return_value=("TimeZoneKeyName", "Not a real timezone")
+    )
     pytest.raises(ZoneInfoNotFoundError, tzlocal.win32._get_localzone_name)
 
     # Old XP style reginfo should fail
-    winreg.EnumValue.configure_mock(return_value=("TimeZoneKeyName", "Belarus Standard Time"))
+    winreg.EnumValue.configure_mock(
+        return_value=("TimeZoneKeyName", "Belarus Standard Time")
+    )
     tzlocal.win32.valuestodict = Mock(
         return_value={
             "StandardName": "Mocked Standard Time",
@@ -263,7 +269,7 @@ def test_conflicting():
     assert "America/New_York" in message
     assert "Europe/Warsaw" in message
     assert "Africa/Johannesburg" in message
-    
+
 
 def test_zoneinfo_compatibility():
     os.environ["TZ"] = "Africa/Harare"
@@ -298,9 +304,31 @@ def test_ubuntu_docker_bug():
 
 def test_broken():
     # Various broken configs, that should be ignored, and we should fall back to UTC.
-    # The first warning is about not finding any timezone configuration, the second 
+    # The first warning is about not finding any timezone configuration, the second
     # is about a syntax error in the config file.
-    with pytest.warns(UserWarning, match="Can not find any timezone configuration"):
-        with pytest.warns(UserWarning, match="Syntax error in"):
-            tz = tzlocal.unix._get_localzone(_root=tz_path("broken"))
+    with (
+        pytest.warns(UserWarning, match="Can not find any timezone configuration"),
+        pytest.warns(UserWarning, match="Syntax error in"),
+    ):
+        tz = tzlocal.unix._get_localzone(_root=tz_path("broken"))
     assert "UTC" in tz.key
+
+
+@pytest.mark.parametrize(
+    "zone",
+    [
+        "America/Argentina/Buenos_Aires",
+        "America/Indiana/Indianapolis",
+        "America/North_Dakota/Center",
+        "Africa/Harare",
+        "UTC",
+    ],
+)
+@pytest.mark.parametrize("prefix", ["", ":"])
+def test_timezone_name_from_nested_env_file(tmp_path, zone, prefix, monkeypatch):
+    path = tmp_path / "usr" / "share" / "zoneinfo" / zone
+    path.parent.mkdir(parents=True)
+    path.touch()
+    monkeypatch.setenv("TZ", prefix + str(path))
+    assert tzlocal.utils._tz_name_from_env() == zone
+    assert tzlocal.unix._get_localzone_name(_root=str(tmp_path)) == zone

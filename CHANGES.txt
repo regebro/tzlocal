@@ -4,7 +4,7 @@ Changes
 5.4.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Recognize timezone file names with multiple slashes in the TZ environment variable.
 
 
 5.4.4 (2026-06-29)
@@ -51,12 +51,12 @@ Changes
 
 - Now supports Python 3.9 to 3.13, and no longer requires backports.zoneinfo.
 
-- Some distributions are for some reason removing support for /etc/timezone, 
-  which is bad, because that's the only place where the timezone is stated 
-  in plain text, and what's worse, they don't delete it. So we can't trust 
+- Some distributions are for some reason removing support for /etc/timezone,
+  which is bad, because that's the only place where the timezone is stated
+  in plain text, and what's worse, they don't delete it. So we can't trust
   it now, so when we have multiple configs, we are forced to just ignore it.
 
-- Attempts to return a ZoneInfo object also for UTC. 
+- Attempts to return a ZoneInfo object also for UTC.
 
 
 5.2 (2023-10-22)
