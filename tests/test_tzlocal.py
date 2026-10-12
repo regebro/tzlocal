@@ -19,7 +19,7 @@ def clear_tz_env_variable():
     os.environ.pop("TZ", None)
 
 
-def tz_path(zonefile: str = None) -> str:
+def tz_path(zonefile: str | None = None) -> str:
     path = Path(__file__).parent.joinpath("test_data")
     if zonefile:
         return str(path / zonefile)
@@ -306,9 +306,11 @@ def test_broken():
     # Various broken configs, that should be ignored, and we should fall back to UTC.
     # The first warning is about not finding any timezone configuration, the second
     # is about a syntax error in the config file.
-    with pytest.warns(UserWarning, match="Can not find any timezone configuration"):
-        with pytest.warns(UserWarning, match="Syntax error in"):
-            tz = tzlocal.unix._get_localzone(_root=tz_path("broken"))
+    with (
+        pytest.warns(UserWarning, match="Can not find any timezone configuration"),
+        pytest.warns(UserWarning, match="Syntax error in"),
+    ):
+        tz = tzlocal.unix._get_localzone(_root=tz_path("broken"))
     assert "UTC" in tz.key
 
 
