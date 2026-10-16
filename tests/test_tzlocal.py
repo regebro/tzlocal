@@ -190,6 +190,31 @@ def test_win32(mocker):
     pytest.raises(LookupError, tzlocal.win32._get_localzone_name)
 
 
+
+
+def test_win32_kb5124010_zone_keys(mocker):
+    """New Windows zone keys from KB5124010 must resolve via win_tz overrides."""
+    mocker.patch("tzlocal.utils.assert_tz_offset")
+    sys.modules["winreg"] = MagicMock()
+    import tzlocal.win32
+
+    valuesmock = mocker.patch("tzlocal.win32.valuestodict")
+    for key, expected in (
+        ("British Columbia Standard Time", "America/Vancouver"),
+        ("Alberta Standard Time", "America/Edmonton"),
+    ):
+        valuesmock.configure_mock(
+            return_value={
+                "TimeZoneKeyName": key,
+                "DynamicDaylightTimeDisabled": 0,
+            }
+        )
+        tzlocal.win32._cache_tz_name = None
+        tzlocal.win32._cache_tz = None
+        assert tzlocal.win32.get_localzone_name() == expected
+        assert str(tzlocal.win32.get_localzone()) == expected
+
+
 def test_win32_env(mocker, monkeypatch):
     sys.modules["winreg"] = MagicMock()
     import tzlocal.win32

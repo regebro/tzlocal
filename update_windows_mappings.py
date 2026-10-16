@@ -19,6 +19,13 @@ from xml.dom import minidom
 WIN_ZONES_URL = "https://raw.githubusercontent.com/unicode-org/cldr/master/common/supplemental/windowsZones.xml"
 ZONEINFO_URL = "ftp://ftp.iana.org/tz/tzdata-latest.tar.gz"
 
+# Windows keys not yet in CLDR windowsZones.xml (e.g. KB5124010).
+# Applied with setdefault so CLDR wins when it catches up.
+WIN_TZ_OVERRIDES = {
+    "Alberta Standard Time": "America/Edmonton",
+    "British Columbia Standard Time": "America/Vancouver",
+}
+
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("tzlocal")
 
@@ -95,6 +102,9 @@ def update_windows_zones():
 
     # Etc/UTC is a common but non-standard alias for Etc/GMT:
     tz_win["Etc/UTC"] = "UTC"
+
+    for win_name, iana_name in WIN_TZ_OVERRIDES.items():
+        win_tz.setdefault(win_name, iana_name)
 
     log.info("Writing mapping")
     with open("tzlocal/windows_tz.py", "w") as out:
