@@ -204,6 +204,7 @@ Contributors
 * Peter Di Pasquale
 * Rongrong
 * Muneeb Sheikh
+* Nicolò Daprelà
 
 (Sorry if I forgot someone)
 
