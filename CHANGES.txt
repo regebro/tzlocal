@@ -5,7 +5,7 @@ Changes
 ------------------
 
 - Recognize timezone file names with multiple slashes in the TZ environment variable.
-
+- Use HTTPS in place of FTP to retrieve tzdata archive.
 
 5.4.4 (2026-06-29)
 ------------------
