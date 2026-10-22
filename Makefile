@@ -13,6 +13,7 @@ ve/bin/fullrelease:
 
 update_mapping:
 	$(bin_dir)/python update_windows_mappings.py
+	$(bin_dir)/ruff format tzlocal/windows_tz.py
 
 check:
 	$(bin_dir)/ruff check tzlocal tests
