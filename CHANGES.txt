@@ -1,7 +1,7 @@
 Changes
 =======
 
-5.4.5 (unreleased)
+5.4.5 (2026-10-22)
 ------------------
 
 - Recognize timezone file names with multiple slashes in the TZ environment variable.
