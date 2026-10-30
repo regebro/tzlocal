@@ -3,6 +3,7 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import get_type_hints
 from unittest.mock import MagicMock, Mock
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -295,6 +296,18 @@ def test_get_localzone_name():
     os.environ["TZ"] = "America/New_York"
     assert tzlocal.unix.get_localzone_name() == "America/New_York"
     del os.environ["TZ"]
+
+
+def test_get_localzone_name_missing(monkeypatch, tmp_path):
+    monkeypatch.delenv("TZ", raising=False)
+    monkeypatch.setattr(tzlocal.unix, "_cache_tz_name", None)
+    detector = tzlocal.unix._get_localzone_name
+    monkeypatch.setattr(tzlocal.unix, "_get_localzone_name", lambda: detector(_root=str(tmp_path)))
+
+    name = tzlocal.unix.get_localzone_name()
+    assert name is None
+    # The distributed annotation must allow the documented no-name result.
+    assert isinstance(name, get_type_hints(tzlocal.unix.get_localzone_name)["return"])
 
 
 def test_ubuntu_docker_bug():

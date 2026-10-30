@@ -4,7 +4,8 @@ Changes
 5.4.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Correct the Unix get_localzone_name() return type to include None when the
+  timezone name cannot be determined.
 
 
 5.4.5 (2026-10-22)
