@@ -228,8 +228,8 @@ def _get_localzone(_root="/"):
     return tz
 
 
-def get_localzone_name() -> str:
-    """Get the computers configured local timezone name, if any."""
+def get_localzone_name() -> str | None:
+    """Get the configured local timezone name, or None if it cannot be found."""
     global _cache_tz_name
     if _cache_tz_name is None:
         _cache_tz_name = _get_localzone_name()
