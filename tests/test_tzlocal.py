@@ -332,3 +332,20 @@ def test_timezone_name_from_nested_env_file(tmp_path, zone, prefix, monkeypatch)
     monkeypatch.setenv("TZ", prefix + str(path))
     assert tzlocal.utils._tz_name_from_env() == zone
     assert tzlocal.unix._get_localzone_name(_root=str(tmp_path)) == zone
+
+
+@pytest.mark.parametrize("zone", ["GMT", "Antarctica/Troll", "EST5EDT"])
+@pytest.mark.parametrize("prefix", ["", ":"])
+def test_timezone_name_from_env_without_windows_mapping(zone, prefix, monkeypatch):
+    # These are valid zoneinfo names that have no Windows mapping, so they
+    # are not in windows_tz.tz_win. get_localzone() already accepts them,
+    # get_localzone_name() must agree instead of ignoring TZ.
+    monkeypatch.setenv("TZ", prefix + zone)
+    assert tzlocal.utils._tz_name_from_env() == zone
+    assert tzlocal.unix._get_localzone_name(_root=tz_path("timezone")) == zone
+    assert str(tzlocal.unix._get_localzone(_root=tz_path("timezone"))) == zone
+
+
+def test_timezone_name_from_env_rejects_invalid(monkeypatch):
+    for value in ("GMT+03:00", "Just Nonsense", "localtime", "../etc/passwd"):
+        assert tzlocal.utils._tz_name_from_env(value) is None

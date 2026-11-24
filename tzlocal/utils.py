@@ -39,6 +39,21 @@ def assert_tz_offset(tz, error=True):
         warnings.warn(msg)
 
 
+def _is_zone_name(name):
+    """Return True if name is an IANA time zone name zoneinfo can load."""
+    if name in windows_tz.tz_win:
+        return True
+    # Some valid zones, like GMT or Antarctica/Troll, have no Windows mapping.
+    # "localtime" is a link to the system's zone on some distros, not a name.
+    if not name or os.path.isabs(name) or name == "localtime":
+        return False
+    try:
+        zoneinfo.ZoneInfo(name)
+    except (zoneinfo.ZoneInfoNotFoundError, ValueError, OSError):
+        return False
+    return True
+
+
 def _tz_name_from_env(tzenv=None):
     if tzenv is None:
         tzenv = os.environ.get("TZ")
@@ -51,7 +66,7 @@ def _tz_name_from_env(tzenv=None):
     if tzenv[0] == ":":
         tzenv = tzenv[1:]
 
-    if tzenv in windows_tz.tz_win:
+    if _is_zone_name(tzenv):
         # Yup, it's a timezone
         return tzenv
 
@@ -62,7 +77,7 @@ def _tz_name_from_env(tzenv=None):
         # Find the full zone name, including names with multiple slashes.
         for start in range(len(parts)):
             possible_tz = "/".join(parts[start:])
-            if possible_tz in windows_tz.tz_win:
+            if _is_zone_name(possible_tz):
                 return possible_tz
 
     log.debug("TZ does not contain a time zone name")

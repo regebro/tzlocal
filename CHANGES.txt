@@ -4,7 +4,9 @@ Changes
 5.4.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- get_localzone_name() now returns zones from the TZ environment variable
+  that have no Windows mapping, like GMT or Antarctica/Troll, instead of
+  ignoring TZ and returning the system's zone.
 
 
 5.4.5 (2026-10-22)
